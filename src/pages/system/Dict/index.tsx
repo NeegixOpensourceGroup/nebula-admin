@@ -1,26 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Modal, Button, Input, Space, Table, message, Popconfirm, Form } from 'antd';
 import type { TableProps, PopconfirmProps } from 'antd';
 import type { SearchProps } from 'antd/es/input/Search';
 import { PlusOutlined } from '@ant-design/icons';
-import { PageContainer, ProCard, ProColumns, ProTable, RequestData } from '@ant-design/pro-components/es';
+import { ActionType, PageContainer, ProCard, ProColumns, ProTable } from '@ant-design/pro-components/es';
 import { FormProps } from 'antd/lib';
 import  services  from '@/services/dict';
 
-const { queryDictList, updateDict, addDict, removeDict } = services.DictController;
+const { queryDictList, updateDict, addDict, removeDict, queryDictItemList, updateDictItem, addDictItem, removeDictItem } = services.DictController;
 
-const dictItemData: DictItemDataType[] = [
-  {
-    key: '1',
-    name: '男',
-    value: '1',
-  },
-  {
-    key: '2',
-    name: '女',
-    value: '2',
-  }
-];
 const { Search } = Input;
 
 
@@ -43,16 +31,18 @@ const DictList: React.FC = () => {
   const [groupData, setGroupData] = useState<DictGroupDataType>();
   const [groupDataSource, setGroupDataSource] = useState<DictGroupDataType[]>([]);
   const [itemData, setItemData] = useState<DictItemDataType>();
-  const [pagination, setPagination] = useState<Pagination>({
+  const [groupPagination, setGroupPagination] = useState<Pagination>({
     current: 1,
     pageSize: 10,
     total: 0,
   });
+  const actionRef = useRef<ActionType|null>(null);
+
   useEffect(() => {
     const queryDictGroupFun = async () => {
-      const res = await queryDictList({...pagination});
+      const res = await queryDictList({...groupPagination});
       setGroupDataSource(res.data?.list);
-      setPagination({
+      setGroupPagination({
         current: res.data?.current,
         pageSize: res.data?.pageSize,
         total: res.data?.total,
@@ -63,17 +53,17 @@ const DictList: React.FC = () => {
   }, []);
 
   const onSearch: SearchProps['onSearch'] = async (value, _e, info) => {
-    console.log(value, info, pagination);
+    console.log(value, info, groupPagination);
     if(value){
-      const res = await queryDictList({...pagination, name: value});
+      const res = await queryDictList({...groupPagination, name: value});
       setGroupDataSource(res.data?.list);
-      setPagination({
+      setGroupPagination({
         current: res.data?.current,
         pageSize: res.data?.pageSize,
         total: res.data?.total,
       });
     } else {
-      const res = await queryDictList({...pagination});
+      const res = await queryDictList({...groupPagination});
       setGroupDataSource(res.data?.list);
     }
   };
@@ -116,9 +106,9 @@ const DictList: React.FC = () => {
         setOpenGroup(false)
       }
     }
-    const resList = await queryDictList({...pagination});
+    const resList = await queryDictList({...groupPagination});
     setGroupDataSource(resList.data?.list);
-    setPagination({
+    setGroupPagination({
       current: resList.data?.current,
       pageSize: resList.data?.pageSize,
       total: resList.data?.total,
@@ -126,16 +116,17 @@ const DictList: React.FC = () => {
    
   };
 
-  const confirm: PopconfirmProps['onConfirm'] = async (e) => {
+  // 删除字典分类
+  const confirmGroup: PopconfirmProps['onConfirm'] = async (e) => {
     if (e && typeof e.stopPropagation === 'function') {
       e.stopPropagation()
     }
-  
-    const res = await removeDict(1);
+    console.log(groupData?.id)
+    const res = await removeDict(groupData?.id || 1);
     if (res.code === 200) {
-      const resList = await queryDictList({...pagination});
+      const resList = await queryDictList({...groupPagination});
       setGroupDataSource(resList.data?.list);
-      setPagination({
+      setGroupPagination({
         current: resList.data?.current,
         pageSize: resList.data?.pageSize,
         total: resList.data?.total,
@@ -148,8 +139,46 @@ const DictList: React.FC = () => {
     }
   };
 
+
+  // TODO 删除字典项
+  const confirmItem: PopconfirmProps['onConfirm'] = async (e) => {
+    if (e && typeof e.stopPropagation === 'function') {
+      e.stopPropagation()
+    }
+    const res = await removeDictItem(groupData?.id || 1, itemData?.id || 1);
+    if (res.code === 200) {
+      actionRef.current?.reload()
+      message.open({
+        type: 'success',
+        content: res.message,
+        duration: 2,
+      })
+    }
+  };
+
   const onItemFinish: FormProps<DictItemDataType>['onFinish'] = async (values) => {
-    console.log('Success:', values);
+    if(itemData?.id){
+      const res = await updateDictItem({ ...itemData, ...values });
+      if(res.code === 200){
+        message.open({
+          type: 'success',
+          content: res.message,
+          duration: 2,
+        })
+        setOpenItem(false)
+      }
+    } else {
+      const res = await addDictItem({...values, dictId: groupData?.id});
+      if(res.code === 200){
+        message.open({
+          type: 'success',
+          content: res.message,
+          duration: 2,
+        })
+        setOpenItem(false)
+      }
+    }
+    actionRef.current?.reload() ;
   };
 
   const dictGroups: TableProps<DictGroupDataType>['columns'] = [
@@ -172,12 +201,15 @@ const DictList: React.FC = () => {
           <a onClick={(e) => showDictGroupModal(e as React.MouseEvent<HTMLAnchorElement>, record)}>编辑</a>
           <Popconfirm
             title="确定删除字典分类？"
-            onConfirm={confirm}
+            onConfirm={confirmGroup}
             onCancel={cancel}
             okText="是"
             cancelText="否"
           >
-            <a onClick={(e) => e.stopPropagation()}>删除</a>
+            <a onClick={(e) => {
+              e.stopPropagation()
+              setGroupData(record)
+            }}>删除</a>
           </Popconfirm>
         </Space>
       ),
@@ -211,12 +243,15 @@ const DictList: React.FC = () => {
           <a onClick={(e) => showDictItemModal(e as React.MouseEvent<HTMLAnchorElement>, record)}>编辑</a>
           <Popconfirm
             title="确定删除字典项？"
-            onConfirm={confirm}
+            onConfirm={confirmItem}
             onCancel={cancel}
             okText="是"
             cancelText="否"
           >
-            <a onClick={(e) => e.stopPropagation()}>删除</a>
+            <a onClick={(e) => {
+              e.stopPropagation(); 
+              setItemData(record)}
+            }>删除</a>
           </Popconfirm>
         </Space>
       ),
@@ -238,20 +273,30 @@ const DictList: React.FC = () => {
             <Table columns={dictGroups} dataSource={groupDataSource}
               rowKey="id"
               pagination={{
-                ...pagination
-                ,
-                onChange: (current, pageSize) => {
-                  setPagination({
+                ...groupPagination,
+                onChange: async (current, pageSize) => {
+                  const res =  await queryDictList({
                     current: current,
-                    pageSize: pageSize,
-                    total: 0
+                    pageSize: pageSize
                   })
+                  if(res.code === 200){
+                    setGroupPagination({
+                      current: res.data?.current,
+                      pageSize: res.data?.pageSize,
+                      total: res.data?.total,
+                    })
+                    setGroupDataSource(res.data?.list);
+                  }
                 }
               }}
               onRow={(record) => {
                 return {
-                  onClick: (event) => {
-                    // console.log(event, record);
+                  onClick: () => {
+                    // 重置到默认值，包括表单
+                    if(actionRef.current && actionRef.current.reset){
+                      actionRef.current.reset();
+                    }
+                    setGroupData(record)
                   }, // 点击行
                 };
               }}/>
@@ -259,24 +304,35 @@ const DictList: React.FC = () => {
         </ProCard>
         <ProCard title="字典项" headerBordered>
           <ProTable search={{labelWidth: 0}}
-           request={async (params, sort, filter) => {
-            console.log(params, sort, filter);
-            return new Promise<Partial<RequestData<DictItemDataType>>>((resolve, reject) => {
-              // 使用params进行请求，然后将结果通过resolve传递
-              // 示例：fetch数据
-              setTimeout(() => {
-                return resolve({});
-              }, 100);
-            });
-          }}
+           rowKey="id"
+           actionRef={actionRef}
+           pagination={{
+            pageSize: 10,
+           }}
+           params={{dictId: groupData?.id}}
+           request={async (params) => {
+            if(groupData?.id === undefined){
+              return {
+                data: [],
+                success: true,
+              }
+            }
+            const res = await queryDictItemList({ ...params});
+            return {
+              data: res.data?.list,
+              total: res.data.total,
+              success: true,
+            }
+           }
+          }
            toolBarRender={() => [
               <Button key="button" icon={<PlusOutlined />} type="primary" onClick={(e)=>showDictItemModal(e as React.MouseEvent<HTMLAnchorElement>)}>
                 新建
               </Button>
             ]
            }
-           columns={dictItems} 
-           dataSource={dictItemData} />
+           columns={dictItems}
+          />
         </ProCard>
       </ProCard>
       <Modal

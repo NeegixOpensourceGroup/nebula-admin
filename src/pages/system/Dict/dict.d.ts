@@ -4,7 +4,8 @@ interface DictGroupDataType {
 }
 
 interface DictItemDataType {
-  key: string;
+  id: number;
+  dictId: number;
   name: string;
   value: string;
 }

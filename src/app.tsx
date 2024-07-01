@@ -89,7 +89,6 @@ export const request: RequestConfig = {
     // 一个二元组，第一个元素是 request 拦截器，第二个元素是错误处理
     [(response) => {return response}, (error: any) => {
       const { response } = error;
-      debugger
       if (response.status === 401) {
         message.open({
           content: '登录失效，请重新登录',
