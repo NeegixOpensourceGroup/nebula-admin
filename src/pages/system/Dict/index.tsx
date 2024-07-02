@@ -52,8 +52,7 @@ const DictList: React.FC = () => {
     queryDictGroupFun();
   }, []);
 
-  const onSearch: SearchProps['onSearch'] = async (value, _e, info) => {
-    console.log(value, info, groupPagination);
+  const onSearch: SearchProps['onSearch'] = async (value) => {
     if(value){
       const res = await queryDictList({...groupPagination, name: value});
       setGroupDataSource(res.data?.list);
@@ -121,9 +120,10 @@ const DictList: React.FC = () => {
     if (e && typeof e.stopPropagation === 'function') {
       e.stopPropagation()
     }
-    console.log(groupData?.id)
+    
     const res = await removeDict(groupData?.id || 1);
     if (res.code === 200) {
+      setGroupData(undefined);
       const resList = await queryDictList({...groupPagination});
       setGroupDataSource(resList.data?.list);
       setGroupPagination({

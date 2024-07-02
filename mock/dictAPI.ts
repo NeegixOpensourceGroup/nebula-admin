@@ -34,26 +34,28 @@ let dictItem = [
 export default {
   'GET /api/v1/dict': (req: any, res: any) => {
     const { current = 1, pageSize = 10, name } = req.query;
+
+    dictGroup = dictGroup.filter(item=>{
+      if(name === undefined){
+        return true
+      }
+      const isFilter =  item.name.includes(name)
+      return isFilter
+    });
+
     res.json({
       data: { 
         total: dictGroup.length,
         pageSize: 10,
         current: current,
-        list: dictGroup.filter(item=>{
-          if(name === undefined){
-            return true
-          }
-          const isFilter =  item.name.includes(name)
-          return isFilter
-        }).splice((current-1)*pageSize, pageSize).reverse()
+        list: dictGroup.reverse().splice((current-1)*pageSize, pageSize)
       },
       code: 200,
       message: '查询成功'
     })
   },
-  'PUT /api/v1/dict': (req: any, res: any) => {
-    dictGroup = dictGroup.map(item => (item.id === req.body.id ? req.body : item))
-    console.log(dictGroup)
+  'PUT /api/v1/dict/:id': (req: any, res: any) => {
+    dictGroup = dictGroup.map(item => (item.id === parseInt(req.params.id) ? req.body : item))
     res.json({
       code: 200,
       message: '更新成功'
@@ -95,7 +97,7 @@ export default {
         total: list.length,
         pageSize: 10,
         current: current,
-        list: list.splice((current-1)*pageSize, pageSize).reverse()
+        list: list.reverse().splice((current-1)*pageSize, pageSize)
       },
       code: 200,
       message: '查询成功'

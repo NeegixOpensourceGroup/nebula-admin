@@ -31,7 +31,7 @@ export async function updateDict(
   },
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>('/api/v1/dict', {
+  return request<NEBULA_API.Result>(`/api/v1/dict/${body.id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
