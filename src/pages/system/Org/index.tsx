@@ -7,13 +7,13 @@ import {
   ProFormTextArea
 } from '@ant-design/pro-components';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Button, Empty, Flex, Input, Space, Tree, message } from 'antd';
+import { Button, Empty, Flex, Input, Popconfirm, Space, Tree, message } from 'antd';
 import type { TreeDataNode } from 'antd';
 import styles from './index.less';
 import  services  from '@/services/org';
 import { buildTreeData, getParentNode } from '@/utils/tools';
 
-const { queryOrgList, queryOrgById } = services.OrgController;
+const { queryOrgList, queryOrgById, updateOrg, deleteOrg, createOrg } = services.OrgController;
 const { Search } = Input;
 
 
@@ -96,26 +96,27 @@ const getParentKey = (key: React.Key, tree: TreeDataNode[]): React.Key => {
   return parentKey!;
 };
 
-const _setFormFieldValues = (data: any, checkedKey: number, formRef: any, defaultData: TreeDataNode[])=>{
-  const parentNode = getParentNode(Number(checkedKey), defaultData);
-      if (parentNode) {
-        formRef?.current?.setFieldsValue({
-          ...data,
-          pName: parentNode.title // 安全地访问 title 属性
-        });
-      } else {
-        formRef?.current?.setFieldsValue({
-          ...data,
-          pName: '总部' // parentNode 为 null 或 undefined 时的默认值
-        });
-      }
+const _setFormFieldValues = (data: any, formRef: any, parentNode: TreeDataNode|null)=>{
+  //const parentNode = getParentNode(Number(checkedKey), defaultData);
+  if (parentNode) {
+    formRef?.current?.setFieldsValue({
+      ...data,
+      pName: parentNode.title // 安全地访问 title 属性
+    });
+  } else {
+    formRef?.current?.setFieldsValue({
+      ...data,
+      pName: '' // parentNode 为 null 或 undefined 时的默认值
+    });
+  }
 }
 const TableList: React.FC<unknown> = () => {
+  const [messageApi, contextHolder] = message.useMessage();
   /// 左侧树-START
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const [autoExpandParent, setAutoExpandParent] = useState(true);
-  const [defaultData, setDefaultData] = useState<TreeDataNode[]>([]);
+  const [defaultTreeData, setDefaultTreeData] = useState<TreeDataNode[]>([]);
  /// 左侧树-END
 
   /// 表单-START
@@ -128,7 +129,10 @@ const TableList: React.FC<unknown> = () => {
   //   code: '',
   //   simpleName:''
   // });
-  const [checkedKey, setCheckedKey] = useState<number>();
+  const [checkedKey, setCheckedKey] = useState<number|string>();
+  const [forbidden, setForbidden] = useState<boolean>(false);
+  const [currentNodeData, setCurrentNodeData] = useState<any>({});
+  const [parentNodeData, setParentNodeData] = useState<any>({});
  /// 表单-END
 
    /// 左侧树-START
@@ -142,7 +146,7 @@ const TableList: React.FC<unknown> = () => {
     const newExpandedKeys = dataList
       .map((item) => {
         if (item.title.indexOf(value) > -1) {
-          return getParentKey(item.key, defaultData);
+          return getParentKey(item.key, defaultTreeData);
         }
         return null;
       })
@@ -178,27 +182,30 @@ const TableList: React.FC<unknown> = () => {
           key: item.key,
         };
       });
-      if(defaultData.length === 0){
+      if(defaultTreeData.length === 0){
         return []
       }
-      const data = loop(defaultData);
+      const data = loop(defaultTreeData);
     return data;
-  }, [searchValue, defaultData]);
+  }, [searchValue, defaultTreeData]);
   /// 左侧树-END
 
 
   /// 表单-START
+  const refreshTreeHandler = async ()=>{
+    const res = await queryOrgList();
+    const treeData = buildTreeData(res.data, {
+      idKey: 'id',
+      nameKey: 'name',
+      pidKey: 'pid'
+    })
+    setDefaultTreeData(treeData)
+    generateList(treeData);
+    return treeData
+  }
   useEffect(() => {
     const queryOrgs = async ()=>{
-        const res = await queryOrgList();
-        const treeData = buildTreeData(res.data, {
-          idKey: 'id',
-          nameKey: 'name',
-          pidKey: 'pid'
-        })
-
-        setDefaultData(treeData)
-        generateList(treeData);
+        const treeData = await refreshTreeHandler();
         setFormStatus(treeData.length>0?FormStatus.NO_DATA:FormStatus.ROOT);
     }
     queryOrgs()
@@ -210,8 +217,14 @@ const TableList: React.FC<unknown> = () => {
   }
 
   // 新增 子节点界面
-  const openAddSubHandler = ()=>{
+  const openAddSubHandler = async ()=>{
     formRef?.current?.resetFields();
+    if(checkedKey === undefined){
+      messageApi.error('请选择要新增的节点');
+      return
+    }
+    setForbidden(currentNodeData.orgType===3);
+    formRef?.current?.setFieldsValue({pName:parentNodeData?.title, orgType:currentNodeData.orgType===3?3:null})
     setFormStatus(FormStatus.CREAT_CHILD)
   }
 
@@ -224,10 +237,9 @@ const TableList: React.FC<unknown> = () => {
   //
   const cancleHandler = async ()=>{
     if(checkedKey !== undefined){
-      const res = await queryOrgById(checkedKey);
-      if (res.code === 200) {
+      if (currentNodeData) {
+        _setFormFieldValues(currentNodeData, formRef, parentNodeData)
         setFormStatus(FormStatus.VIEW_NODE)
-        _setFormFieldValues(res.data, checkedKey, formRef, defaultData)
       } else {
         setFormStatus(FormStatus.NO_DATA)
       }
@@ -237,8 +249,17 @@ const TableList: React.FC<unknown> = () => {
     setFormStatus(treeData.length>0?FormStatus.VIEW_NODE:FormStatus.ROOT)
   }
 
-
-  
+  const deleteHanlder = async ()=>{
+    if(checkedKey !== undefined){
+      const res = await deleteOrg(checkedKey);
+      if (res.code === 200) {
+        const treeList = await refreshTreeHandler();
+        setFormStatus(!treeList || treeList.length === 0 ? FormStatus.ROOT:FormStatus.NO_DATA)
+        formRef?.current?.resetFields();
+        messageApi.success('删除成功');
+      }
+    }
+  }  
   /// 表单-END
 
 
@@ -248,6 +269,7 @@ const TableList: React.FC<unknown> = () => {
         title: '组织管理',
       }}
     >
+      {contextHolder}
       <ProCard split="vertical">
         <ProCard title="组织" colSpan="20%">
         <Search style={{ marginBottom: 8 }} placeholder="查询" onChange={onChange} />
@@ -255,18 +277,26 @@ const TableList: React.FC<unknown> = () => {
           onExpand={onExpand}
           expandedKeys={expandedKeys}
           autoExpandParent={autoExpandParent}
+          selectedKeys={checkedKey?[checkedKey]:[]}
           onSelect={async ( selectedKeys) => {
               if (selectedKeys.length > 0) {
                 const res = await queryOrgById(Number(selectedKeys[0]));
                 if (res.code === 200) {
-                  setFormStatus(FormStatus.VIEW_NODE)
+                  formRef?.current?.resetFields();
+                  const parentNode = getParentNode(Number(selectedKeys[0]), defaultTreeData);
+                  setCurrentNodeData(res.data)
+                  setParentNodeData(parentNode);
                   setCheckedKey(Number(selectedKeys[0]))
-                  _setFormFieldValues(res.data, Number(selectedKeys[0]), formRef, defaultData)
+                  _setFormFieldValues(res.data, formRef, parentNode)
+                  setFormStatus(FormStatus.VIEW_NODE)
                 } else {
                   setFormStatus(FormStatus.NO_DATA)
                 }
               } else {
-                  setFormStatus(FormStatus.NO_DATA)
+                setCurrentNodeData(null)
+                setParentNodeData(null)
+                setCheckedKey(undefined)
+                setFormStatus(FormStatus.NO_DATA)
               }
               
             }
@@ -283,7 +313,16 @@ const TableList: React.FC<unknown> = () => {
               <>
                 <Button onClick={openEditHandler}>编辑</Button>
                 <Button type='primary' onClick={openAddSubHandler}>新增子级</Button>
-                <Button danger type='primary'>删除</Button>
+                <Popconfirm
+                  title="警告"
+                  description="确认删除当前组织?"
+                  onConfirm={deleteHanlder}
+                  okText="是"
+                  cancelText="否"
+                >
+                  <Button danger type='primary'>删除</Button>
+                </Popconfirm>
+                
               </>:null
             }
             {
@@ -295,23 +334,83 @@ const TableList: React.FC<unknown> = () => {
             </Space>
           }
           >
-       
-              <ProForm
-                hidden={formStatus === FormStatus.ROOT || formStatus === FormStatus.NO_DATA}
-                formRef={formRef}
-                grid={true}
-                readonly={formStatus === FormStatus.CREAT_ROOT || formStatus === FormStatus.CREAT_CHILD || formStatus === FormStatus.EDIT_NODE?false:true}
-                onFinish={async () => {
-                  message.success('提交成功');
-                }}
-                submitter={{
-                  render: (props, doms) => {
-                    return formStatus !== FormStatus.VIEW_NODE?
-                      <Flex justify="flex-end" align="center">
-                        <Space>{doms}</Space>
-                      </Flex> :null;
-                  },
-                }}
+            <ProForm
+              hidden={formStatus === FormStatus.ROOT || formStatus === FormStatus.NO_DATA}
+              formRef={formRef}
+              grid={true}
+              readonly={formStatus === FormStatus.CREAT_ROOT || formStatus === FormStatus.CREAT_CHILD || formStatus === FormStatus.EDIT_NODE?false:true}
+              onFinish={async () => {
+                const values = formRef.current?.getFieldsValue();
+                let pid:number =0;
+                if (parentNodeData) {
+                  pid = Number(parentNodeData.key);
+                } 
+
+                if(formStatus === FormStatus.CREAT_ROOT || formStatus === FormStatus.CREAT_CHILD){
+                  const res = await createOrg({...values, pid:Number(checkedKey)});
+                  if(res.code === 200){
+                    await refreshTreeHandler();
+                    setFormStatus(FormStatus.VIEW_NODE)
+                    setExpandedKeys([res.data.id])
+                    setAutoExpandParent(true);
+                    setCheckedKey(res.data.id)
+                    messageApi.success('提交成功');
+                  }
+                }
+                if(formStatus === FormStatus.EDIT_NODE){
+                  const res = await updateOrg(Number(checkedKey), {...values, pid});
+                  if(res.code === 200){
+                    await refreshTreeHandler();
+                    setFormStatus(FormStatus.VIEW_NODE)
+                    messageApi.success('提交成功');
+                  }
+                }
+              }}
+              onReset={
+                async () => {
+                  // const res = await queryOrgById(Number(checkedKey));
+                  // if (res.code === 200) {
+                  //   formRef?.current?.resetFields();
+                  //   setCheckedKey(Number(checkedKey))
+                  //   if(formStatus === FormStatus.CREAT_CHILD ){
+                  //     //formRef.current?.setFieldsValue({id:res.data.id, pName});
+                  //   }
+                  //   if(formStatus === FormStatus.EDIT_NODE ){
+
+                  //   }
+                  // }
+                  formRef?.current?.resetFields();
+                  if(formStatus === FormStatus.CREAT_CHILD){
+                    console.log(forbidden)
+                    formRef.current?.setFieldsValue({
+                      id:currentNodeData?.id,
+                      orgType:forbidden?3:null,
+                      pid:currentNodeData?.pid,
+                      pName:parentNodeData?.title
+                    })
+                  }
+
+                  if(formStatus === FormStatus.EDIT_NODE){
+                    formRef.current?.setFieldsValue({
+                      id:currentNodeData?.id,
+                      code:currentNodeData?.code,
+                      orgType:currentNodeData?.orgType,
+                      pid:currentNodeData?.pid,
+                      pName:parentNodeData?.title
+                    })
+                  }
+                  
+                  console.log(currentNodeData, parentNodeData)
+                }
+              }
+              submitter={{
+                render: (props, doms) => {
+                  return formStatus !== FormStatus.VIEW_NODE?
+                    <Flex justify="flex-end" align="center">
+                      <Space>{doms}</Space>
+                    </Flex> :null;
+                },
+              }}
                 // syncToUrl={(values, type) => {
                 //   console.log('syncToUrl', values, type)
                 //   if (type === 'get') {
@@ -331,19 +430,30 @@ const TableList: React.FC<unknown> = () => {
                 //     expirationTime: undefined,
                 //   };
                 // }}
-                initialValues={{
-                  id: null,
-                  name: '',
-                  pid: 0,
-                  code: '',
-                  simpleName:''
-                }}
-                autoFocusFirstInput
+              initialValues={{
+                id: null,
+                name: '',
+                pid: 0,
+                code: '',
+                simpleName:'',
+                tel:'',
+                manager:'',
+                phone:'',
+                remark:''
+              }}
+              autoFocusFirstInput
               >
               <ProFormRadio.Group
                 colProps={{ span: 12 }}
                 label="组织类型"
                 name="orgType"
+                tooltip="部门类型下只能新增子部门"
+                rules={[
+                  {
+                    required: true,
+                    message: '请选择组织类型',
+                  },
+                ]}
                 readonly={formStatus === FormStatus.EDIT_NODE}
                 options={[
                   {
@@ -354,7 +464,7 @@ const TableList: React.FC<unknown> = () => {
                   {
                     label: '子公司',
                     value: 2,
-                    disabled: formStatus === FormStatus.CREAT_ROOT,
+                    disabled: formStatus === FormStatus.CREAT_ROOT || forbidden,
                   },
                   {
                     label: '部门',
@@ -377,6 +487,7 @@ const TableList: React.FC<unknown> = () => {
                 readonly={formStatus === FormStatus.EDIT_NODE}
                 label="组织代码"
                 placeholder="请输入组织代码"
+                rules={[{ required: true }]}
               />
               <ProFormText
                 colProps={{ span: 12 }}
@@ -384,6 +495,7 @@ const TableList: React.FC<unknown> = () => {
                 name="name"
                 label="组织名称"
                 placeholder="请输入组织名称"
+                rules={[{ required: true }]}
               />
               <ProFormText
                 colProps={{ span: 12 }}
@@ -404,7 +516,6 @@ const TableList: React.FC<unknown> = () => {
                 width="md"
                 name="manager"
                 label="负责人"
-                rules={[{ required: true }]}
                 placeholder="请输入负责人"
               />
               <ProFormText
