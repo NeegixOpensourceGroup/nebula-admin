@@ -268,7 +268,7 @@ const DictList: React.FC = () => {
           <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
             <Space size="middle">
               <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={(e) => showDictGroupModal(e as React.MouseEvent<HTMLAnchorElement>)} />
-              <Search placeholder="输入字典分类" onSearch={onSearch} enterButton style={{ width: '100%' }}/>
+              <Search placeholder="输入字典分类" onSearch={onSearch} enterButton  style={{ margin: 8 }}/>
             </Space>
             <Table columns={dictGroups} dataSource={groupDataSource}
               rowKey="id"

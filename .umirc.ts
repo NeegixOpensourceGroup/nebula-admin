@@ -47,13 +47,13 @@ export default defineConfig({
       routes: [
         {
           path: '/system',
-          redirect: '/system/dept',
+          redirect: '/system/org',
           wrappers:['@/wrappers/auth'],
         },
         {
-          name: '部门管理',
-          path: '/system/dept',
-          component: './system/Dept',
+          name: '组织管理',
+          path: '/system/org',
+          component: './system/Org',
           wrappers:['@/wrappers/auth'],
         },
         {
