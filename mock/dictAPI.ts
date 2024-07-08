@@ -35,7 +35,7 @@ export default {
   'GET /api/v1/dict': (req: any, res: any) => {
     const { current = 1, pageSize = 10, name } = req.query;
 
-    dictGroup = dictGroup.filter(item=>{
+    const handlerDictGroup = dictGroup.filter(item=>{
       if(name === undefined){
         return true
       }
@@ -45,10 +45,10 @@ export default {
 
     res.json({
       data: { 
-        total: dictGroup.length,
+        total: handlerDictGroup.length,
         pageSize: 10,
         current: current,
-        list: dictGroup.reverse().splice((current-1)*pageSize, pageSize)
+        list: handlerDictGroup.reverse().splice((current-1)*pageSize, pageSize)
       },
       code: 200,
       message: '查询成功'
