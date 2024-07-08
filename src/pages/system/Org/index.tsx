@@ -224,7 +224,7 @@ const TableList: React.FC<unknown> = () => {
       return
     }
     setForbidden(currentNodeData.orgType===3);
-    formRef?.current?.setFieldsValue({pName:parentNodeData?.title, orgType:currentNodeData.orgType===3?3:null})
+    formRef?.current?.setFieldsValue({pName:currentNodeData.name, orgType:currentNodeData.orgType===3?3:null})
     setFormStatus(FormStatus.CREAT_CHILD)
   }
 
@@ -367,26 +367,18 @@ const TableList: React.FC<unknown> = () => {
                 }
               }}
               onReset={
-                async () => {
-                  // const res = await queryOrgById(Number(checkedKey));
-                  // if (res.code === 200) {
-                  //   formRef?.current?.resetFields();
-                  //   setCheckedKey(Number(checkedKey))
-                  //   if(formStatus === FormStatus.CREAT_CHILD ){
-                  //     //formRef.current?.setFieldsValue({id:res.data.id, pName});
-                  //   }
-                  //   if(formStatus === FormStatus.EDIT_NODE ){
-
-                  //   }
-                  // }
-                  formRef?.current?.resetFields();
+                () => {
+                 if(formStatus === FormStatus.CREAT_ROOT){
+                  formRef.current?.setFieldsValue({
+                    orgType:1
+                  })
+                 }
                   if(formStatus === FormStatus.CREAT_CHILD){
-                    console.log(forbidden)
                     formRef.current?.setFieldsValue({
                       id:currentNodeData?.id,
                       orgType:forbidden?3:null,
                       pid:currentNodeData?.pid,
-                      pName:parentNodeData?.title
+                      pName:currentNodeData?.name
                     })
                   }
 
@@ -399,8 +391,6 @@ const TableList: React.FC<unknown> = () => {
                       pName:parentNodeData?.title
                     })
                   }
-                  
-                  console.log(currentNodeData, parentNodeData)
                 }
               }
               submitter={{
@@ -437,6 +427,7 @@ const TableList: React.FC<unknown> = () => {
                 code: '',
                 simpleName:'',
                 tel:'',
+                orgType:null,
                 manager:'',
                 phone:'',
                 remark:''
@@ -470,6 +461,11 @@ const TableList: React.FC<unknown> = () => {
                     label: '部门',
                     value: 3,
                     disabled: formStatus === FormStatus.CREAT_ROOT,
+                  },
+                  {
+                    label: '外部公司',
+                    value: 4,
+                    disabled: formStatus === FormStatus.CREAT_ROOT || forbidden,
                   },
                 ]}
               />
