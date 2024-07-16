@@ -47,19 +47,25 @@ export default defineConfig({
       routes: [
         {
           path: '/system',
-          redirect: '/system/org',
+          redirect: '/system/biz-unit',
           wrappers:['@/wrappers/auth'],
         },
         {
           name: '组织管理',
-          path: '/system/org',
-          component: './system/Org',
+          path: '/system/biz-unit',
+          component: './system/BizUnit',
+          wrappers:['@/wrappers/auth'],
+        },
+        {
+          name: '部门管理',
+          path: '/system/dept',
+          component: './system/Dept',
           wrappers:['@/wrappers/auth'],
         },
         {
           name: '人员管理',
-          path: '/system/table2',
-          component: './Table',
+          path: '/system/psn',
+          component: './system/Psn',
           wrappers:['@/wrappers/auth'],
         },
         {

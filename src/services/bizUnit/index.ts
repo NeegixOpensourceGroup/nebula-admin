@@ -1,7 +1,7 @@
 /* eslint-disable */
 // 该文件由 OneAPI 自动生成，请勿手动修改！
 
-import * as OrgController from './OrgController';
+import * as BizUnitController from './BizUnitController';
 export default {
-  OrgController,
+  BizUnitController,
 };

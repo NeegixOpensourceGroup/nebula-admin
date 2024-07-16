@@ -1,71 +1,72 @@
-import { TreeDataNode } from "antd";
 interface Config {
   idKey: string;
   nameKey: string;
   pidKey: string;
-  rootPidValue?: any;
 }
 
 export function buildTreeData(
-  items: [],
-  config: Config = { // 给 config 参数一个默认值
-    idKey: 'id', // 假设默认的 id 键是 'id'
-    nameKey: 'name', // 假设默认的 name 键是 'name'
-    pidKey: 'pid', // 假设默认的 pid 键是 'pid'
-    rootPidValue: 0 // 假设默认的根节点 pid 值是 0
-  } // 注意：默认值必须符合 Config<T> 接口的结构
-): TreeDataNode[] {
-  const { idKey, nameKey, pidKey, rootPidValue = 0 } = config;
-  const map: { [key: string]: TreeDataNode } = {};
+  items: any[],
+  config: Config = {
+    idKey: 'id',
+    nameKey: 'name',
+    pidKey: 'pid'
+  }
+): any[] {
+  const { idKey, nameKey, pidKey } = config;
+  const map: { [key: string]: any } = {};
+
+  if (!items || items.length === 0) return [];
 
   // Initialize all nodes and store them in a map
   items.forEach(item => {
-    const id = item[idKey] as string | number;
-    const name = item[nameKey] as string;
+    const id = item[idKey];
+    const name = item[nameKey];
     map[String(id)] = {
       key: id,
-      title: name
+      title: name,
+      value: id,
+      children: []
     };
   });
 
-  // Build the tree structure
-  const treeData: TreeDataNode[] = [];
-  items.forEach(item => {
-    const id = item[idKey] as string | number;
-    const pid = item[pidKey] as string | number;
-    const parentId = pid !== undefined && pid !== null ? (pid as string | number) : rootPidValue;
+  // Declare treeData here
+  const treeData: any[] = [];
 
-    if (String(parentId) === String(rootPidValue)) {
+  // Build the tree structure
+  items.forEach(item => {
+    const id = item[idKey];
+    const pid = item[pidKey];
+
+    // If pid doesn't exist in map or is null/undefined, it's a root node
+    if (pid === null || !map.hasOwnProperty(String(pid))) {
       treeData.push(map[String(id)]);
-    } else if (parentId !== null && map[String(parentId)]) {
-      const parent = map[String(parentId)];
-      if (!parent.children) {
-        parent.children = [];
-      }
+    } else {
+      const parent = map[String(pid)];
       parent.children.push(map[String(id)]);
     }
   });
 
-  // Remove empty children arrays
-  const removeEmptyChildren = (nodes: TreeDataNode[]) => {
-    nodes.forEach(node => {
-      if (node.children && node.children.length === 0) {
-        delete node.children;
-      } else if (node.children) {
-        removeEmptyChildren(node.children);
+  // Remove empty children arrays recursively
+  const pruneEmptyChildren = (nodeList: any[]) => {
+    nodeList.forEach(node => {
+      if (node.children && node.children.length > 0) {
+        pruneEmptyChildren(node.children);
+        if (node.children.length === 0) {
+          delete node.children;
+        }
       }
     });
   };
 
-  removeEmptyChildren(treeData);
+  pruneEmptyChildren(treeData);
 
   return treeData;
 }
 
 // 定义辅助函数，用于获取当前节点的父节点
-export function getParentNode(nodeKey: string | number, treeData: TreeDataNode[]): TreeDataNode | null {
+export function getParentNode(nodeKey: string | number, treeData: any[]): any | null {
   // 辅助函数，用于递归查找父节点
-  function findParent(node: TreeDataNode, key: string | number): TreeDataNode | null {
+  function findParent(node: any, key: string | number): any | null {
     // 如果节点的 key 与给定的 key 匹配，则返回该节点本身，因为它是根节点
     if (node.key === key) {
       return null;

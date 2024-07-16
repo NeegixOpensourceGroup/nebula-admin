@@ -1,6 +1,6 @@
 const users = [
-  { id: 0, name: 'Umi', nickName: 'U', gender: 'MALE' },
-  { id: 1, name: 'Fish', nickName: 'B', gender: 'FEMALE' },
+  { id: 0, code:'100001', name: '马云', nickName: '老马', gender: '男' },
+  { id: 1, code:'100002', name: '马化腾', nickName: '小马', gender: '男' },
 ];
 
 export default {

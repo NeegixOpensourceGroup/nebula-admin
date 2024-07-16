@@ -1,6 +1,6 @@
 let dictGroup = [
-  {id:1, name: '字典分类2'},
-  {id:2, name: '字典分类3'}
+  {id:1, name: '性别', code: 'XB'},
+  {id:2, name: '字典分类3', code: 'ZD'}
 ]
 
 
@@ -19,12 +19,18 @@ let dictItem = [
   },
   {
     id: 3,
+    dictId: 1,
+    name: '不男不女',
+    value: '3',
+  },
+  {
+    id: 4,
     dictId: 2,
     name: '字典项一',
     value: '1',
   },
   {
-    id: 4,
+    id: 5,
     dictId: 2,
     name: '字典项二',
     value: '2',
@@ -126,5 +132,22 @@ export default {
       code: 200,
       message: '删除成功'
     });
+  },
+  'GET /api/v1/dictItem/dictCode/:dictCode': (req: any, res: any) => {
+    const dictGroupData = dictGroup.find(item=>item.code === req.params.dictCode);
+    if(dictGroupData){
+      const list = dictItem.filter(item=>item.dictId===dictGroupData.id);
+      res.json({
+        code: 200,
+        message: '查询成功',
+        data: list
+      })
+      return
+    } else {
+      res.json({
+        code: 500,
+        message: '数据不存在'
+      })
+    }
   },
 }

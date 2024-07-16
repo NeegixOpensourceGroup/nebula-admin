@@ -11,7 +11,16 @@ declare namespace NEBULA_API {
     message: string;
     data: any;
   };
-  type Org = {
+  type BizUnit = {
+    id: number;
+    code: string;
+    name: string;
+    simpleName: string;
+    tel: string;
+    phone: string;
+    pid: number;
+  };
+  type Dept = {
     id: number;
     code: string;
     name: string;

@@ -10,10 +10,10 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Button, Empty, Flex, Input, Popconfirm, Space, Tree, message } from 'antd';
 import type { TreeDataNode } from 'antd';
 import styles from './index.less';
-import  services  from '@/services/org';
+import  services  from '@/services/bizUnit';
 import { buildTreeData, getParentNode } from '@/utils/tools';
 
-const { queryOrgList, queryOrgById, updateOrg, deleteOrg, createOrg } = services.OrgController;
+const { queryBizUnitList, queryBizUnitById, updateBizUnit, deleteBizUnit, createBizUnit } = services.BizUnitController;
 const { Search } = Input;
 
 
@@ -25,36 +25,6 @@ enum FormStatus {
   EDIT_NODE,  // 编辑节点
   VIEW_NODE,  // 查看节点
 }
-
-
-// const x = 3;
-// const y = 2;
-// const z = 1;
-// let defaultData: TreeDataNode[] = [];
-
-// const generateData = (_level: number, _preKey?: React.Key, _tns?: TreeDataNode[]) => {
-//   const preKey = _preKey || '0';
-//   const tns = _tns || defaultData;
-
-//   const children: React.Key[] = [];
-//   for (let i = 0; i < x; i++) {
-//     const key = `${preKey}-${i}`;
-//     tns.push({ title: key, key });
-//     if (i < y) {
-//       children.push(key);
-//     }
-//   }
-//   if (_level < 0) {
-//     return tns;
-//   }
-//   const level = _level - 1;
-//   children.forEach((key, index) => {
-//     console.log(key)
-//     tns[index].children = [];
-//     return generateData(level, key, tns[index].children);
-//   });
-// };
-// generateData(z);
 
 const dataList: { key: React.Key; title: string }[] = [];
 const generateList = (data: TreeDataNode[]) => {
@@ -79,7 +49,6 @@ const generateList = (data: TreeDataNode[]) => {
     }
   }
 };
-
 
 const getParentKey = (key: React.Key, tree: TreeDataNode[]): React.Key => {
   let parentKey: React.Key;
@@ -110,7 +79,7 @@ const _setFormFieldValues = (data: any, formRef: any, parentNode: TreeDataNode|n
     });
   }
 }
-const TableList: React.FC<unknown> = () => {
+const BizUnitList: React.FC<unknown> = () => {
   const [messageApi, contextHolder] = message.useMessage();
   /// 左侧树-START
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
@@ -130,7 +99,6 @@ const TableList: React.FC<unknown> = () => {
   //   simpleName:''
   // });
   const [checkedKey, setCheckedKey] = useState<number|string>();
-  const [forbidden, setForbidden] = useState<boolean>(false);
   const [currentNodeData, setCurrentNodeData] = useState<any>({});
   const [parentNodeData, setParentNodeData] = useState<any>({});
  /// 表单-END
@@ -188,12 +156,8 @@ const TableList: React.FC<unknown> = () => {
       const data = loop(defaultTreeData);
     return data;
   }, [searchValue, defaultTreeData]);
-  /// 左侧树-END
-
-
-  /// 表单-START
   const refreshTreeHandler = async ()=>{
-    const res = await queryOrgList();
+    const res = await queryBizUnitList();
     const treeData = buildTreeData(res.data, {
       idKey: 'id',
       nameKey: 'name',
@@ -203,6 +167,8 @@ const TableList: React.FC<unknown> = () => {
     generateList(treeData);
     return treeData
   }
+  /// 左侧树-END
+  
   useEffect(() => {
     const queryOrgs = async ()=>{
         const treeData = await refreshTreeHandler();
@@ -210,6 +176,9 @@ const TableList: React.FC<unknown> = () => {
     }
     queryOrgs()
   }, []);
+
+  /// 表单-START
+
 
   // 编辑 界面
   const openEditHandler = ()=>{
@@ -223,7 +192,6 @@ const TableList: React.FC<unknown> = () => {
       messageApi.error('请选择要新增的节点');
       return
     }
-    setForbidden(currentNodeData.orgType===3);
     formRef?.current?.setFieldsValue({pName:currentNodeData.name, orgType:currentNodeData.orgType===3?3:null})
     setFormStatus(FormStatus.CREAT_CHILD)
   }
@@ -251,7 +219,7 @@ const TableList: React.FC<unknown> = () => {
 
   const deleteHanlder = async ()=>{
     if(checkedKey !== undefined){
-      const res = await deleteOrg(checkedKey);
+      const res = await deleteBizUnit(checkedKey);
       if (res.code === 200) {
         const treeList = await refreshTreeHandler();
         setFormStatus(!treeList || treeList.length === 0 ? FormStatus.ROOT:FormStatus.NO_DATA)
@@ -280,7 +248,7 @@ const TableList: React.FC<unknown> = () => {
           selectedKeys={checkedKey?[checkedKey]:[]}
           onSelect={async ( selectedKeys) => {
               if (selectedKeys.length > 0) {
-                const res = await queryOrgById(Number(selectedKeys[0]));
+                const res = await queryBizUnitById(Number(selectedKeys[0]));
                 if (res.code === 200) {
                   formRef?.current?.resetFields();
                   const parentNode = getParentNode(Number(selectedKeys[0]), defaultTreeData);
@@ -347,20 +315,24 @@ const TableList: React.FC<unknown> = () => {
                 } 
 
                 if(formStatus === FormStatus.CREAT_ROOT || formStatus === FormStatus.CREAT_CHILD){
-                  const res = await createOrg({...values, pid:Number(checkedKey)});
+                  const pid = formStatus === FormStatus.CREAT_ROOT?0:Number(checkedKey);
+                  const res = await createBizUnit({...values, pid});
                   if(res.code === 200){
                     await refreshTreeHandler();
                     setFormStatus(FormStatus.VIEW_NODE)
                     setExpandedKeys([res.data.id])
                     setAutoExpandParent(true);
                     setCheckedKey(res.data.id)
+                    setParentNodeData({key: currentNodeData.id, title: currentNodeData.name})
+                    setCurrentNodeData({...values,pid, id:res.data.id})
                     messageApi.success('提交成功');
                   }
                 }
                 if(formStatus === FormStatus.EDIT_NODE){
-                  const res = await updateOrg(Number(checkedKey), {...values, pid});
+                  const res = await updateBizUnit(Number(checkedKey), {...values, pid});
                   if(res.code === 200){
                     await refreshTreeHandler();
+                    setCurrentNodeData({...values,pid, id:Number(checkedKey)})
                     setFormStatus(FormStatus.VIEW_NODE)
                     messageApi.success('提交成功');
                   }
@@ -376,7 +348,6 @@ const TableList: React.FC<unknown> = () => {
                   if(formStatus === FormStatus.CREAT_CHILD){
                     formRef.current?.setFieldsValue({
                       id:currentNodeData?.id,
-                      orgType:forbidden?3:null,
                       pid:currentNodeData?.pid,
                       pName:currentNodeData?.name
                     })
@@ -453,19 +424,14 @@ const TableList: React.FC<unknown> = () => {
                     disabled: formStatus === FormStatus.CREAT_CHILD,
                   },
                   {
-                    label: '子公司',
+                    label: '分/子公司',
                     value: 2,
-                    disabled: formStatus === FormStatus.CREAT_ROOT || forbidden,
-                  },
-                  {
-                    label: '部门',
-                    value: 3,
                     disabled: formStatus === FormStatus.CREAT_ROOT,
                   },
                   {
                     label: '外部公司',
-                    value: 4,
-                    disabled: formStatus === FormStatus.CREAT_ROOT || forbidden,
+                    value: 3,
+                    disabled: formStatus === FormStatus.CREAT_ROOT,
                   },
                 ]}
               />
@@ -535,4 +501,4 @@ const TableList: React.FC<unknown> = () => {
   );
 };
 
-export default TableList;
+export default BizUnitList;

@@ -3,30 +3,30 @@
 import { request } from '@umijs/max';
 
 /** 此处后端没有提供注释 GET /api/v1/queryUserList */
-export async function queryOrgList(
+export async function queryBizUnitList(
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>('/api/v1/org', {
+  return request<NEBULA_API.Result>('/api/v1/bizUnit', {
     method: 'GET',
     ...(options || {}),
   });
 }
 
-export async function queryOrgById(
+export async function queryBizUnitById(
   id: number|string,
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/org/${id}`, {
+  return request<NEBULA_API.Result>(`/api/v1/bizUnit/${id}`, {
     method: 'GET',
     ...(options || {}),
   });
 }
 
-export async function createOrg(
-  body: NEBULA_API.Org,
+export async function createBizUnit(
+  body: NEBULA_API.BizUnit,
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>('/api/v1/org', {
+  return request<NEBULA_API.Result>('/api/v1/bizUnit', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -37,12 +37,12 @@ export async function createOrg(
 }
 
 
-export async function updateOrg(
+export async function updateBizUnit(
   id: number|string,
-  body: NEBULA_API.Org,
+  body: NEBULA_API.BizUnit,
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/org/${id}`, {
+  return request<NEBULA_API.Result>(`/api/v1/bizUnit/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -52,11 +52,11 @@ export async function updateOrg(
   })
 }
 
-export async function deleteOrg(
+export async function deleteBizUnit(
   id: number|string,
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/org/${id}`, {
+  return request<NEBULA_API.Result>(`/api/v1/bizUnit/${id}`, {
     method: 'DELETE',
     ...(options || {}),
   });

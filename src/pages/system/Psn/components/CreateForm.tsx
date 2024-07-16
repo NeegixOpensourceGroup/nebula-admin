@@ -8,7 +8,6 @@ interface CreateFormProps {
 
 const CreateForm: React.FC<PropsWithChildren<CreateFormProps>> = (props) => {
   const { modalVisible, onCancel } = props;
-
   return (
     <Modal
       destroyOnClose

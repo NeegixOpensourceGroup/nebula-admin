@@ -131,5 +131,16 @@ export async function addDictItem(
 export async function removeDictItem(dictId: number, id: number, options?: { [key: string]: any }){
   return request<NEBULA_API.Result>(`/api/v1/dictItem/${dictId}/${id}`, {
     method: 'DELETE',
+    ...(options || {}),
   });
+}
+
+ export async function queryDictItemByDictCode(
+  code: string,
+  options?: { [key: string]: any },
+) {
+  return request<NEBULA_API.Result>(`/api/v1/dictItem/dictCode/${code}`, {
+    method: 'GET',
+    ...(options || {}),
+  })
 }
