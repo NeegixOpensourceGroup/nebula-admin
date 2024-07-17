@@ -112,7 +112,6 @@ export default {
   'PUT /api/v1/dictItem/:dictId/:id': (req: any, res: any) => {
     const {dictId, id} = req.params;
     dictItem = dictItem.map(item => (item.id === parseInt(id) && item.dictId === parseInt(dictId) ? req.body : item))
-    console.log(dictItem)
     res.json({
       code: 200,
       message: '更新成功'

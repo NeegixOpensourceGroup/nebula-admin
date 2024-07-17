@@ -28,7 +28,6 @@ export async function createDept(
   body: NEBULA_API.Dept,
   options?: { [key: string]: any },
 ) {
-  console.log('createDept', bizUnitId, body)
   return request<NEBULA_API.Result>(`/api/v1/dept/bizUnit/${bizUnitId}`, {
     method: 'POST',
     headers: {
@@ -45,7 +44,6 @@ export async function updateDept(
   body: NEBULA_API.Dept,
   options?: { [key: string]: any },
 ) {
-  console.log('updateDept', id, body)
   return request<NEBULA_API.Result>(`/api/v1/dept/${id}`, {
     method: 'PUT',
     headers: {

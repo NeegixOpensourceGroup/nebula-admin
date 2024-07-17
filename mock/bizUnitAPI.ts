@@ -43,7 +43,6 @@ export default {
   'POST /api/v1/bizUnit': (req: any, res: any) => {
     const insertId = bizUnits.length+1;
     bizUnits.push({...req.body, id: insertId})
-    console.log(bizUnits)
     res.json({
       code: 200,
       message: '新增成功',

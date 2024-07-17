@@ -39,6 +39,7 @@ const BizUnitSelectTree: React.FC<BizUnitSelectTreeProps> = ({onChange}) => {
   return (
     <TreeSelect
       showSearch
+      treeNodeFilterProp="title" 
       style={{ width: 300 }}
       value={value}
       dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
