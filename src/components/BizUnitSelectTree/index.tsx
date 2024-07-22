@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { TreeSelect } from 'antd';
 import type { TreeSelectProps } from 'antd';
-import  bizUnitServices  from '@/services/bizUnit';
 import { buildTreeData } from '@/utils/tools';
+import  bizUnitServices  from '@/services/bizUnit';
 const  { queryBizUnitList } = bizUnitServices.BizUnitController;
 interface BizUnitSelectTreeProps {
   onChange?: (value: string) => void;
@@ -44,7 +44,6 @@ const BizUnitSelectTree: React.FC<BizUnitSelectTreeProps> = ({onChange}) => {
       value={value}
       dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
       placeholder="请选择业务单元"
-      allowClear
       treeDefaultExpandAll
       onChange={onChangeTree}
       treeData={bizUnitTreeData}

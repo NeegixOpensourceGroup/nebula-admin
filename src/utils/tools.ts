@@ -25,6 +25,7 @@ export function buildTreeData(
       key: id,
       title: name,
       value: id,
+      label: name,
       children: []
     };
   });

@@ -1,4 +1,4 @@
-import services from '@/services/demo';
+import services from '@/services/psn';
 import {
   ActionType,
   FooterToolbar,
@@ -66,7 +66,7 @@ const handleUpdate = async (fields: FormValueType) => {
  *  删除节点
  * @param selectedRows
  */
-const handleRemove = async (selectedRows: API.UserInfo[]) => {
+const handleRemove = async (selectedRows: API.PsnInfo[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
@@ -89,9 +89,9 @@ const TableList: React.FC<unknown> = () => {
     useState<boolean>(false);
   const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<API.UserInfo>();
-  const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
-  const columns: ProColumns<API.UserInfo>[] = [
+  const [row, setRow] = useState<API.PsnInfo>();
+  const [selectedRowsState, setSelectedRows] = useState<API.PsnInfo[]>([]);
+  const columns: ProColumns<API.PsnInfo>[] = [
     {
       title: '名称',
       dataIndex: 'name',
@@ -140,7 +140,7 @@ const TableList: React.FC<unknown> = () => {
     },
   ];
 
-  const columns2: ProDescriptionsItemProps<API.UserInfo>[] = [
+  const columns2: ProDescriptionsItemProps<API.PsnInfo>[] = [
     {
       title: '名称',
       dataIndex: 'name',
@@ -195,7 +195,7 @@ const TableList: React.FC<unknown> = () => {
         title: 'CRUD 示例',
       }}
     >
-      <ProTable<API.UserInfo>
+      <ProTable<API.PsnInfo>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"
@@ -255,7 +255,7 @@ const TableList: React.FC<unknown> = () => {
         onCancel={() => handleModalVisible(false)}
         modalVisible={createModalVisible}
       >
-        <ProTable<API.UserInfo, API.UserInfo>
+        <ProTable<API.PsnInfo, API.PsnInfo>
           onSubmit={async (value) => {
             const success = await handleAdd(value);
             if (success) {
@@ -300,7 +300,7 @@ const TableList: React.FC<unknown> = () => {
         closable={false}
       >
         {row?.name && (
-          <ProDescriptions<API.UserInfo>
+          <ProDescriptions<API.PsnInfo>
             column={2}
             title={row?.name}
             request={async () => ({

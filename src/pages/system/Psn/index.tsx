@@ -1,4 +1,3 @@
-import services from '@/services/demo';
 import {
   ActionType,
   FooterToolbar,
@@ -7,87 +6,24 @@ import {
   ProColumns,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, Divider, message, Tree, Input, TreeDataNode } from 'antd';
+import { Button, Divider, message, Tree, Input, TreeDataNode, Space, Popconfirm } from 'antd';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import CreateForm from './components/CreateForm';
-import UpdateForm, { FormValueType } from './components/UpdateForm';
+import UpdateForm from './components/UpdateForm';
 import  dictServices from '@/services/dict';
 import styles from './index.less';
-import  bizUnitServices  from '@/services/bizUnit';
 import BizUnitSelectTree from '@/components/BizUnitSelectTree';
+import deptServices  from '@/services/dept';
+import psnServices from '@/services/psn';
+import { buildTreeData } from '@/utils/tools';
 
 const { Search } = Input;
 const { queryDictItemByDictCode } = dictServices.DictController;
-const { queryOrgById, } = bizUnitServices.BizUnitController;
-const { addUser, queryUserList, deleteUser, modifyUser } =
-  services.UserController;
+const {queryDeptList} = deptServices.DeptController;
+const { queryUserList, deletePsn, addPsn, updatePsn } = psnServices.PsnController;
 
-/**
- * 添加节点
- * @param fields
- */
-const handleAdd = async (fields: API.UserInfo) => {
-  const hide = message.loading('正在添加');
-  try {
-    await addUser({ ...fields });
-    hide();
-    message.success('添加成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('添加失败请重试！');
-    return false;
-  }
-};
 
-/**
- * 更新节点
- * @param fields
- */
-const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('正在配置');
-  try {
-    await modifyUser(
-      {
-        userId: fields.id || '',
-      },
-      {
-        name: fields.name || '',
-        nickName: fields.nickName || '',
-        email: fields.email || '',
-      },
-    );
-    hide();
 
-    message.success('配置成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('配置失败请重试！');
-    return false;
-  }
-};
-
-/**
- *  删除节点
- * @param selectedRows
- */
-const handleRemove = async (selectedRows: API.UserInfo[]) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
-  try {
-    await deleteUser({
-      userId: selectedRows.find((row) => row.id)?.id || '',
-    });
-    hide();
-    message.success('删除成功，即将刷新');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请重试');
-    return false;
-  }
-};
 
 const dataList: { key: React.Key; title: string }[] = [];
 const generateList = (data: any[]) => {
@@ -128,23 +64,22 @@ const getParentKey = (key: React.Key, tree: TreeDataNode[]): React.Key => {
   return parentKey!;
 };
 
+
 const PsnList: React.FC<unknown> = () => {
 
   const [messageApi, contextHolder] = message.useMessage();
-
+  const [bizUnitId, setBizUnitId] = useState<number|string>(1);
   /// 左侧树-START
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const [autoExpandParent, setAutoExpandParent] = useState(true);
   const [defaultTreeData, setDefaultTreeData] = useState<any[]>([]);
+  const [checkedKey, setCheckedKey] = useState<number|string>();
  /// 左侧树-END
 
   /// 右侧列表-START
-  const [createModalVisible, handleModalVisible] = useState<boolean>(false);
-  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef<ActionType>();
-  const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<API.PsnInfo[]>([]);
   const [sexData, setSexData] = useState<any>({});
    /// 左侧列表-END
 
@@ -216,7 +151,91 @@ const PsnList: React.FC<unknown> = () => {
       }
     });
   }, []);
-  const columns: ProColumns<API.UserInfo>[] = [
+
+  const onSubmit = async (values: any) => {
+    const hide = messageApi.loading('正在添加');
+    if (!values.bizUnitPk) {
+      messageApi.error('请选择业务单元');
+      return false;
+    }
+    try {
+      if (!values.id) {
+        const res = await addPsn(values);
+        if (res.code === 200) {
+          hide();
+          messageApi.success(res.message);
+          actionRef.current?.reload();
+          return true;
+        } else {
+          hide();
+          messageApi.error(res.message);
+          return false;
+        }
+      } else {
+        const res = await updatePsn(values.id, values);
+        if (res.code === 200) {
+          hide();
+          messageApi.success(res.message);
+          actionRef.current?.reload();
+          return true;
+        } else {
+          hide();
+          messageApi.error(res.message);
+          return false;
+        }
+      }
+      
+    } catch (error) {
+     hide();
+     return false;
+    }
+  }
+
+  const handleSingleRemove = async(id: number|string) => {
+    const hide = messageApi.loading('正在删除');
+    try {
+      await deletePsn(id);
+      actionRef.current?.reload();
+      hide();
+      messageApi.success('删除成功，即将刷新');
+      return true;
+    } catch (error) {
+      hide();
+      messageApi.error('删除失败，请重试');
+      return false;
+    }
+  }
+
+  /**
+ *  删除节点
+ * @param selectedRows
+ */
+const handleRemove = async (selectedRows: API.PsnInfo[]) => {
+  const hide = messageApi.loading('正在删除');
+  if (!selectedRows) return true;
+  try {
+    
+    console.log(selectedRows)
+    const res  = await deletePsn(selectedRows.map(item=>item.id).join(","));
+    if(res.code === 200){
+      actionRef.current?.reload();
+      hide();
+      messageApi.success('删除成功，即将刷新');
+      return true;
+    } else {
+      hide();
+      messageApi.error(res.message);
+      return false;
+    }
+   
+  } catch (error) {
+    hide();
+    messageApi.error('删除失败，请重试');
+    return false;
+  }
+};
+
+  const columns: ProColumns<API.PsnInfo>[] = [
     {
       title: '编码',
       dataIndex: 'code',
@@ -244,7 +263,7 @@ const PsnList: React.FC<unknown> = () => {
     },
     {
       title: '昵称',
-      dataIndex: 'nickName',
+      dataIndex: 'nickname',
       valueType: 'text',
     },
     {
@@ -259,16 +278,18 @@ const PsnList: React.FC<unknown> = () => {
       valueType: 'option',
       render: (_, record) => (
         <>
-          <a
-            onClick={() => {
-              handleUpdateModalVisible(true);
-              setStepFormValues(record);
-            }}
-          >
-            更新
-          </a>
+          <UpdateForm key={'updateForm'} id={record.id}  bizUnitId={bizUnitId} onSubmit={onSubmit}/>
           <Divider type="vertical" />
-          <a href="">删除</a>
+          <Popconfirm
+            title="警告"
+            description="确认删除当前组织?"
+            onConfirm={()=> (record.id !== undefined ? handleSingleRemove(record.id) : null)}
+            okText="是"
+            cancelText="否"
+          >
+            <a>删除</a>
+          </Popconfirm>
+          
         </>
       ),
     },
@@ -284,7 +305,22 @@ const PsnList: React.FC<unknown> = () => {
     >
       {contextHolder}
         <ProCard title={
-          <BizUnitSelectTree />
+          <Space>
+            <BizUnitSelectTree onChange={async (value: string) => {
+              const res = await queryDeptList(value);
+              if (res.code === 200) {
+                const treeData = buildTreeData(res.data, {
+                  idKey: 'id',
+                  nameKey: 'name',
+                  pidKey: 'pid'
+                })
+                setDefaultTreeData(treeData)
+                generateList(treeData);
+                setBizUnitId(parseInt(value))
+                setCheckedKey(undefined)
+              }
+            }}/>
+          </Space>
         } split="vertical" bordered headerBordered >
           <ProCard title="部门" colSpan="20%" >
             <Search style={{ marginBottom: 8 }} placeholder="查询" onChange={onChange} />
@@ -292,22 +328,11 @@ const PsnList: React.FC<unknown> = () => {
               onExpand={onExpand}
               expandedKeys={expandedKeys}
               autoExpandParent={autoExpandParent}
-              //selectedKeys={checkedKey?[checkedKey]:[]}
               onSelect={async ( selectedKeys) => {
                   if (selectedKeys.length > 0) {
-                    const res = await queryOrgById(Number(selectedKeys[0]));
-                    if (res.code === 200) {
-                      // formRef?.current?.resetFields();
-                      // const parentNode = getParentNode(Number(selectedKeys[0]), defaultTreeData);
-                      // setCurrentNodeData(res.data)
-                      // setParentNodeData(parentNode);
-                      // setCheckedKey(Number(selectedKeys[0]))
-                    } else {
-                    }
+                    setCheckedKey(Number(selectedKeys[0]))
                   } else {
-                    // setCurrentNodeData(null)
-                    // setParentNodeData(null)
-                    // setCheckedKey(undefined)
+                    setCheckedKey(undefined)
                   }
                   
                 }
@@ -316,7 +341,7 @@ const PsnList: React.FC<unknown> = () => {
             />
           </ProCard>
           <ProCard title="人员" colSpan="80%" >
-            <ProTable<API.UserInfo>
+            <ProTable<API.PsnInfo>
               headerTitle="查询表格"
               actionRef={actionRef}
               rowKey="id"
@@ -324,13 +349,7 @@ const PsnList: React.FC<unknown> = () => {
                 labelWidth: 50,
               }}
               toolBarRender={() => [
-                <Button
-                  key="1"
-                  type="primary"
-                  onClick={() => handleModalVisible(true)}
-                >
-                  新建
-                </Button>,
+                <CreateForm key={"userForm"} bizUnitId={bizUnitId} onSubmit={onSubmit} />,
               ]}
               request={async (params, sorter, filter) => {
                 const { data, success } = await queryUserList({
@@ -372,45 +391,6 @@ const PsnList: React.FC<unknown> = () => {
                 <Button type="primary">批量审批</Button>
               </FooterToolbar>
             )}
-            <CreateForm
-              onCancel={() => handleModalVisible(false)}
-              modalVisible={createModalVisible}
-            >
-              <ProTable<API.UserInfo, API.UserInfo>
-                onSubmit={async (value) => {
-                  const success = await handleAdd(value);
-                  if (success) {
-                    handleModalVisible(false);
-                    if (actionRef.current) {
-                      actionRef.current.reload();
-                    }
-                  }
-                }}
-                rowKey="id"
-                type="form"
-                columns={columns}
-              />
-            </CreateForm>
-            {stepFormValues && Object.keys(stepFormValues).length ? (
-              <UpdateForm
-                onSubmit={async (value) => {
-                  const success = await handleUpdate(value);
-                  if (success) {
-                    handleUpdateModalVisible(false);
-                    setStepFormValues({});
-                    if (actionRef.current) {
-                      actionRef.current.reload();
-                    }
-                  }
-                }}
-                onCancel={() => {
-                  handleUpdateModalVisible(false);
-                  setStepFormValues({});
-                }}
-                updateModalVisible={updateModalVisible}
-                values={stepFormValues}
-              />
-            ) : null}
           </ProCard>
         </ProCard>
     </PageContainer>

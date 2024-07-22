@@ -17,7 +17,7 @@ declare namespace API {
     current?: number;
     pageSize?: number;
     total?: number;
-    list?: Array<UserInfo>;
+    list?: Array<PsnInfo>;
   }
 
   interface Result {
@@ -33,9 +33,9 @@ declare namespace API {
   }
 
   interface Result_UserInfo_ {
-    success?: boolean;
-    errorMessage?: string;
-    data?: UserInfo;
+    code?: number;
+    message?: string;
+    data?: PsnInfo;
   }
 
   interface Result_string_ {
@@ -44,24 +44,45 @@ declare namespace API {
     data?: string;
   }
 
-  type UserGenderEnum = 'MALE' | 'FEMALE';
+  interface PsnInfo {
+    id?: string|number;
+    name?: string;
+    /** nick */
+    nickname?: string;
+    /** email */
+    email?: string;
+    gender?: number;
+    birthday?: string;
+    cardKind?: string;
+    card?: string;
+    workDate?: string;
+    homeAddress?: string;
+    homeTel?: string;
+    workTel?: string;
+    phone?: string;
+    status?: number;
+    bizUnitPk?: number;
+  }
 
-  interface UserInfo {
+  interface PsnInfoVO {
     id?: string;
     name?: string;
     /** nick */
-    nickName?: string;
+    nickname?: string;
     /** email */
     email?: string;
-    gender?: UserGenderEnum;
-  }
-
-  interface UserInfoVO {
-    name?: string;
-    /** nick */
-    nickName?: string;
-    /** email */
-    email?: string;
+    gender?: number;
+    birthday?: string;
+    cardKind?: string;
+    card?: string;
+    workDate?: string;
+    homeAddress?: string;
+    homeTel?: string;
+    workTel?: string;
+    phone?: string;
+    status?: number;
+    bizUnitPk?: number;
+    dataSource?: Array<any>;
   }
 
   type definitions_0 = null;

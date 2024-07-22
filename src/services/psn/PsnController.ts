@@ -25,11 +25,11 @@ export async function queryUserList(
 }
 
 /** 此处后端没有提供注释 POST /api/v1/user */
-export async function addUser(
-  body?: API.UserInfoVO,
+export async function addPsn(
+  body?: API.PsnInfoVO,
   options?: { [key: string]: any },
 ) {
-  return request<API.Result_UserInfo_>('/api/v1/user', {
+  return request<NEBULA_API.Result>('/api/v1/user', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -40,57 +40,39 @@ export async function addUser(
 }
 
 /** 此处后端没有提供注释 GET /api/v1/user/${param0} */
-export async function getUserDetail(
-  params: {
-    // path
-    /** userId */
-    userId?: string;
-  },
+export async function getPsnDetail(
+  userId?: string|number,
   options?: { [key: string]: any },
 ) {
-  const { userId: param0 } = params;
-  return request<API.Result_UserInfo_>(`/api/v1/user/${param0}`, {
+  return request<NEBULA_API.Result>(`/api/v1/user/${userId}`, {
     method: 'GET',
-    params: { ...params },
     ...(options || {}),
   });
 }
 
 /** 此处后端没有提供注释 PUT /api/v1/user/${param0} */
-export async function modifyUser(
-  params: {
-    // path
-    /** userId */
-    userId?: string;
-  },
-  body?: API.UserInfoVO,
+export async function updatePsn(
+  userId?: string|number,
+  body?: API.PsnInfoVO,
   options?: { [key: string]: any },
 ) {
-  const { userId: param0 } = params;
-  return request<API.Result_UserInfo_>(`/api/v1/user/${param0}`, {
+  return request<NEBULA_API.Result>(`/api/v1/user/${userId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 此处后端没有提供注释 DELETE /api/v1/user/${param0} */
-export async function deleteUser(
-  params: {
-    // path
-    /** userId */
-    userId?: string;
-  },
+export async function deletePsn(
+  userId?: string|number,
   options?: { [key: string]: any },
 ) {
-  const { userId: param0 } = params;
-  return request<API.Result_string_>(`/api/v1/user/${param0}`, {
+  return request<NEBULA_API.Result>(`/api/v1/user/${userId}`, {
     method: 'DELETE',
-    params: { ...params },
     ...(options || {}),
   });
 }
