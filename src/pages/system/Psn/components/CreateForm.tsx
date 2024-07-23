@@ -76,11 +76,16 @@ const columns: ProColumns<DataSourceType>[] = [
     dataIndex: 'bizUnitPk',
     valueType: 'treeSelect',
     initialValue: bizUnitId,
-    fieldProps:  {
-      treeData: bizUnits,
-      treeDefaultExpandAll: true,
-      showSearch: true,
-      treeNodeFilterProp:"title",
+    fieldProps: (_, { rowIndex })=>{
+      return {
+        treeData: bizUnits,
+        treeDefaultExpandAll: true,
+        showSearch: true,
+        treeNodeFilterProp:"title",
+        onSelect: () => {
+          editableFormRef.current?.setRowData?.(rowIndex, { dept: undefined });
+        }
+      }
     },
     width: 200,
   },
@@ -102,7 +107,6 @@ const columns: ProColumns<DataSourceType>[] = [
     fieldProps: {
       showSearch: true,
       treeNodeFilterProp:"title",
-      placeholder: '请选择'
     },
     dependencies: ['bizUnitPk'],
     request: async ({bizUnitPk}) => {
@@ -231,7 +235,7 @@ const columns: ProColumns<DataSourceType>[] = [
           label="性别"
           placeholder="请选择性别"
           request={async () => {
-            const res = await queryDictItemByDictCode('XB');
+            const res = await queryDictItemByDictCode('GENDER');
             return res.data.map((item:any) => {
               return {
                 value: item.id,
@@ -248,11 +252,20 @@ const columns: ProColumns<DataSourceType>[] = [
           label="出生日期"
           placeholder="请选择出生日期"
         />
-        <ProFormText
+        <ProFormSelect
           width="sm"
           name="cardKind"
           label="证件类型"
           placeholder="请选择证件类型"
+          request={async () => {
+            const res = await queryDictItemByDictCode('CARD_KIND');
+            return res.data.map((item:any) => {
+              return {
+                value: item.id,
+                label: item.name,
+              }
+            })
+          }}
         />
         <ProFormText
           width="sm"
@@ -297,6 +310,12 @@ const columns: ProColumns<DataSourceType>[] = [
           name="email"
           label="电子邮箱"
           placeholder="请输入电子邮箱"
+          rules={[
+            {
+              type: 'email',
+              message: '请输入正确的邮箱地址',
+            },
+          ]}
         />
         <ProFormSwitch
           width="sm"

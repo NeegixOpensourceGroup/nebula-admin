@@ -1,6 +1,6 @@
 let users = [
   { id: 1,bizUnitPk: 1, code:'100001', name: '马云', nickname: '老马', gender: 3,
-    birthday: '1971-01-01', cardKind: '身份证', card: '111111111111111111',
+    birthday: '1971-01-01', cardKind: 4, card: '111111111111111111',
     workDate: '2010-01-01', homeAddress: '北京市朝阳区芍药居', homeTel: '010-1234567',
     workTel: '010-1234567', phone: '13888888888', email: 'xxxx@qq.com', status: true,
     dataSource:[{
@@ -11,7 +11,7 @@ let users = [
     ]
    },
   { id: 2,bizUnitPk: 1, code:'100002', name: '马化腾', nickname: '小马', gender: 1,
-    birthday: '1971-01-01', cardKind: '身份证', card: '111111111111111111',
+    birthday: '1971-01-01', cardKind: 5, card: '111111111111111111',
     workDate: '2010-01-01', homeAddress: '北京市朝阳区芍药居', homeTel: '010-1234567',
     workTel: '010-1234567', phone: '13888888888', email: 'xxxx@qq.com', status: true,
     dataSource:[{
@@ -21,21 +21,44 @@ let users = [
 ];
 
 export default {
-  'GET /api/v1/queryUserList': (req: any, res: any) => {
+  'GET /api/v1/psn': (req: any, res: any) => {
+    const { current, pageSize, code, name, nickname, gender, bizUnitId, checkedKey, sorter, filter } = req.query;
+    let psns = users.filter(item => {
+      if (bizUnitId && item.bizUnitPk !== parseInt(bizUnitId)) {
+        return false;
+      }
+      if (code && item.code !== code) {
+        return false;
+      }
+      if (name && item.name !== name) {
+        return false;
+      }
+      if (nickname && item.nickname !== nickname) {
+        return false;
+      }
+      if (gender && item.gender !== parseInt(gender)) {
+        return false;
+      }
+      if (checkedKey && !item.dataSource.find(item => item.dept === parseInt(checkedKey))) {
+        return false;
+      }
+      return true;
+    })
+    psns = psns.splice(0, pageSize);
     res.json({
       success: true,
-      data: { list: users },
+      data: { list: psns },
       errorCode: 0,
     });
   },
-  'PUT /api/v1/user/:id': (req: any, res: any) => {
+  'PUT /api/v1/psn/:id': (req: any, res: any) => {
     users = users.map(item => (item.id === parseInt(req.params.id) ? {id:parseInt(req.params.id),...req.body} : item))
     res.json({
       code: 200,
       message: '保存成功'
     });
   },
-  'POST /api/v1/user': (req: any, res: any) => {
+  'POST /api/v1/psn': (req: any, res: any) => {
     users.push({
       id: users.length+1,
       ...req.body,
@@ -45,7 +68,7 @@ export default {
       message: '保存成功'
     });
   },
-  'DELETE /api/v1/user/:id': (req: any, res: any) => {
+  'DELETE /api/v1/psn/:id': (req: any, res: any) => {
     const { id } = req.params;
     id.split(',').forEach((item:any) => {
       users.splice(
@@ -59,7 +82,7 @@ export default {
       message: '删除成功'
     });
   },
-  'GET /api/v1/user/:id': (req: any, res: any) => {
+  'GET /api/v1/psn/:id': (req: any, res: any) => {
     const { id } = req.params;
     res.json({
       data: users.find((item) => item.id === parseInt(id)),

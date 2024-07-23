@@ -1,6 +1,6 @@
 let dictGroup = [
-  {id:1, name: '性别', code: 'XB'},
-  {id:2, name: '字典分类3', code: 'ZD'}
+  {id:1, name: '性别', code: 'GENDER'},
+  {id:2, name: '证件类型', code: 'CARD_KIND'}
 ]
 
 
@@ -26,13 +26,31 @@ let dictItem = [
   {
     id: 4,
     dictId: 2,
-    name: '字典项一',
+    name: '身份证',
     value: '1',
   },
   {
     id: 5,
     dictId: 2,
-    name: '字典项二',
+    name: '驾照',
+    value: '2',
+  },
+  {
+    id: 6,
+    dictId: 2,
+    name: '护照',
+    value: '2',
+  },
+  {
+    id: 7,
+    dictId: 2,
+    name: '港澳居民来往内地通行证',
+    value: '2',
+  },
+  {
+    id: 8,
+    dictId: 2,
+    name: '台湾居民来往大陆通行证',
     value: '2',
   }
 ];

@@ -20,7 +20,7 @@ import { buildTreeData } from '@/utils/tools';
 const { Search } = Input;
 const { queryDictItemByDictCode } = dictServices.DictController;
 const {queryDeptList} = deptServices.DeptController;
-const { queryUserList, deletePsn, addPsn, updatePsn } = psnServices.PsnController;
+const { queryPsnList, deletePsn, addPsn, updatePsn } = psnServices.PsnController;
 
 
 
@@ -141,7 +141,7 @@ const PsnList: React.FC<unknown> = () => {
 
   useEffect(() => {
     // 查询性别字典
-    queryDictItemByDictCode('XB').then((res) => {
+    queryDictItemByDictCode('GENDER').then((res) => {
       if (res.code === 200) {
         const enumObject:any = {};
         res.data.forEach((item:any) => {
@@ -351,8 +351,9 @@ const handleRemove = async (selectedRows: API.PsnInfo[]) => {
               toolBarRender={() => [
                 <CreateForm key={"userForm"} bizUnitId={bizUnitId} onSubmit={onSubmit} />,
               ]}
+              params={{bizUnitId, checkedKey}}
               request={async (params, sorter, filter) => {
-                const { data, success } = await queryUserList({
+                const { data, success } = await queryPsnList({
                   ...params,
                   // FIXME: remove @ts-ignore
                   // @ts-ignore

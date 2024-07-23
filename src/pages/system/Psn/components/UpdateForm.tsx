@@ -8,9 +8,10 @@ import {
   ProFormSwitch,
   ProFormTreeSelect,
   ProFormSelect,
+  EditableFormInstance,
 } from '@ant-design/pro-components';
 import { Form } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import psnServices from '@/services/psn';
 import  bizUnitServices  from '@/services/bizUnit';
 import { buildTreeData } from '@/utils/tools';
@@ -43,17 +44,23 @@ const UpdateForm: React.FC<UpdateFormProps> = ({id, bizUnitId, onSubmit}) => {
   const [form] = Form.useForm<any>();
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>();
   const [bizUnits, setBizUnits] = useState<any[]>([]);
+  const editableFormRef = useRef<EditableFormInstance>();
   const columns: ProColumns<DataSourceType>[] = [
     {
       title: '任职业务单元',
       dataIndex: 'bizUnitPk',
       valueType: 'treeSelect',
       initialValue: bizUnitId,
-      fieldProps: {
-        treeData: bizUnits,
-        treeDefaultExpandAll: true,
-        showSearch: true,
-        treeNodeFilterProp:"title"
+      fieldProps: (_, { rowIndex })=>{
+        return {
+          treeData: bizUnits,
+          treeDefaultExpandAll: true,
+          showSearch: true,
+          treeNodeFilterProp:"title",
+          onSelect: () => {
+            editableFormRef.current?.setRowData?.(rowIndex, { dept: undefined });
+          }
+        }
       },
       width: 200,
     },
@@ -216,7 +223,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({id, bizUnitId, onSubmit}) => {
           label="性别"
           placeholder="请选择性别"
           request={async () => {
-            const res = await queryDictItemByDictCode('XB');
+            const res = await queryDictItemByDictCode('GENDER');
             return res.data.map((item:any) => {
               return {
                 value: item.id,
@@ -233,11 +240,20 @@ const UpdateForm: React.FC<UpdateFormProps> = ({id, bizUnitId, onSubmit}) => {
           label="出生日期"
           placeholder="请选择出生日期"
         />
-        <ProFormText
+        <ProFormSelect
           width="sm"
           name="cardKind"
           label="证件类型"
           placeholder="请选择证件类型"
+          request={async () => {
+            const res = await queryDictItemByDictCode('CARD_KIND');
+            return res.data.map((item:any) => {
+              return {
+                value: item.id,
+                label: item.name,
+              }
+            })
+          }}
         />
         <ProFormText
           width="sm"
@@ -282,6 +298,12 @@ const UpdateForm: React.FC<UpdateFormProps> = ({id, bizUnitId, onSubmit}) => {
           name="email"
           label="电子邮箱"
           placeholder="请输入电子邮箱"
+          rules={[
+            {
+              type: 'email',
+              message: '请输入正确的邮箱地址',
+            }
+          ]}
         />
         <ProFormSwitch
           width="sm"
@@ -299,6 +321,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({id, bizUnitId, onSubmit}) => {
           scroll={{ x: 1200 }}
           toolBarRender={false}
           columns={columns}
+          editableFormRef={editableFormRef}
           recordCreatorProps={{
             newRecordType: 'dataSource',
             position: 'top',
