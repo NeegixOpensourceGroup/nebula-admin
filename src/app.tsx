@@ -2,20 +2,23 @@ import { RunTimeLayoutConfig } from '@umijs/max';
 import { history, RequestConfig } from 'umi';
 import { message } from 'antd';
 import services from '@/services/auth';
+import accessServices from '@/services/access';
 
+const { queryAccess } = accessServices.AccessController;
 const { logout } = services.AuthController;
 
 
 // 运行时配置
 // 全局初始化数据配置，用于 Layout 用户信息和权限初始化
 // 更多信息见文档：https://umijs.org/docs/api/runtime-config#getinitialstate
-export async function getInitialState(): Promise<{ name?: string, token?: string }> {
+export async function getInitialState(): Promise<{ name?: string, token?: string, access?: any }> {
   const name = sessionStorage.getItem("name");
   if (name === null) {
     // 处理null值的情况，可能是抛出错误或返回默认值
     throw new Error("initialState is null");
   } else {
-    return { name };
+    const res = await queryAccess();
+    return { name, access: res.data };
   }
 }
 
@@ -36,6 +39,7 @@ export const layout: RunTimeLayoutConfig = () => {
           duration: 1,
           onClose: () => {
             sessionStorage.removeItem("token");
+            sessionStorage.removeItem("name");
             history.push("/login");
           },
         });

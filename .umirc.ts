@@ -38,7 +38,6 @@ export default defineConfig({
       path: '/home',
       icon: 'smile',
       component: './Home',
-      wrappers:['@/wrappers/auth'],
     },
     {
       name: '系统管理',
@@ -48,31 +47,27 @@ export default defineConfig({
         {
           path: '/system',
           redirect: '/system/biz-unit',
-          wrappers:['@/wrappers/auth'],
         },
         {
           name: '组织管理',
           path: '/system/biz-unit',
           component: './system/BizUnit',
-          wrappers:['@/wrappers/auth'],
         },
         {
           name: '部门管理',
           path: '/system/dept',
           component: './system/Dept',
-          wrappers:['@/wrappers/auth'],
         },
         {
           name: '人员管理',
           path: '/system/psn',
           component: './system/Psn',
-          wrappers:['@/wrappers/auth'],
+          access: 'system:psn:list',
         },
         {
           name: '字典管理',
           path: '/system/dict',
           component: './system/Dict',
-          wrappers:['@/wrappers/auth'],
         },
       ],
     },
@@ -84,19 +79,16 @@ export default defineConfig({
         {
           path: '/log',
           redirect: '/log/table1',
-          wrappers:['@/wrappers/auth'],
         },
         {
           name: '操作日志',
           path: '/log/table1',
           component: './Table',
-          wrappers:['@/wrappers/auth'],
         },
         {
           name: '登录日志',
           path: '/log/table2',
           component: './Table',
-          wrappers:['@/wrappers/auth'],
         },
       ],
     },
@@ -105,14 +97,16 @@ export default defineConfig({
       name: '权限演示',
       path: '/access',
       component: './Access',
-      wrappers:['@/wrappers/auth'],
     },
     {
       name: 'CRUD 示例',
       path: '/table',
       component: './Table',
-      wrappers:['@/wrappers/auth'],
     },
+    {
+      path: '/*',
+      component: '@/pages/404'
+    }
   ],
   npmClient: 'npm',
 });

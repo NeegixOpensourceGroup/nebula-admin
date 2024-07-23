@@ -18,7 +18,9 @@ import type { CSSProperties } from 'react';
 import { useState } from 'react';
 import { history, useModel } from 'umi';
 import services from '@/services/auth';
+import accessServices from '@/services/access';
 
+const { queryAccess } = accessServices.AccessController;
 type LoginType = 'phone' | 'account';
 
 const iconStyles: CSSProperties = {
@@ -62,8 +64,9 @@ const Page = () => {
         type: 'success',
         content: '登录成功！',
         duration: 1,
-        onClose: () => {
-          setInitialState({ ...initialState, token: res.headers.authorization, name: values.username });
+        onClose: async() => {
+          const accessRes = await queryAccess();
+          setInitialState({ ...initialState, token: res.headers.authorization, name: values.username, access: accessRes.data});
           if(values.username){
             sessionStorage.setItem('name', values.username);
             history.push("/home");
