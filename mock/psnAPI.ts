@@ -22,7 +22,7 @@ let users = [
 
 export default {
   'GET /api/v1/psn': (req: any, res: any) => {
-    const { current, pageSize, code, name, nickname, gender, bizUnitId, checkedKey, sorter, filter } = req.query;
+    const { current, pageSize, code, name, nickname, gender, bizUnitId, checkedKey } = req.query;
     let psns = users.filter(item => {
       if (bizUnitId && item.bizUnitPk !== parseInt(bizUnitId)) {
         return false;
@@ -44,7 +44,8 @@ export default {
       }
       return true;
     })
-    psns = psns.splice(0, pageSize);
+    // 分页查询
+    psns = psns.splice(pageSize * (current - 1), pageSize);
     res.json({
       success: true,
       data: { list: psns },
