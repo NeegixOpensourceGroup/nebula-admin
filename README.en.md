@@ -68,7 +68,7 @@ routes: [
 3.  Create pages in the pages directory.
 4.  Create interfaces in the services directory.
 5.  Create mock data in the mock directory (or enable the backend service).
-6.  The menu/button information can be obtained through the queryAccess interface, or you can customize it, refer to the mock data.
+6.  Permission information about menus/buttons can be obtained through the `queryAccess` interface, or you can customize it, refer to the mock data for the interface result.
 
 #### Contribution
 
