@@ -1,13 +1,13 @@
 const access = {
-  'system:psn:list': true,
-  'system:psn:add': true,
-  'system:psn:edit': true,
-  'system:psn:delete': true,
-  'system:psn:export': true,
-  'system:psn:import': true,
-  'system:psn:query': true,
-  'system:psn:resetPwd': true,
-  'system:psn:changeStatus': true,
+  'organization:psn:list': true,
+  'organization:psn:add': true,
+  'organization:psn:edit': true,
+  'organization:psn:delete': true,
+  'organization:psn:export': true,
+  'organization:psn:import': true,
+  'organization:psn:query': true,
+  'organization:psn:resetPwd': true,
+  'organization:psn:changeStatus': true,
 };
 
 export default {

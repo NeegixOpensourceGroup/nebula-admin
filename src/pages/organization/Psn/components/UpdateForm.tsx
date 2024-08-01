@@ -1,4 +1,3 @@
-import { PlusOutlined } from '@ant-design/icons';
 import {
   DrawerForm,
   ProForm,
@@ -11,15 +10,17 @@ import {
   ProFormSelect,
   EditableFormInstance,
 } from '@ant-design/pro-components';
-import { Button } from 'antd';
+import { Form } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
-import  bizUnitServices  from '@/services/bizUnit';
+import psnServices from '@/services/organization/psn';
+import  bizUnitServices  from '@/services/organization/bizUnit';
 import { buildTreeData } from '@/utils/tools';
-import  dictServices from '@/services/dict';
-import deptServices  from '@/services/dept';
+import  dictServices from '@/services/system/dict';
+import deptServices  from '@/services/organization/dept';
 const { queryDictItemByDictCode } = dictServices.DictController;
 const  { queryBizUnitList } = bizUnitServices.BizUnitController;
 const {queryDeptList} = deptServices.DeptController;
+const { getPsnDetail } = psnServices.PsnController;
 
 type DataSourceType = {
   id: React.Key;
@@ -34,28 +35,103 @@ type DataSourceType = {
   position?: string;
 };
 
-interface CreateFormProps {
+interface UpdateFormProps {
+  id?: number|string;
   bizUnitId?: number|string;
   onSubmit: (values: any) => Promise<boolean>;
 }
-
-const CreateForm: React.FC<CreateFormProps> = ({ bizUnitId, onSubmit }) => {
-  const [form] = ProForm.useForm<any>();
-  const [defaultData] = useState<DataSourceType[]>([{
-    id: 2,
-    bizUnitPk: bizUnitId,
-    code: '',
-    kind: '',
-    dept:'',
-    major: false,
-    duty: '',
-    position: '',
-  }]);
-  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
-    defaultData.map((item) => item.id),
-  );
+const UpdateForm: React.FC<UpdateFormProps> = ({id, bizUnitId, onSubmit}) => {
+  const [form] = Form.useForm<any>();
+  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>();
   const [bizUnits, setBizUnits] = useState<any[]>([]);
   const editableFormRef = useRef<EditableFormInstance>();
+  const columns: ProColumns<DataSourceType>[] = [
+    {
+      title: '任职业务单元',
+      dataIndex: 'bizUnitPk',
+      valueType: 'treeSelect',
+      initialValue: bizUnitId,
+      fieldProps: (_, { rowIndex })=>{
+        return {
+          treeData: bizUnits,
+          treeDefaultExpandAll: true,
+          showSearch: true,
+          treeNodeFilterProp:"title",
+          onSelect: () => {
+            editableFormRef.current?.setRowData?.(rowIndex, { dept: undefined });
+          }
+        }
+      },
+      width: 200,
+    },
+    {
+      title: '员工编号',
+      dataIndex: 'code',
+      width: 100,
+    },
+    {
+      title: '人员类别',
+      dataIndex: 'kind',
+      width: 100,
+    },
+    {
+      title: '所在部门',
+      dataIndex: 'dept',
+      valueType: 'treeSelect',
+      width: 150,
+      fieldProps: {
+        showSearch: true,
+        treeNodeFilterProp: "title",
+      },
+      dependencies: ['bizUnitPk'],
+      request: async ({bizUnitPk}) => {
+        const res = await queryDeptList(bizUnitPk);
+        if (res.code === 200) {
+          const treeData = buildTreeData(res.data, {
+            idKey: 'id',
+            nameKey: 'name',
+            pidKey: 'pid'
+          })
+          return treeData
+        }
+        return []
+      },
+    },
+    {
+      title: '是否主职',
+      dataIndex: 'major',
+      valueType: 'switch',
+      width: 70,
+    },
+    {
+      title: '任职开始日期',
+      dataIndex: 'start',
+      valueType: 'date',
+      width: 150,
+    },
+    {
+      title: '任职结束日期',
+      dataIndex: 'end',
+      valueType: 'date',
+      width: 150,
+    },
+    {
+      title: '职务',
+      dataIndex: 'duty',
+      width: 100,
+    },
+    {
+      title: '岗位',
+      dataIndex: 'position',
+      width: 100,
+    },
+    {
+      title: '操作',
+      valueType: 'option',
+      width: 120,
+      fixed: 'right'
+    },
+  ];
   useEffect(() => {
     queryBizUnitList().then(res => {
       if (res.code === 200) {
@@ -69,110 +145,21 @@ const CreateForm: React.FC<CreateFormProps> = ({ bizUnitId, onSubmit }) => {
       }
     })
  }, [])
-
-const columns: ProColumns<DataSourceType>[] = [
-  {
-    title: '任职业务单元',
-    dataIndex: 'bizUnitPk',
-    valueType: 'treeSelect',
-    initialValue: bizUnitId,
-    fieldProps: (_, { rowIndex })=>{
-      return {
-        treeData: bizUnits,
-        treeDefaultExpandAll: true,
-        showSearch: true,
-        treeNodeFilterProp:"title",
-        onSelect: () => {
-          editableFormRef.current?.setRowData?.(rowIndex, { dept: undefined });
-        }
-      }
-    },
-    width: 200,
-  },
-  {
-    title: '员工编号',
-    dataIndex: 'code',
-    width: 100,
-  },
-  {
-    title: '人员类别',
-    dataIndex: 'kind',
-    width: 100,
-  },
-  {
-    title: '所在部门',
-    dataIndex: 'dept',
-    valueType: 'treeSelect',
-    width: 150,
-    fieldProps: {
-      showSearch: true,
-      treeNodeFilterProp:"title",
-    },
-    dependencies: ['bizUnitPk'],
-    request: async ({bizUnitPk}) => {
-      const res = await queryDeptList(bizUnitPk);
-      if (res.code === 200) {
-        const treeData = buildTreeData(res.data, {
-          idKey: 'id',
-          nameKey: 'name',
-          pidKey: 'pid'
-        })
-        return treeData
-      }
-      return []
-    },
-  },
-  {
-    title: '是否主职',
-    dataIndex: 'major',
-    valueType: 'switch',
-    width: 70,
-  },
-  {
-    title: '任职开始日期',
-    dataIndex: 'start',
-    valueType: 'date',
-    width: 150,
-  },
-  {
-    title: '任职结束日期',
-    dataIndex: 'end',
-    valueType: 'date',
-    width: 150,
-  },
-  {
-    title: '职务',
-    dataIndex: 'duty',
-    width: 100,
-  },
-  {
-    title: '岗位',
-    dataIndex: 'position',
-    width: 100,
-  },
-  {
-    title: '操作',
-    valueType: 'option',
-    width: 120,
-    fixed: 'right'
-  },
-];
+  const detailHandler = async () => {
+    const res = await getPsnDetail(id);
+    if (res.code === 200) {
+      form.setFieldsValue(res.data);
+      setEditableRowKeys(res.data.dataSource.map((item:any) => item.id));
+    }
+  }
 
   return (
     <DrawerForm<any>
-      title="新建人员"
+      title="编辑人员"
       width={'90%'}
       form={form}
       trigger={
-        <Button type="primary" onClick={() => {
-          form.setFieldsValue({
-            bizUnitPk: bizUnitId,
-            dataSource: [{...defaultData[0], bizUnitPk: bizUnitId}],
-          })
-        }}>
-          <PlusOutlined />
-          新建
-        </Button>
+        <a onClick={detailHandler}>编辑</a>
       }
       autoFocusFirstInput
       drawerProps={{
@@ -180,7 +167,7 @@ const columns: ProColumns<DataSourceType>[] = [
       }}
       submitTimeout={2000}
       onFinish={async (values) => {
-        return await onSubmit(values);
+        return await onSubmit({...values, id});
       }}
     >
       <ProForm.Group>
@@ -188,13 +175,14 @@ const columns: ProColumns<DataSourceType>[] = [
           name="bizUnitPk"
           width="sm"
           label="业务单元"
-          disabled
+          tooltip="最长为 24 位"
           placeholder="请选择业务单元"
           fieldProps={
             {
               treeData: bizUnits
             }
           }
+          disabled
           rules={[
             {
               required: true,
@@ -314,7 +302,7 @@ const columns: ProColumns<DataSourceType>[] = [
             {
               type: 'email',
               message: '请输入正确的邮箱地址',
-            },
+            }
           ]}
         />
         <ProFormSwitch
@@ -332,15 +320,15 @@ const columns: ProColumns<DataSourceType>[] = [
           rowKey="id"
           scroll={{ x: 1200 }}
           toolBarRender={false}
-          editableFormRef={editableFormRef}
           columns={columns}
+          editableFormRef={editableFormRef}
           recordCreatorProps={{
             newRecordType: 'dataSource',
             position: 'top',
             record: () => ({
               id: Date.now(),
               bizUnitPk: bizUnitId,
-              code: '',
+              code: '000001',
               kind: '',
               dept:'',
               major: false,
@@ -362,4 +350,4 @@ const columns: ProColumns<DataSourceType>[] = [
   );
 };
 
-export default CreateForm;
+export default UpdateForm;

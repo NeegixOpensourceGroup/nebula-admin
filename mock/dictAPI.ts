@@ -39,19 +39,19 @@ let dictItem = [
     id: 6,
     dictId: 2,
     name: '护照',
-    value: '2',
+    value: '3',
   },
   {
     id: 7,
     dictId: 2,
     name: '港澳居民来往内地通行证',
-    value: '2',
+    value: '4',
   },
   {
     id: 8,
     dictId: 2,
     name: '台湾居民来往大陆通行证',
-    value: '2',
+    value: '5',
   }
 ];
 

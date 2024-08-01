@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { TreeSelect } from 'antd';
 import type { TreeSelectProps } from 'antd';
 import { buildTreeData } from '@/utils/tools';
-import  bizUnitServices  from '@/services/bizUnit';
+import  bizUnitServices  from '@/services/organization/bizUnit';
 const  { queryBizUnitList } = bizUnitServices.BizUnitController;
 interface BizUnitSelectTreeProps {
   onChange?: (value: string) => void;

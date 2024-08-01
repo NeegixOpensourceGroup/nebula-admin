@@ -10,10 +10,9 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Button, Empty, Flex, Input, Popconfirm, Space, Tree, message } from 'antd';
 import type { TreeDataNode } from 'antd';
 import styles from './index.less';
-import  services  from '@/services/bizUnit';
+import menuServices from '@/services/development/menu';
 import { buildTreeData, getParentNode } from '@/utils/tools';
-
-const { queryBizUnitList, queryBizUnitById, updateBizUnit, deleteBizUnit, createBizUnit } = services.BizUnitController;
+const { queryMenuList, queryMenuById,createMenu, updateMenu, deleteMenu } = menuServices.MenuController;
 const { Search } = Input;
 
 
@@ -91,13 +90,6 @@ const BizUnitList: React.FC<unknown> = () => {
   /// 表单-START
   const [formStatus, setFormStatus] = useState<FormStatus>(FormStatus.ROOT);
   const formRef = useRef<any>();
-  // const [formData, setFormData] = useState<any>({
-  //   id: null,
-  //   name: '',
-  //   pid: 0,
-  //   code: '',
-  //   simpleName:''
-  // });
   const [checkedKey, setCheckedKey] = useState<number|string>();
   const [currentNodeData, setCurrentNodeData] = useState<any>({});
   const [parentNodeData, setParentNodeData] = useState<any>({});
@@ -157,7 +149,7 @@ const BizUnitList: React.FC<unknown> = () => {
     return data;
   }, [searchValue, defaultTreeData]);
   const refreshTreeHandler = async ()=>{
-    const res = await queryBizUnitList();
+    const res = await queryMenuList();
     const treeData = buildTreeData(res.data, {
       idKey: 'id',
       nameKey: 'name',
@@ -171,8 +163,8 @@ const BizUnitList: React.FC<unknown> = () => {
   
   useEffect(() => {
     const queryOrgs = async ()=>{
-        const treeData = await refreshTreeHandler();
-        setFormStatus(treeData.length>0?FormStatus.NO_DATA:FormStatus.ROOT);
+        await refreshTreeHandler();
+        setFormStatus(FormStatus.ROOT);
     }
     queryOrgs()
   }, []);
@@ -192,13 +184,13 @@ const BizUnitList: React.FC<unknown> = () => {
       messageApi.error('请选择要新增的节点');
       return
     }
-    formRef?.current?.setFieldsValue({pName:currentNodeData.name, orgType:currentNodeData.orgType===3?3:null})
+    formRef?.current?.setFieldsValue({pName:currentNodeData.name, type:currentNodeData.type===3?3:null})
     setFormStatus(FormStatus.CREAT_CHILD)
   }
 
   // 新增 根节点子界面
   const openAddRootHandler = ()=>{
-    formRef?.current?.setFieldsValue({orgType:1})
+    formRef?.current?.setFieldsValue({type:1})
     setFormStatus(FormStatus.CREAT_ROOT)
   }
 
@@ -213,16 +205,16 @@ const BizUnitList: React.FC<unknown> = () => {
       }
     } else {
       formRef?.current?.resetFields();
+      setFormStatus(FormStatus.ROOT)
     }
-    setFormStatus(treeData.length>0?FormStatus.VIEW_NODE:FormStatus.ROOT)
   }
 
   const deleteHanlder = async ()=>{
     if(checkedKey !== undefined){
-      const res = await deleteBizUnit(checkedKey);
+      const res = await deleteMenu(checkedKey);
       if (res.code === 200) {
-        const treeList = await refreshTreeHandler();
-        setFormStatus(!treeList || treeList.length === 0 ? FormStatus.ROOT:FormStatus.NO_DATA)
+        await refreshTreeHandler();
+        setFormStatus(FormStatus.ROOT)
         formRef?.current?.resetFields();
         messageApi.success('删除成功');
       }
@@ -234,12 +226,12 @@ const BizUnitList: React.FC<unknown> = () => {
   return (
     <PageContainer
       header={{
-        title: '组织管理',
+        title: '菜单管理',
       }}
     >
       {contextHolder}
       <ProCard split="vertical">
-        <ProCard title="组织" colSpan="20%">
+        <ProCard title="菜单" colSpan="20%">
         <Search style={{ marginBottom: 8 }} placeholder="查询" onChange={onChange} />
         <Tree
           onExpand={onExpand}
@@ -248,7 +240,7 @@ const BizUnitList: React.FC<unknown> = () => {
           selectedKeys={checkedKey?[checkedKey]:[]}
           onSelect={async ( selectedKeys) => {
               if (selectedKeys.length > 0) {
-                const res = await queryBizUnitById(Number(selectedKeys[0]));
+                const res = await queryMenuById(Number(selectedKeys[0]));
                 if (res.code === 200) {
                   formRef?.current?.resetFields();
                   const parentNode = getParentNode(Number(selectedKeys[0]), defaultTreeData);
@@ -261,18 +253,18 @@ const BizUnitList: React.FC<unknown> = () => {
                   setFormStatus(FormStatus.NO_DATA)
                 }
               } else {
+                formRef?.current?.resetFields();
                 setCurrentNodeData(null)
                 setParentNodeData(null)
                 setCheckedKey(undefined)
-                setFormStatus(FormStatus.NO_DATA)
+                setFormStatus(FormStatus.ROOT)
               }
-              
             }
           }
           treeData={treeData}
         />
         </ProCard>
-        <ProCard title={`组织信息${formStatus===FormStatus.VIEW_NODE?'-查看':formStatus===FormStatus.EDIT_NODE?'-编辑':formStatus===FormStatus.CREAT_CHILD?'-新增子级':formStatus===FormStatus.CREAT_ROOT?'-新增根级':''}`} headerBordered
+        <ProCard title={`菜单信息${formStatus===FormStatus.VIEW_NODE?'-查看':formStatus===FormStatus.EDIT_NODE?'-编辑':formStatus===FormStatus.CREAT_CHILD?'-新增子级':formStatus===FormStatus.CREAT_ROOT?'-新增根级':''}`} headerBordered
           style={{ minHeight: '500px' }}
           extra={
             <Space>
@@ -280,10 +272,10 @@ const BizUnitList: React.FC<unknown> = () => {
               formStatus === FormStatus.VIEW_NODE?
               <>
                 <Button onClick={openEditHandler}>编辑</Button>
-                <Button type='primary' onClick={openAddSubHandler}>新增子级</Button>
+                {currentNodeData.type!==2?<Button type='primary' onClick={openAddSubHandler}>新增子级</Button>:null}
                 <Popconfirm
                   title="警告"
-                  description="确认删除当前组织?"
+                  description={`确认删除当前的${currentNodeData.type===1?'菜单':'按钮'}?`}  
                   onConfirm={deleteHanlder}
                   okText="是"
                   cancelText="否"
@@ -316,7 +308,7 @@ const BizUnitList: React.FC<unknown> = () => {
 
                 if(formStatus === FormStatus.CREAT_ROOT || formStatus === FormStatus.CREAT_CHILD){
                   const pid = formStatus === FormStatus.CREAT_ROOT?0:Number(checkedKey);
-                  const res = await createBizUnit({...values, pid});
+                  const res = await createMenu({...values, pid});
                   if(res.code === 200){
                     await refreshTreeHandler();
                     setFormStatus(FormStatus.VIEW_NODE)
@@ -329,7 +321,7 @@ const BizUnitList: React.FC<unknown> = () => {
                   }
                 }
                 if(formStatus === FormStatus.EDIT_NODE){
-                  const res = await updateBizUnit(Number(checkedKey), {...values, pid});
+                  const res = await updateMenu(Number(checkedKey), {...values, pid});
                   if(res.code === 200){
                     await refreshTreeHandler();
                     setCurrentNodeData({...values,pid, id:Number(checkedKey)})
@@ -342,7 +334,7 @@ const BizUnitList: React.FC<unknown> = () => {
                 () => {
                  if(formStatus === FormStatus.CREAT_ROOT){
                   formRef.current?.setFieldsValue({
-                    orgType:1
+                    type:1
                   })
                  }
                   if(formStatus === FormStatus.CREAT_CHILD){
@@ -357,7 +349,7 @@ const BizUnitList: React.FC<unknown> = () => {
                     formRef.current?.setFieldsValue({
                       id:currentNodeData?.id,
                       code:currentNodeData?.code,
-                      orgType:currentNodeData?.orgType,
+                      type:currentNodeData?.type,
                       pid:currentNodeData?.pid,
                       pName:parentNodeData?.title
                     })
@@ -372,25 +364,6 @@ const BizUnitList: React.FC<unknown> = () => {
                     </Flex> :null;
                 },
               }}
-                // syncToUrl={(values, type) => {
-                //   console.log('syncToUrl', values, type)
-                //   if (type === 'get') {
-                //     // 为了配合 transform
-                //     // startTime 和 endTime 拼成 createTimeRanger
-                //     return {
-                //       ...values,
-                //       createTimeRanger:
-                //         values.startTime || values.endTime
-                //           ? [values.startTime, values.endTime]
-                //           : undefined,
-                //     };
-                //   }
-                //   // expirationTime 不同步到 url
-                //   return {
-                //     ...values,
-                //     expirationTime: undefined,
-                //   };
-                // }}
               initialValues={{
                 id: null,
                 name: '',
@@ -398,7 +371,7 @@ const BizUnitList: React.FC<unknown> = () => {
                 code: '',
                 simpleName:'',
                 tel:'',
-                orgType:null,
+                type:null,
                 manager:'',
                 phone:'',
                 remark:''
@@ -407,31 +380,27 @@ const BizUnitList: React.FC<unknown> = () => {
               >
               <ProFormRadio.Group
                 colProps={{ span: 12 }}
-                label="组织类型"
-                name="orgType"
-                tooltip="部门类型下只能新增子部门"
+                label="类型"
+                name="type"
                 rules={[
                   {
                     required: true,
-                    message: '请选择组织类型',
+                    message: '请选择类型',
                   },
                 ]}
                 readonly={formStatus === FormStatus.EDIT_NODE}
                 options={[
                   {
-                    label: '总部',
+                    label: '菜单',
                     value: 1,
-                    disabled: formStatus === FormStatus.CREAT_CHILD,
                   },
                   {
-                    label: '分/子公司',
+                    label: '按钮',
                     value: 2,
-                    disabled: formStatus === FormStatus.CREAT_ROOT,
                   },
                   {
-                    label: '外部公司',
+                    label: '接口',
                     value: 3,
-                    disabled: formStatus === FormStatus.CREAT_ROOT,
                   },
                 ]}
               />
@@ -440,33 +409,33 @@ const BizUnitList: React.FC<unknown> = () => {
                 width="md"
                 name="pName"
                 readonly={true}
-                label="上级组织名称"
+                label="上级菜单名称"
               />
-              <ProFormText
+              {/* <ProFormText
                 colProps={{ span: 12 }}
                 width="md"
                 name="code"
                 readonly={formStatus === FormStatus.EDIT_NODE}
-                label="组织代码"
+                label="代码"
                 placeholder="请输入组织代码"
                 rules={[{ required: true }]}
-              />
+              /> */}
               <ProFormText
                 colProps={{ span: 12 }}
                 width="md"
                 name="name"
-                label="组织名称"
-                placeholder="请输入组织名称"
+                label="名称"
+                placeholder="请输入名称"
                 rules={[{ required: true }]}
               />
               <ProFormText
                 colProps={{ span: 12 }}
                 width="md"
-                name="simpleName"
-                label="组织简称"
-                placeholder="请输入组织简称"
+                name="access"
+                label="权限识别码"
+                placeholder="请输入简称"
               />
-              <ProFormText
+              {/* <ProFormText
                 colProps={{ span: 12 }}
                 width="md"
                 name="tel"
@@ -486,14 +455,14 @@ const BizUnitList: React.FC<unknown> = () => {
                 name="phone"
                 label="负责人电话"
                 placeholder="请输入负责人电话"
-              />
+              /> */}
               <ProFormTextArea width="xl" label="备注" name="remark" />
             </ProForm>
             <Empty
               style={{ display: formStatus === FormStatus.NO_DATA|| formStatus === FormStatus.ROOT ? 'block' : 'none' }}
               image={Empty.PRESENTED_IMAGE_SIMPLE}
               >
-              <Button hidden={formStatus!==FormStatus.ROOT} type="primary" onClick={openAddRootHandler}>创建组织总部</Button>
+              <Button hidden={formStatus!==FormStatus.ROOT} type="primary" onClick={openAddRootHandler}>创建菜单</Button>
             </Empty>
         </ProCard>
       </ProCard>

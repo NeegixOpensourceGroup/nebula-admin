@@ -11,7 +11,7 @@ const AccessPage: React.FC = () => {
         title: '权限示例',
       }}
     >
-      <Access accessible={access['system:psn:list']}>
+      <Access accessible={access['organization:psn:list']}>
         <Button>只有 Admin 可以看到这个按钮</Button>
       </Access>
     </PageContainer>

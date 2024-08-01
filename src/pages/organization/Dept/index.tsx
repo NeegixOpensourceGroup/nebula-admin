@@ -10,7 +10,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Button, Empty, Flex, Input, Popconfirm, Space, Tree, message } from 'antd';
 import type { TreeDataNode } from 'antd';
 import styles from './index.less';
-import  services  from '@/services/dept';
+import  services  from '@/services/organization/dept';
 import { buildTreeData, getParentNode } from '@/utils/tools';
 import BizUnitSelectTree from '@/components/BizUnitSelectTree';
 
@@ -306,7 +306,7 @@ const OrgList: React.FC<unknown> = () => {
                 <Button type='primary' onClick={openAddSubHandler}>新增子级</Button>
                 <Popconfirm
                   title="警告"
-                  description="确认删除当前组织?"
+                  description="确认删除当前部门?"
                   onConfirm={deleteHanlder}
                   okText="是"
                   cancelText="否"

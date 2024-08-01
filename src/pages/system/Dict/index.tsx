@@ -5,7 +5,7 @@ import type { SearchProps } from 'antd/es/input/Search';
 import { PlusOutlined } from '@ant-design/icons';
 import { ActionType, PageContainer, ProCard, ProColumns, ProTable } from '@ant-design/pro-components/es';
 import { FormProps } from 'antd/lib';
-import  services  from '@/services/dict';
+import  services  from '@/services/system/dict';
 
 const { queryDictList, updateDict, addDict, removeDict, queryDictItemList, updateDictItem, addDictItem, removeDictItem } = services.DictController;
 

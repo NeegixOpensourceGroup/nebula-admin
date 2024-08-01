@@ -1,8 +1,8 @@
 import { RunTimeLayoutConfig } from '@umijs/max';
 import { history, RequestConfig } from 'umi';
 import { message } from 'antd';
-import services from '@/services/auth';
-import accessServices from '@/services/access';
+import services from '@/services/system/auth';
+import accessServices from '@/services/system/access';
 
 const { queryAccess } = accessServices.AccessController;
 const { logout } = services.AuthController;

@@ -10,11 +10,11 @@ import { Button, Divider, message, Tree, Input, TreeDataNode, Space, Popconfirm 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import  dictServices from '@/services/dict';
+import  dictServices from '@/services/system/dict';
 import styles from './index.less';
 import BizUnitSelectTree from '@/components/BizUnitSelectTree';
-import deptServices  from '@/services/dept';
-import psnServices from '@/services/psn';
+import deptServices  from '@/services/organization/dept';
+import psnServices from '@/services/organization/psn';
 import { buildTreeData } from '@/utils/tools';
 
 const { Search } = Input;

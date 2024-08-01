@@ -17,8 +17,8 @@ import { Button, Divider, Space, Tabs, message, theme } from 'antd';
 import type { CSSProperties } from 'react';
 import { useState } from 'react';
 import { history, useModel } from 'umi';
-import services from '@/services/auth';
-import accessServices from '@/services/access';
+import services from '@/services/system/auth';
+import accessServices from '@/services/system/access';
 
 const { queryAccess } = accessServices.AccessController;
 type LoginType = 'phone' | 'account';
