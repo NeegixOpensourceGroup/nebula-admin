@@ -1,22 +1,74 @@
 # nebula-admin
 
 #### Description
-基于umimax框架，配合Ant Design UI组件库搭建的管理系统
+
+nebula-admin is a management system built on the umimax framework, complemented by the Ant Design UI component library.
+
+#### Interface Images
+
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801113906.png)
+
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114034.png)
+
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114145.png)
+
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114221.png)
+
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114303.png)
+
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114349.png)
+
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114423.png)
+
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114448.png)
+
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114532.png)
+
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114603.png)
+
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114639.png)
 
 #### Software Architecture
-Software architecture description
+
+```
+"@ant-design/icons": "^5.0.1",
+"@ant-design/pro-components": "^2.4.4",
+"@umijs/max": "^4.2.9",
+"antd": "^5.4.0"
+```
 
 #### Installation
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1. Install dependencies: `npm install`
+2. Start: `npm run dev`
 
 #### Instructions
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  The current page data is all mock data, so you need to git clone and start it yourself to view the demo.
+2.  Configure route information and backend service proxy information in .umirc.ts:
+
+```
+proxy: {
+  '/api': {
+    'target': 'http://localhost:8080/',
+  }
+},
+routes: [
+  {
+    name: 'Home',
+    path: '/home',
+    icon: 'HomeOutlined',
+    component: './Home',
+    access: 'home',
+    wrappers: ['@/wrappers/auth'],
+  }
+]
+```
+
+3.  Create pages in the pages directory.
+4.  Create interfaces in the services directory.
+5.  Create mock data in the mock directory (or enable the backend service).
+6.  The menu/button information can be obtained through the queryAccess interface, or you can customize it, refer to the mock data.
 
 #### Contribution
 
@@ -25,12 +77,8 @@ Software architecture description
 3.  Commit your code
 4.  Create Pull Request
 
+#### Future plans
 
-#### Gitee Feature
-
-1.  You can use Readme\_XXX.md to support different languages, such as Readme\_en.md, Readme\_zh.md
-2.  Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3.  Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4.  The most valuable open source project [GVP](https://gitee.com/gvp)
-5.  The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
-6.  The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+1.  Continue to improve the page
+2.  Start the backend service
+3.  Add more features
