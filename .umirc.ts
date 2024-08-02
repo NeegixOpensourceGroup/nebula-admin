@@ -8,12 +8,12 @@ export default defineConfig({
   model: {},
   initialState: {},
   request: {
-    dataField: ''
+    dataField: '',
   },
   proxy: {
     '/api': {
-      'target': 'http://localhost:8080/',
-      'changeOrigin': true,
+      target: 'http://localhost:8080/',
+      changeOrigin: true,
     },
   },
   layout: {
@@ -68,7 +68,7 @@ export default defineConfig({
           access: 'organization:psn:list',
           wrappers: ['@/wrappers/auth'],
         },
-      ]
+      ],
     },
     {
       name: '系统管理',
@@ -115,7 +115,7 @@ export default defineConfig({
     {
       name: '日志管理',
       path: '/log',
-      icon: 'smile',
+      icon: 'ContainerOutlined',
       routes: [
         {
           path: '/log',
@@ -138,7 +138,7 @@ export default defineConfig({
     {
       name: '开发管理',
       path: '/development',
-      icon: 'smile',
+      icon: 'CodeOutlined',
       routes: [
         {
           path: '/development',
@@ -167,9 +167,8 @@ export default defineConfig({
     },
     {
       path: '/*',
-      component: '@/pages/404'
-    }
+      component: '@/pages/404',
+    },
   ],
   npmClient: 'npm',
 });
-
