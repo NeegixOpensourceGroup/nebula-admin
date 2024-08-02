@@ -28,6 +28,8 @@ nebula-admin is a management system built on the umimax framework, complemented 
 
 ![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114639.png)
 
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240802213815.png)
+
 #### Software Architecture
 
 ```

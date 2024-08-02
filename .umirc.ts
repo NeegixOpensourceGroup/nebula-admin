@@ -151,6 +151,12 @@ export default defineConfig({
           wrappers: ['@/wrappers/auth'],
         },
         {
+          name: '接口管理',
+          path: '/development/api',
+          component: './development/Api',
+          wrappers: ['@/wrappers/auth'],
+        },
+        {
           name: '错误日志',
           path: '/development/table2',
           component: './Table',

@@ -1,3 +1,4 @@
+import services from '@/services/system/role';
 import { PlusOutlined } from '@ant-design/icons';
 import {
   DrawerForm,
@@ -6,32 +7,39 @@ import {
   ProFormSwitch,
   ProFormText,
 } from '@ant-design/pro-components';
-import { Button, Form, message, Tabs, } from 'antd';
 import type { TabsProps } from 'antd';
+import { Button, Form, message, Tabs } from 'antd';
 import { Key } from 'react';
 import MenuTree from './MenuTree';
-import services from '@/services/system/role';
 const { createRole } = services.RoleController;
 
 const onChange = (key: string) => {
   console.log(key);
 };
 
-let pagePermissions:any[] = [];
+let pagePermissions: any[] = [];
 
 interface CreateFormProps {
   actionRef: ProCoreActionType | undefined;
 }
 
-const CreateForm:React.FC<CreateFormProps> = ({ actionRef }) => {
-  const [form] = Form.useForm<{ name: string; description: string; enabled:boolean; permission:{ checked: Key[]; halfChecked: Key[]; }; }>();
+const CreateForm: React.FC<CreateFormProps> = ({ actionRef }) => {
+  const [form] = Form.useForm<{
+    name: string;
+    description: string;
+    enabled: boolean;
+    permission: { checked: Key[]; halfChecked: Key[] };
+  }>();
   const [messageApi, contextHolder] = message.useMessage();
   const onCheck = (checkedKeysValue: Key[], halfCheckedKeys: Key[]) => {
     console.log('onCheck', checkedKeysValue, halfCheckedKeys);
-    pagePermissions = [...checkedKeysValue.map(item=>({menuId: item, isHalf:false})), ...halfCheckedKeys.map(item=>({menuId: item, isHalf:true}))];
+    pagePermissions = [
+      ...checkedKeysValue.map((item) => ({ menuId: item, isHalf: false })),
+      ...halfCheckedKeys.map((item) => ({ menuId: item, isHalf: true })),
+    ];
 
     //form.setFieldValue('pagePermissions',checkedKeysValue)
-  }
+  };
   const items: TabsProps['items'] = [
     {
       key: '1',
@@ -52,7 +60,7 @@ const CreateForm:React.FC<CreateFormProps> = ({ actionRef }) => {
       key: '4',
       label: '字段权限',
       children: 'Content of Tab Pane 4',
-    }
+    },
   ];
 
   return (
@@ -64,7 +72,6 @@ const CreateForm:React.FC<CreateFormProps> = ({ actionRef }) => {
       title="新建角色"
       width={'30%'}
       form={form}
-      onValuesChange={(changeValues) => console.log(changeValues)}
       trigger={
         <Button type="primary">
           <PlusOutlined />
@@ -77,14 +84,14 @@ const CreateForm:React.FC<CreateFormProps> = ({ actionRef }) => {
       }}
       submitTimeout={2000}
       onFinish={async (values) => {
-        const res = await createRole({...values, pagePermissions});
-        if(res.code===200){
+        const res = await createRole({ ...values, pagePermissions });
+        if (res.code === 200) {
           messageApi.success(res.message);
           actionRef?.reload();
-        }else{
+        } else {
           messageApi.error(res.message);
         }
-        
+
         // 不返回不会关闭弹框
         return true;
       }}

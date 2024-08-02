@@ -28,6 +28,8 @@
 
 ![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114639.png)
 
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240802213815.png)
+
 #### 软件架构
 
 ```

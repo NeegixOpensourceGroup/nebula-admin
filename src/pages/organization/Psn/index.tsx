@@ -1,3 +1,8 @@
+import BizUnitSelectTree from '@/components/BizUnitSelectTree';
+import deptServices from '@/services/organization/dept';
+import psnServices from '@/services/organization/psn';
+import dictServices from '@/services/system/dict';
+import { buildTreeData } from '@/utils/tools';
 import {
   ActionType,
   FooterToolbar,
@@ -6,24 +11,26 @@ import {
   ProColumns,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, Divider, message, Tree, Input, TreeDataNode, Space, Popconfirm } from 'antd';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Button,
+  Divider,
+  Input,
+  message,
+  Popconfirm,
+  Space,
+  Tree,
+  TreeDataNode,
+} from 'antd';
+import React, { useMemo, useRef, useState } from 'react';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import  dictServices from '@/services/system/dict';
 import styles from './index.less';
-import BizUnitSelectTree from '@/components/BizUnitSelectTree';
-import deptServices  from '@/services/organization/dept';
-import psnServices from '@/services/organization/psn';
-import { buildTreeData } from '@/utils/tools';
 
 const { Search } = Input;
 const { queryDictItemByDictCode } = dictServices.DictController;
-const {queryDeptList} = deptServices.DeptController;
-const { queryPsnList, deletePsn, addPsn, updatePsn } = psnServices.PsnController;
-
-
-
+const { queryDeptList } = deptServices.DeptController;
+const { queryPsnList, deletePsn, addPsn, updatePsn } =
+  psnServices.PsnController;
 
 const dataList: { key: React.Key; title: string }[] = [];
 const generateList = (data: any[]) => {
@@ -35,7 +42,8 @@ const generateList = (data: any[]) => {
 
     if (typeof title === 'function') {
       const titleNode = title(node);
-      titleString = typeof titleNode === 'string' ? titleNode : titleNode?.toString() ?? '';
+      titleString =
+        typeof titleNode === 'string' ? titleNode : titleNode?.toString() ?? '';
     } else if (typeof title === 'string') {
       titleString = title;
     } else {
@@ -64,93 +72,79 @@ const getParentKey = (key: React.Key, tree: TreeDataNode[]): React.Key => {
   return parentKey!;
 };
 
-
 const PsnList: React.FC<unknown> = () => {
-
   const [messageApi, contextHolder] = message.useMessage();
-  const [bizUnitId, setBizUnitId] = useState<number|string>(1);
+  const [bizUnitId, setBizUnitId] = useState<number | string>(1);
   /// 左侧树-START
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const [autoExpandParent, setAutoExpandParent] = useState(true);
   const [defaultTreeData, setDefaultTreeData] = useState<any[]>([]);
-  const [checkedKey, setCheckedKey] = useState<number|string>();
- /// 左侧树-END
+  const [checkedKey, setCheckedKey] = useState<number | string>();
+  /// 左侧树-END
 
   /// 右侧列表-START
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.PsnInfo[]>([]);
-  const [sexData, setSexData] = useState<any>({});
-   /// 左侧列表-END
+  /// 左侧列表-END
 
-     /// 左侧树-START
-     const onExpand = (newExpandedKeys: React.Key[]) => {
-      setExpandedKeys(newExpandedKeys);
-      setAutoExpandParent(false);
-    };
-  
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { value } = e.target;
-      const newExpandedKeys = dataList
-        .map((item) => {
-          if (item.title.indexOf(value) > -1) {
-            return getParentKey(item.key, defaultTreeData);
-          }
-          return null;
-        })
-        .filter((item, i, self): item is React.Key => !!(item && self.indexOf(item) === i));
-      setExpandedKeys(newExpandedKeys);
-      setSearchValue(value);
-      setAutoExpandParent(true);
-    };
-  
-    let treeData = useMemo(() => {
-      const loop = (data: TreeDataNode[]): TreeDataNode[] =>
-        data.map((item) => {
-          const strTitle = item.title as string;
-          const index = strTitle.indexOf(searchValue);
-          const beforeStr = strTitle.substring(0, index);
-          const afterStr = strTitle.slice(index + searchValue.length);
-          const title =
-            index > -1 ? (
-              <span key={item.key}>
-                {beforeStr}
-                <span className={styles.siteTreeSearchValue}>{searchValue}</span>
-                {afterStr}
-              </span>
-            ) : (
-              <span key={item.key}>{strTitle}</span>
-            );
-          if (item.children) {
-            return { title, key: item.key, children: loop(item.children) };
-          }
-  
-          return {
-            title,
-            key: item.key,
-          };
-        });
-        if(defaultTreeData.length === 0){
-          return []
+  /// 左侧树-START
+  const onExpand = (newExpandedKeys: React.Key[]) => {
+    setExpandedKeys(newExpandedKeys);
+    setAutoExpandParent(false);
+  };
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    const newExpandedKeys = dataList
+      .map((item) => {
+        if (item.title.indexOf(value) > -1) {
+          return getParentKey(item.key, defaultTreeData);
         }
-        const data = loop(defaultTreeData);
-      return data;
-    }, [searchValue, defaultTreeData]);
-    /// 左侧树-END
+        return null;
+      })
+      .filter(
+        (item, i, self): item is React.Key =>
+          !!(item && self.indexOf(item) === i),
+      );
+    setExpandedKeys(newExpandedKeys);
+    setSearchValue(value);
+    setAutoExpandParent(true);
+  };
 
+  let treeData = useMemo(() => {
+    const loop = (data: TreeDataNode[]): TreeDataNode[] =>
+      data.map((item) => {
+        const strTitle = item.title as string;
+        const index = strTitle.indexOf(searchValue);
+        const beforeStr = strTitle.substring(0, index);
+        const afterStr = strTitle.slice(index + searchValue.length);
+        const title =
+          index > -1 ? (
+            <span key={item.key}>
+              {beforeStr}
+              <span className={styles.siteTreeSearchValue}>{searchValue}</span>
+              {afterStr}
+            </span>
+          ) : (
+            <span key={item.key}>{strTitle}</span>
+          );
+        if (item.children) {
+          return { title, key: item.key, children: loop(item.children) };
+        }
 
-  useEffect(() => {
-    // 查询性别字典
-    queryDictItemByDictCode('GENDER').then((res) => {
-      if (res.code === 200) {
-        const enumObject:any = {};
-        res.data.forEach((item:any) => {
-          enumObject[item.id] = item.name;
-        });
-        setSexData(enumObject);
-      }
-    });
-  }, []);
+        return {
+          title,
+          key: item.key,
+        };
+      });
+    if (defaultTreeData.length === 0) {
+      return [];
+    }
+    const data = loop(defaultTreeData);
+    return data;
+  }, [searchValue, defaultTreeData]);
+  /// 左侧树-END
 
   const onSubmit = async (values: any) => {
     const hide = messageApi.loading('正在添加');
@@ -184,14 +178,13 @@ const PsnList: React.FC<unknown> = () => {
           return false;
         }
       }
-      
     } catch (error) {
-     hide();
-     return false;
+      hide();
+      return false;
     }
-  }
+  };
 
-  const handleSingleRemove = async(id: number|string) => {
+  const handleSingleRemove = async (id: number | string) => {
     const hide = messageApi.loading('正在删除');
     try {
       await deletePsn(id);
@@ -204,36 +197,36 @@ const PsnList: React.FC<unknown> = () => {
       messageApi.error('删除失败，请重试');
       return false;
     }
-  }
+  };
 
   /**
- *  删除节点
- * @param selectedRows
- */
-const handleRemove = async (selectedRows: API.PsnInfo[]) => {
-  const hide = messageApi.loading('正在删除');
-  if (!selectedRows) return true;
-  try {
-    
-    console.log(selectedRows)
-    const res  = await deletePsn(selectedRows.map(item=>item.id).join(","));
-    if(res.code === 200){
-      actionRef.current?.reload();
+   *  删除节点
+   * @param selectedRows
+   */
+  const handleRemove = async (selectedRows: API.PsnInfo[]) => {
+    const hide = messageApi.loading('正在删除');
+    if (!selectedRows) return true;
+    try {
+      console.log(selectedRows);
+      const res = await deletePsn(
+        selectedRows.map((item) => item.id).join(','),
+      );
+      if (res.code === 200) {
+        actionRef.current?.reload();
+        hide();
+        messageApi.success('删除成功，即将刷新');
+        return true;
+      } else {
+        hide();
+        messageApi.error(res.message);
+        return false;
+      }
+    } catch (error) {
       hide();
-      messageApi.success('删除成功，即将刷新');
-      return true;
-    } else {
-      hide();
-      messageApi.error(res.message);
+      messageApi.error('删除失败，请重试');
       return false;
     }
-   
-  } catch (error) {
-    hide();
-    messageApi.error('删除失败，请重试');
-    return false;
-  }
-};
+  };
 
   const columns: ProColumns<API.PsnInfo>[] = [
     {
@@ -269,7 +262,20 @@ const handleRemove = async (selectedRows: API.PsnInfo[]) => {
     {
       title: '性别',
       dataIndex: 'gender',
-      valueEnum: sexData,
+      valueType: 'select',
+      fieldProps: () => {
+        return {
+          fieldNames: {
+            label: 'name',
+            value: 'id',
+          },
+        };
+      },
+      request: async () => {
+        // 查询性别字典
+        const res = await queryDictItemByDictCode('GENDER');
+        return res.data;
+      },
     },
     {
       title: '操作',
@@ -278,24 +284,28 @@ const handleRemove = async (selectedRows: API.PsnInfo[]) => {
       valueType: 'option',
       render: (_, record) => (
         <>
-          <UpdateForm key={'updateForm'} id={record.id}  bizUnitId={bizUnitId} onSubmit={onSubmit}/>
+          <UpdateForm
+            key={'updateForm'}
+            id={record.id}
+            bizUnitId={bizUnitId}
+            onSubmit={onSubmit}
+          />
           <Divider type="vertical" />
           <Popconfirm
             title="警告"
             description="确认删除当前组织?"
-            onConfirm={()=> (record.id !== undefined ? handleSingleRemove(record.id) : null)}
+            onConfirm={() =>
+              record.id !== undefined ? handleSingleRemove(record.id) : null
+            }
             okText="是"
             cancelText="否"
           >
             <a>删除</a>
           </Popconfirm>
-          
         </>
       ),
     },
   ];
-
-
 
   return (
     <PageContainer
@@ -304,96 +314,109 @@ const handleRemove = async (selectedRows: API.PsnInfo[]) => {
       }}
     >
       {contextHolder}
-        <ProCard title={
+      <ProCard
+        title={
           <Space>
-            <BizUnitSelectTree onChange={async (value: string) => {
-              const res = await queryDeptList(value);
-              if (res.code === 200) {
-                const treeData = buildTreeData(res.data, {
-                  idKey: 'id',
-                  nameKey: 'name',
-                  pidKey: 'pid'
-                })
-                setDefaultTreeData(treeData)
-                generateList(treeData);
-                setBizUnitId(parseInt(value))
-                setCheckedKey(undefined)
-              }
-            }}/>
+            <BizUnitSelectTree
+              onChange={async (value: string) => {
+                const res = await queryDeptList(value);
+                if (res.code === 200) {
+                  const treeData = buildTreeData(res.data, {
+                    idKey: 'id',
+                    nameKey: 'name',
+                    pidKey: 'pid',
+                  });
+                  setDefaultTreeData(treeData);
+                  generateList(treeData);
+                  setBizUnitId(parseInt(value));
+                  setCheckedKey(undefined);
+                }
+              }}
+            />
           </Space>
-        } split="vertical" bordered headerBordered >
-          <ProCard title="部门" colSpan="20%" >
-            <Search style={{ marginBottom: 8 }} placeholder="查询" onChange={onChange} />
-            <Tree
-              onExpand={onExpand}
-              expandedKeys={expandedKeys}
-              autoExpandParent={autoExpandParent}
-              onSelect={async ( selectedKeys) => {
-                  if (selectedKeys.length > 0) {
-                    setCheckedKey(Number(selectedKeys[0]))
-                  } else {
-                    setCheckedKey(undefined)
-                  }
-                  
-                }
+        }
+        split="vertical"
+        bordered
+        headerBordered
+      >
+        <ProCard title="部门" colSpan="20%">
+          <Search
+            style={{ marginBottom: 8 }}
+            placeholder="查询"
+            onChange={onChange}
+          />
+          <Tree
+            onExpand={onExpand}
+            expandedKeys={expandedKeys}
+            autoExpandParent={autoExpandParent}
+            onSelect={async (selectedKeys) => {
+              if (selectedKeys.length > 0) {
+                setCheckedKey(Number(selectedKeys[0]));
+              } else {
+                setCheckedKey(undefined);
               }
-              treeData={treeData}
-            />
-          </ProCard>
-          <ProCard title="人员" colSpan="80%" >
-            <ProTable<API.PsnInfo>
-              headerTitle="查询表格"
-              actionRef={actionRef}
-              rowKey="id"
-              search={{
-                labelWidth: 50,
-              }}
-              toolBarRender={() => [
-                <CreateForm key={"userForm"} bizUnitId={bizUnitId} onSubmit={onSubmit} />,
-              ]}
-              params={{bizUnitId, checkedKey}}
-              request={async (params, sorter, filter) => {
-                const { data, success } = await queryPsnList({
-                  ...params,
-                  // FIXME: remove @ts-ignore
-                  // @ts-ignore
-                  sorter,
-                  filter,
-                });
-                return {
-                  data: data?.list || [],
-                  success,
-                };
-              }}
-              columns={columns}
-              rowSelection={{
-                onChange: (_, selectedRows) => setSelectedRows(selectedRows),
-              }}
-            />
-            {selectedRowsState?.length > 0 && (
-              <FooterToolbar
-                extra={
-                  <div>
-                    已选择{' '}
-                    <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-                    项&nbsp;&nbsp;
-                  </div>
-                }
-              >
-                <Button
-                  onClick={async () => {
-                    await handleRemove(selectedRowsState);
-                    setSelectedRows([]);
-                    actionRef.current?.reloadAndRest?.();
-                  }}
-                >
-                  批量删除
-                </Button>
-                <Button type="primary">批量审批</Button>
-              </FooterToolbar>
-            )}
-          </ProCard>
+            }}
+            treeData={treeData}
+          />
         </ProCard>
+        <ProCard title="人员" colSpan="80%">
+          <ProTable<API.PsnInfo>
+            headerTitle="查询表格"
+            actionRef={actionRef}
+            rowKey="id"
+            search={{
+              labelWidth: 50,
+            }}
+            toolBarRender={() => [
+              <CreateForm
+                key={'userForm'}
+                bizUnitId={bizUnitId}
+                onSubmit={onSubmit}
+              />,
+            ]}
+            params={{ bizUnitId, checkedKey }}
+            request={async (params, sorter, filter) => {
+              const { data, success } = await queryPsnList({
+                ...params,
+                // FIXME: remove @ts-ignore
+                // @ts-ignore
+                sorter,
+                filter,
+              });
+              return {
+                data: data?.list || [],
+                success,
+              };
+            }}
+            columns={columns}
+            rowSelection={{
+              onChange: (_, selectedRows) => setSelectedRows(selectedRows),
+            }}
+          />
+          {selectedRowsState?.length > 0 && (
+            <FooterToolbar
+              extra={
+                <div>
+                  已选择{' '}
+                  <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
+                  项&nbsp;&nbsp;
+                </div>
+              }
+            >
+              <Button
+                onClick={async () => {
+                  await handleRemove(selectedRowsState);
+                  setSelectedRows([]);
+                  actionRef.current?.reloadAndRest?.();
+                }}
+              >
+                批量删除
+              </Button>
+              <Button type="primary">批量审批</Button>
+            </FooterToolbar>
+          )}
+        </ProCard>
+      </ProCard>
     </PageContainer>
   );
 };

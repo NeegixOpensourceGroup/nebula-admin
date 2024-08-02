@@ -1,3 +1,4 @@
+import services from '@/services/system/role';
 import {
   DrawerForm,
   ProCoreActionType,
@@ -5,42 +6,49 @@ import {
   ProFormSwitch,
   ProFormText,
 } from '@ant-design/pro-components';
-import { Form, message, Tabs, } from 'antd';
 import type { TabsProps } from 'antd';
+import { Form, message, Tabs } from 'antd';
 import { Key, useState } from 'react';
 import MenuTree from './MenuTree';
-import services from '@/services/system/role';
 const { updateRole, getRole } = services.RoleController;
 
 const onChange = (key: string) => {
   console.log(key);
 };
 
-let pagePermissions:any[] = [];
+let pagePermissions: any[] = [];
 
-interface UpdateFormProps{
-  roleId: number|string;
+interface UpdateFormProps {
+  roleId: number | string;
   actionRef?: ProCoreActionType | undefined;
 }
-const UpdateForm:React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
-  const [form] = Form.useForm<{ name: string; description: string; enabled:boolean; permission:{ checked: Key[]; halfChecked: Key[]; }; }>();
+const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
+  const [form] = Form.useForm<{
+    name: string;
+    description: string;
+    enabled: boolean;
+    permission: { checked: Key[]; halfChecked: Key[] };
+  }>();
   const [messageApi, contextHolder] = message.useMessage();
-  const [checkedKeys, setCheckedKeys] = useState<Key[]>([])
+  const [checkedKeys, setCheckedKeys] = useState<Key[]>([]);
   const onCheck = (checkedKeysValue: Key[], halfCheckedKeys: Key[]) => {
-    pagePermissions = [...checkedKeysValue.map(item=>({menuId: item, isHalf:false})), ...halfCheckedKeys.map(item=>({menuId: item, isHalf:true}))];
-  }
+    pagePermissions = [
+      ...checkedKeysValue.map((item) => ({ menuId: item, isHalf: false })),
+      ...halfCheckedKeys.map((item) => ({ menuId: item, isHalf: true })),
+    ];
+  };
 
   const roleDetailHanlder = async () => {
     const res = await getRole(roleId);
-    if(res.code===200){
+    if (res.code === 200) {
       form.setFieldsValue({
         name: res.data.name,
         description: res.data.description,
         enabled: res.data.enabled,
       });
-      setCheckedKeys(res.data.pagePermissions?.map((item:any) => item.menuId));
+      setCheckedKeys(res.data.pagePermissions?.map((item: any) => item.menuId));
     }
-  }
+  };
 
   const items: TabsProps['items'] = [
     {
@@ -62,7 +70,7 @@ const UpdateForm:React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
       key: '4',
       label: '字段权限',
       children: 'Content of Tab Pane 4',
-    }
+    },
   ];
 
   return (
@@ -74,24 +82,21 @@ const UpdateForm:React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
       title="编辑角色"
       width={'30%'}
       form={form}
-      onValuesChange={(changeValues) => console.log(changeValues)}
-      trigger={
-        <a onClick={roleDetailHanlder}>编辑</a>
-      }
+      trigger={<a onClick={roleDetailHanlder}>编辑</a>}
       autoFocusFirstInput
       drawerProps={{
         destroyOnClose: true,
       }}
       submitTimeout={2000}
       onFinish={async (values) => {
-        const res = await updateRole(roleId, {...values, pagePermissions});
-        if(res.code===200){
+        const res = await updateRole(roleId, { ...values, pagePermissions });
+        if (res.code === 200) {
           messageApi.success(res.message);
           actionRef?.reload();
-        }else{
+        } else {
           messageApi.error(res.message);
         }
-        
+
         // 不返回不会关闭弹框
         return true;
       }}
