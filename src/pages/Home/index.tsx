@@ -10,6 +10,13 @@ const HomePage: React.FC = () => {
     <PageContainer ghost>
       <div className={styles.container}>
         <Guide name={trim(name)} />
+        <div style={{ textAlign: 'center' }}>
+          powered by <a href="https://umijs.org/docs/max/introduce">UmiMax</a>{' '}
+          and{' '}
+          <a href="https://ant-design.antgroup.com/docs/react/introduce-cn">
+            Ant Design 5.0
+          </a>
+        </div>
       </div>
     </PageContainer>
   );

@@ -1,3 +1,3 @@
 export default {
-  welcome: '欢迎光临 Umi 的世界！',
+  welcome: '欢迎光临 Neegix 的世界！',
 };

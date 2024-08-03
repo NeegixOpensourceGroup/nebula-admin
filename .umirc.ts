@@ -119,18 +119,24 @@ export default defineConfig({
       routes: [
         {
           path: '/log',
-          redirect: '/log/table1',
+          redirect: '/log/optLog',
         },
         {
           name: '操作日志',
-          path: '/log/table1',
-          component: './Table',
+          path: '/log/optLog',
+          component: './log/OptLog',
           wrappers: ['@/wrappers/auth'],
         },
         {
           name: '登录日志',
-          path: '/log/table2',
-          component: './Table',
+          path: '/log/loginLog',
+          component: './log/LoginLog',
+          wrappers: ['@/wrappers/auth'],
+        },
+        {
+          name: '错误日志',
+          path: '/log/errorLog',
+          component: './log/ErrorLog',
           wrappers: ['@/wrappers/auth'],
         },
       ],
@@ -154,12 +160,6 @@ export default defineConfig({
           name: '接口管理',
           path: '/development/api',
           component: './development/Api',
-          wrappers: ['@/wrappers/auth'],
-        },
-        {
-          name: '错误日志',
-          path: '/development/table2',
-          component: './Table',
           wrappers: ['@/wrappers/auth'],
         },
       ],
