@@ -68,6 +68,12 @@ export default defineConfig({
           access: 'organization:psn:list',
           wrappers: ['@/wrappers/auth'],
         },
+        {
+          name: '岗位管理',
+          path: '/organization/post',
+          component: './organization/Post',
+          wrappers: ['@/wrappers/auth'],
+        },
       ],
     },
     {
