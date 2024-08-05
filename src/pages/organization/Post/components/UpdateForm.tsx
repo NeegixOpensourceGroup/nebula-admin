@@ -84,16 +84,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, actionRef }) => {
           label="岗位名称"
           placeholder="请输入岗位名称"
         />
-        <ProFormSwitch
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          width="md"
-          name="enabled"
-          label="是否启用"
-        />
+        <ProFormSwitch width="md" name="enabled" label="是否启用" />
       </ProForm.Group>
     </DrawerForm>
   );
