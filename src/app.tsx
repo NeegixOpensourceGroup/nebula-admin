@@ -5,6 +5,7 @@ import { GithubFilled, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { RunTimeLayoutConfig } from '@umijs/max';
 import { Dropdown, message } from 'antd';
 import { history, RequestConfig } from 'umi';
+import logo from '/public/images/logo.png';
 
 const { queryAccess } = accessServices.AccessController;
 const { logout } = services.AuthController;
@@ -29,7 +30,7 @@ export async function getInitialState(): Promise<{
 
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
   return {
-    logo: 'https://img.alicdn.com/tfs/TB1YHEpwUT1gK0jSZFhXXaAtVXa-28-27.svg',
+    logo,
     menu: {
       locale: false,
     },

@@ -1,5 +1,4 @@
 import { defineConfig } from '@umijs/max';
-
 export default defineConfig({
   antd: {
     compact: true,
@@ -10,6 +9,7 @@ export default defineConfig({
   request: {
     dataField: '',
   },
+  favicons: ['/images/logo.png'],
   proxy: {
     '/api': {
       target: 'http://localhost:8080/',

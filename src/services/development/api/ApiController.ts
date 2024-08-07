@@ -1,8 +1,15 @@
 import { request } from '@umijs/max';
 
-export async function queryApiList(options?: { [key: string]: any }) {
+export async function queryApiList(
+  params: {
+    current?: number;
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
   return request<NEBULA_API.Result>('/api/v1/api', {
     method: 'GET',
+    params,
     ...(options || {}),
   });
 }

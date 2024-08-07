@@ -10,6 +10,7 @@ import {
 import type { TabsProps } from 'antd';
 import { Button, Form, message, Tabs } from 'antd';
 import { Key } from 'react';
+import ApiTable from './ApiTable';
 import MenuTree from './MenuTree';
 const { createRole } = services.RoleController;
 
@@ -18,6 +19,8 @@ const onChange = (key: string) => {
 };
 
 let pagePermissions: any[] = [];
+
+let apiPermissions: Key[] = [];
 
 interface CreateFormProps {
   actionRef: ProCoreActionType | undefined;
@@ -32,13 +35,15 @@ const CreateForm: React.FC<CreateFormProps> = ({ actionRef }) => {
   }>();
   const [messageApi, contextHolder] = message.useMessage();
   const onCheck = (checkedKeysValue: Key[], halfCheckedKeys: Key[]) => {
-    console.log('onCheck', checkedKeysValue, halfCheckedKeys);
     pagePermissions = [
       ...checkedKeysValue.map((item) => ({ menuId: item, isHalf: false })),
       ...halfCheckedKeys.map((item) => ({ menuId: item, isHalf: true })),
     ];
 
     //form.setFieldValue('pagePermissions',checkedKeysValue)
+  };
+  const onTableSelected = (selectedKeys: Key[]) => {
+    apiPermissions = selectedKeys;
   };
   const items: TabsProps['items'] = [
     {
@@ -49,7 +54,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ actionRef }) => {
     {
       key: '2',
       label: '接口权限',
-      children: 'Content of Tab Pane 2',
+      children: <ApiTable onTableSelected={onTableSelected} />,
     },
     {
       key: '3',
@@ -84,7 +89,11 @@ const CreateForm: React.FC<CreateFormProps> = ({ actionRef }) => {
       }}
       submitTimeout={2000}
       onFinish={async (values) => {
-        const res = await createRole({ ...values, pagePermissions });
+        const res = await createRole({
+          ...values,
+          pagePermissions,
+          apiPermissions,
+        });
         if (res.code === 200) {
           messageApi.success(res.message);
           actionRef?.reload();

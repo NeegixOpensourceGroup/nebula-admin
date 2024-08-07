@@ -9,6 +9,7 @@ import {
 import type { TabsProps } from 'antd';
 import { Form, message, Tabs } from 'antd';
 import { Key, useState } from 'react';
+import ApiTable from './ApiTable';
 import MenuTree from './MenuTree';
 const { updateRole, getRole } = services.RoleController;
 
@@ -17,6 +18,8 @@ const onChange = (key: string) => {
 };
 
 let pagePermissions: any[] = [];
+
+let apiPermissions: Key[] = [];
 
 interface UpdateFormProps {
   roleId: number | string;
@@ -31,11 +34,16 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
   }>();
   const [messageApi, contextHolder] = message.useMessage();
   const [checkedKeys, setCheckedKeys] = useState<Key[]>([]);
+  const [tableSelectedKeys, setTableSelectedKeys] = useState<Key[]>([]);
   const onCheck = (checkedKeysValue: Key[], halfCheckedKeys: Key[]) => {
     pagePermissions = [
       ...checkedKeysValue.map((item) => ({ menuId: item, isHalf: false })),
       ...halfCheckedKeys.map((item) => ({ menuId: item, isHalf: true })),
     ];
+  };
+
+  const onTableSelected = (selectedKeys: Key[]) => {
+    apiPermissions = selectedKeys;
   };
 
   const roleDetailHanlder = async () => {
@@ -47,6 +55,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
         enabled: res.data.enabled,
       });
       setCheckedKeys(res.data.pagePermissions?.map((item: any) => item.menuId));
+      setTableSelectedKeys(res.data.apiPermissions);
     }
   };
 
@@ -59,7 +68,12 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
     {
       key: '2',
       label: '接口权限',
-      children: 'Content of Tab Pane 2',
+      children: (
+        <ApiTable
+          onTableSelected={onTableSelected}
+          tableSelectedKeys={tableSelectedKeys}
+        />
+      ),
     },
     {
       key: '3',
@@ -89,7 +103,11 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
       }}
       submitTimeout={2000}
       onFinish={async (values) => {
-        const res = await updateRole(roleId, { ...values, pagePermissions });
+        const res = await updateRole(roleId, {
+          ...values,
+          pagePermissions,
+          apiPermissions,
+        });
         if (res.code === 200) {
           messageApi.success(res.message);
           actionRef?.reload();

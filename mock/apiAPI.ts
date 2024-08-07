@@ -15,6 +15,62 @@ let api = [
     module: 1,
     created_at: '2023-03-01 00:00:00',
   },
+  {
+    id: 3,
+    access: 'system:psn:update',
+    name: 'third_psn_update',
+    description: '第三方更新人员接口',
+    module: 1,
+    created_at: '2023-03-01 00:00:00',
+  },
+  {
+    id: 4,
+    access: 'system:psn:delete',
+    name: 'third_psn_delete',
+    description: '第三方删除人员接口',
+    module: 1,
+    created_at: '2023-03-01 00:00:00',
+  },
+  {
+    id: 5,
+    access: 'system:psn:query',
+    name: 'third_psn_query',
+  },
+  {
+    id: 6,
+    access: 'system:psn:query',
+    name: 'third_psn_query',
+  },
+  {
+    id: 7,
+    access: 'system:psn:query',
+    name: 'third_psn_query',
+  },
+  {
+    id: 8,
+    access: 'system:psn:query',
+    name: 'third_psn_query',
+  },
+  {
+    id: 9,
+    access: 'system:psn:query',
+    name: 'third_psn_query',
+  },
+  {
+    id: 10,
+    access: 'system:psn:query',
+    name: 'third_psn_query',
+  },
+  {
+    id: 11,
+    access: 'system:psn:query',
+    name: 'third_psn_query',
+  },
+  {
+    id: 12,
+    access: 'system:psn:query',
+    name: 'third_psn_query',
+  },
 ];
 
 export default {
