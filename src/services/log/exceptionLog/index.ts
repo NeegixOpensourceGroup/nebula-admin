@@ -1,7 +1,7 @@
 /* eslint-disable */
 // 该文件由 OneAPI 自动生成，请勿手动修改！
 
-import * as ErrorLogController from './ErrorLogController';
+import * as ExceptionLogController from './ExceptionLogController';
 export default {
-  ErrorLogController,
+  ExceptionLogController,
 };

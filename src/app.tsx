@@ -2,7 +2,7 @@ import { GiteeFilled } from '@/icons/GiteeFilled';
 import accessServices from '@/services/system/access';
 import services from '@/services/system/auth';
 import { GithubFilled, LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { RunTimeLayoutConfig } from '@umijs/max';
+import { RunTimeLayoutConfig, SelectLang } from '@umijs/max';
 import { Dropdown, message } from 'antd';
 import { history, RequestConfig } from 'umi';
 import logo from '/public/images/logo.png';
@@ -98,6 +98,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
             );
           }}
         />,
+        <SelectLang key={'SelectLang'} />,
       ];
     },
   };

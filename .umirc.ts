@@ -18,10 +18,12 @@ export default defineConfig({
   },
   layout: {
     title: 'Nebula',
+    locale: true,
   },
   locale: {
     default: 'zh-CN',
     baseSeparator: '-',
+    title: true,
   },
   routes: [
     {
@@ -34,14 +36,14 @@ export default defineConfig({
       component: '@/pages/Login',
     },
     {
-      name: '首页',
+      title: 'menu.home',
       path: '/home',
       icon: 'HomeOutlined',
       component: './Home',
       wrappers: ['@/wrappers/auth'],
     },
     {
-      name: '组织管理',
+      title: 'menu.organization.title',
       path: '/organization',
       icon: 'ApartmentOutlined',
       routes: [
@@ -50,26 +52,26 @@ export default defineConfig({
           redirect: '/organization/biz-unit',
         },
         {
-          name: '组织管理',
+          title: 'menu.organization.title',
           path: '/organization/biz-unit',
           component: './organization/BizUnit',
           wrappers: ['@/wrappers/auth'],
         },
         {
-          name: '部门管理',
+          title: 'menu.organization.dept',
           path: '/organization/dept',
           component: './organization/Dept',
           wrappers: ['@/wrappers/auth'],
         },
         {
-          name: '人员管理',
+          title: 'menu.organization.psn',
           path: '/organization/psn',
           component: './organization/Psn',
           access: 'organization:psn:list',
           wrappers: ['@/wrappers/auth'],
         },
         {
-          name: '岗位管理',
+          title: 'menu.organization.position',
           path: '/organization/post',
           component: './organization/Post',
           wrappers: ['@/wrappers/auth'],
@@ -77,7 +79,7 @@ export default defineConfig({
       ],
     },
     {
-      name: '系统管理',
+      title: 'menu.system.title',
       path: '/system',
       icon: 'BlockOutlined',
       routes: [
@@ -85,33 +87,14 @@ export default defineConfig({
           path: '/system',
           redirect: '/system/dict',
         },
-        // {
-        //   name: '组织管理',
-        //   path: '/system/biz-unit',
-        //   component: './system/BizUnit',
-        //   wrappers: ['@/wrappers/auth'],
-        // },
-        // {
-        //   name: '部门管理',
-        //   path: '/system/dept',
-        //   component: './system/Dept',
-        //   wrappers: ['@/wrappers/auth'],
-        // },
-        // {
-        //   name: '人员管理',
-        //   path: '/system/psn',
-        //   component: './system/Psn',
-        //   access: 'system:psn:list',
-        //   wrappers: ['@/wrappers/auth'],
-        // },
         {
-          name: '字典管理',
+          title: 'menu.system.dictionary',
           path: '/system/dict',
           component: './system/Dict',
           wrappers: ['@/wrappers/auth'],
         },
         {
-          name: '角色管理',
+          title: 'menu.system.role',
           path: '/system/role',
           component: './system/Role',
           wrappers: ['@/wrappers/auth'],
@@ -119,7 +102,7 @@ export default defineConfig({
       ],
     },
     {
-      name: '日志管理',
+      title: 'menu.log.title',
       path: '/log',
       icon: 'ContainerOutlined',
       routes: [
@@ -128,27 +111,27 @@ export default defineConfig({
           redirect: '/log/optLog',
         },
         {
-          name: '操作日志',
+          title: 'menu.log.operate',
           path: '/log/optLog',
           component: './log/OptLog',
           wrappers: ['@/wrappers/auth'],
         },
         {
-          name: '登录日志',
+          title: 'menu.log.login',
           path: '/log/loginLog',
           component: './log/LoginLog',
           wrappers: ['@/wrappers/auth'],
         },
         {
-          name: '错误日志',
-          path: '/log/errorLog',
-          component: './log/ErrorLog',
+          title: 'menu.log.exception',
+          path: '/log/exceptionLog',
+          component: './log/ExceptionLog',
           wrappers: ['@/wrappers/auth'],
         },
       ],
     },
     {
-      name: '开发管理',
+      title: 'menu.development.title',
       path: '/development',
       icon: 'CodeOutlined',
       routes: [
@@ -157,13 +140,13 @@ export default defineConfig({
           redirect: '/development/menu',
         },
         {
-          name: '菜单管理',
+          title: 'menu.development.menu',
           path: '/development/menu',
           component: './development/Menu',
           wrappers: ['@/wrappers/auth'],
         },
         {
-          name: '接口管理',
+          title: 'menu.development.api',
           path: '/development/api',
           component: './development/Api',
           wrappers: ['@/wrappers/auth'],
@@ -172,7 +155,7 @@ export default defineConfig({
     },
     {
       icon: 'smile',
-      name: '权限演示',
+      title: 'menu.permission',
       path: '/access',
       component: './Access',
       wrappers: ['@/wrappers/auth'],

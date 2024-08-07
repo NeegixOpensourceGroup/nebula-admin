@@ -18,7 +18,7 @@ import {
 import { Divider, Space, Tabs, message, theme } from 'antd';
 import type { CSSProperties } from 'react';
 import { useState } from 'react';
-import { history, useModel } from 'umi';
+import { FormattedMessage, history, useModel } from 'umi';
 
 const { queryAccess } = accessServices.AccessController;
 type LoginType = 'phone' | 'account';
@@ -98,7 +98,11 @@ const Page = () => {
             backgroundColor: 'rgba(0, 0, 0,0.65)',
             backdropFilter: 'blur(4px)',
           }}
-          subTitle="基于React和Ant Design打造的开发平台"
+          subTitle={
+            <>
+              <FormattedMessage id="login.subtitle" />
+            </>
+          }
           // activityConfig={{
           //   style: {
           //     boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.2)',

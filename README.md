@@ -29,7 +29,7 @@
 ├── 日志管理     -- Log
   ├── 操作日志   -- OperationLog
   ├── 登录日志   -- LoginLog
-  ├── 错误日志   -- ErrorLog
+  ├── 异常日志   -- ExceptionLog
 ├── 开发管理     -- Development
   ├── 菜单管理   -- Menu
   ├── 接口管理   -- Interface

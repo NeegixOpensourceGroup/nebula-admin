@@ -1,4 +1,4 @@
-import services from '@/services/log/errorLog';
+import services from '@/services/log/exceptionLog';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -8,8 +8,9 @@ import {
 import { Button, message } from 'antd';
 import { useRef, useState } from 'react';
 
-const { queryErrorLogList, deleteErrorLog } = services.ErrorLogController;
-type ErrorLogItem = {
+const { queryExceptionLogList, deleteExceptionLog } =
+  services.ExceptionLogController;
+type ExceptionLogItem = {
   id: number;
   ip: string;
   level: number;
@@ -22,7 +23,7 @@ export default () => {
   const [selectedRowsState, setSelectedRows] = useState<any[]>([]);
   const actionRef = useRef<ActionType>();
 
-  const columns: ProColumns<ErrorLogItem>[] = [
+  const columns: ProColumns<ExceptionLogItem>[] = [
     {
       title: 'IP',
       dataIndex: 'ip',
@@ -76,7 +77,7 @@ export default () => {
     if (!selectedRows) return true;
     try {
       //const res  = await deletePsn(selectedRows.map(item=>item.id).join(","));
-      const res = await deleteErrorLog(
+      const res = await deleteExceptionLog(
         selectedRows.map((item) => item.id).join(','),
       );
       if (res.code === 200) {
@@ -99,11 +100,11 @@ export default () => {
   return (
     <PageContainer
       header={{
-        title: '接口管理',
+        title: '异常日志',
       }}
     >
       {contextHolder}
-      <ProTable<ErrorLogItem>
+      <ProTable<ExceptionLogItem>
         columns={columns}
         actionRef={actionRef}
         rowSelection={{
@@ -111,7 +112,7 @@ export default () => {
         }}
         cardBordered
         request={async (params) => {
-          const res = await queryErrorLogList(params);
+          const res = await queryExceptionLogList(params);
           return { data: res.data.list, total: res.data.total, success: true };
         }}
         editable={{
