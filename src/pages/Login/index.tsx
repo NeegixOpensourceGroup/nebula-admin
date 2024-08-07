@@ -98,7 +98,7 @@ const Page = () => {
             backgroundColor: 'rgba(0, 0, 0,0.65)',
             backdropFilter: 'blur(4px)',
           }}
-          subTitle="基于React和Ant Design的开发平台"
+          subTitle="基于React和Ant Design打造的开发平台"
           // activityConfig={{
           //   style: {
           //     boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.2)',
