@@ -1,4 +1,12 @@
-# nebula-admin
+# <div align=center>Nebula-Admin</div>
+
+<div align=center>
+
+![Static Badge](https://img.shields.io/badge/v0.0.1-white?style=flat&logo=nebula&label=nebula-admin&color=%23FF0000)
+
+![Static Badge](https://img.shields.io/badge/v20.11.1-white?style=flat&logoColor=%23339933&label=nodejs&color=%23339933) ![Static Badge](https://img.shields.io/badge/v10.5.0-white?style=flat&logo=npm&label=npm&color=%23CB3837) ![Static Badge](https://img.shields.io/badge/%40umijs%2Fmax-%5E4.2.9-blue?style=flat) ![Static Badge](https://img.shields.io/badge/antd-5.4.0-green?style=flat)
+
+</div>
 
 #### Description
 
@@ -28,35 +36,40 @@ nebula-admin is a management system built on the umimax framework, complemented 
 
 #### Interface Images
 
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122055.png)
-
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122147.png)
-
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122222.png)
-
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122404.png)
-
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122447.png)
-
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114423.png)
-
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122530.png)
-
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114448.png)
-
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114532.png)
-
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122613.png)
-
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122652.png)
-
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122734.png)
-
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122757.png)
-
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122904.png)
-
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122830.png)
+<table>
+  <tr>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122055.png" width="200" /></td>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122147.png" width="200" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122222.png" width="200" /></td>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122404.png" width="200" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122447.png" width="200" /></td>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114423.png" width="200" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122530.png" width="200" /></td>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114448.png" width="200" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114532.png" width="200" /></td>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122613.png" width="200" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122652.png" width="200" /></td>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122734.png" width="200" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122757.png" width="200" /></td>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122904.png" width="200" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122830.png" width="200" /></td>
+    <td></td>
+  </tr>
+</table>
 
 #### Software Architecture
 
