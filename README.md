@@ -113,3 +113,13 @@ routes: [
 1.  继续完善页面
 2.  启动后端服务
 3.  添加更多功能
+
+#### 联系信息
+
+1.  QQ 群: 766104737
+
+<img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/qrcode_1723007085212.jpg" width="200" />
+
+2. Discord:
+
+<img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/httpsdiscord.gg4YrRkht9.png" width="200" />

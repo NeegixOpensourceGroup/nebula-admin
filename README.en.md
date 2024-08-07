@@ -112,3 +112,13 @@ routes: [
 1.  Continue to improve the page
 2.  Start the backend service
 3.  Add more features
+
+#### Contact information
+
+1.  QQ Group: 766104737
+
+<img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/qrcode_1723007085212.jpg" width="200" />
+
+2. Discord:
+
+<img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/httpsdiscord.gg4YrRkht9.png" width="200" />
