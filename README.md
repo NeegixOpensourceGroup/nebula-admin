@@ -4,31 +4,59 @@
 
 基于 umimax 框架，配合 Ant Design UI 组件库搭建的管理系统
 
+#### 菜单结构
+
+```
+├── 首页        -- Home
+├── 组织管理     -- Organization
+  ├── 组织管理   -- Organization
+  ├── 部门管理   -- Department
+  ├── 人员管理   -- Person
+  ├── 岗位管理   -- Post
+├── 系统管理     -- System
+  ├── 字典管理   -- Dictionary
+  ├── 角色管理   -- Role
+├── 日志管理     -- Log
+  ├── 操作日志   -- OperationLog
+  ├── 登录日志   -- LoginLog
+  ├── 错误日志   -- ErrorLog
+├── 开发管理     -- Development
+  ├── 菜单管理   -- Menu
+  ├── 接口管理   -- Interface
+├── 权限演示     -- Permission Demo
+```
+
 #### 界面图片
 
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801113906.png)
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122055.png)
 
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801202333.png)
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122147.png)
 
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114145.png)
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122222.png)
 
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114221.png)
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122404.png)
 
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114303.png)
-
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114349.png)
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122447.png)
 
 ![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114423.png)
+
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122530.png)
 
 ![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114448.png)
 
 ![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114532.png)
 
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114603.png)
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122613.png)
 
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240801114639.png)
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122652.png)
 
-![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240802213815.png)
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122734.png)
+
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122757.png)
+
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122904.png)
+
+![](https://gitee.com/kushu001/pic-go-images/raw/master/images/20240807122830.png)
 
 #### 软件架构
 

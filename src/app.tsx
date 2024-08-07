@@ -46,6 +46,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
             menu={{
               items: [
                 {
+                  key: 'psn',
+                  icon: <UserOutlined />,
+                  label: '个人信息',
+                },
+                {
                   key: 'logout',
                   icon: <LogoutOutlined />,
                   label: '退出登录',
@@ -64,11 +69,6 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
                       });
                     }
                   },
-                },
-                {
-                  key: 'psn',
-                  icon: <UserOutlined />,
-                  label: '个人信息',
                 },
               ],
             }}

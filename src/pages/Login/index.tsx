@@ -1,3 +1,5 @@
+import accessServices from '@/services/system/access';
+import services from '@/services/system/auth';
 import {
   AlipayOutlined,
   LockOutlined,
@@ -13,12 +15,10 @@ import {
   ProFormCheckbox,
   ProFormText,
 } from '@ant-design/pro-components';
-import { Button, Divider, Space, Tabs, message, theme } from 'antd';
+import { Divider, Space, Tabs, message, theme } from 'antd';
 import type { CSSProperties } from 'react';
 import { useState } from 'react';
 import { history, useModel } from 'umi';
-import services from '@/services/system/auth';
-import accessServices from '@/services/system/access';
 
 const { queryAccess } = accessServices.AccessController;
 type LoginType = 'phone' | 'account';
@@ -41,8 +41,6 @@ type FieldType = {
 
 const { login } = services.AuthController;
 
-
-
 const Page = () => {
   const [loginType, setLoginType] = useState<LoginType>('account');
   const { token } = theme.useToken();
@@ -52,30 +50,34 @@ const Page = () => {
 
   //const history = useHistory();
 
-  const loginHandler: FormProps<FieldType>['login'] =  async (values) => {
+  const loginHandler: FormProps<FieldType>['login'] = async (values) => {
     //const { username, password } = values;
     const formData = new FormData(); // 初始化 FormData
-    formData.append("username", values.username || ""); // 添加 username
-    formData.append("password", values.password || ""); // 添加 password
-    const res  = await login(formData);
+    formData.append('username', values.username || ''); // 添加 username
+    formData.append('password', values.password || ''); // 添加 password
+    const res = await login(formData);
     if (res.status === 200) {
       sessionStorage.setItem('token', res.headers.authorization);
       messageApi.open({
         type: 'success',
         content: '登录成功！',
         duration: 1,
-        onClose: async() => {
+        onClose: async () => {
           const accessRes = await queryAccess();
-          setInitialState({ ...initialState, token: res.headers.authorization, name: values.username, access: accessRes.data});
-          if(values.username){
+          setInitialState({
+            ...initialState,
+            token: res.headers.authorization,
+            name: values.username,
+            access: accessRes.data,
+          });
+          if (values.username) {
             sessionStorage.setItem('name', values.username);
-            history.push("/home");
+            history.push('/home');
           }
-
         },
       });
-  }
-  }
+    }
+  };
 
   return (
     <>
@@ -91,36 +93,36 @@ const Page = () => {
           backgroundImageUrl="https://mdn.alipayobjects.com/huamei_gcee1x/afts/img/A*y0ZTS6WLwvgAAAAAAAAAAAAADml6AQ/fmt.webp"
           //logo="https://github.githubassets.com/favicons/favicon.png"
           backgroundVideoUrl="https://gw.alipayobjects.com/v/huamei_gcee1x/afts/video/jXRBRK_VAwoAAAAAAAAAAAAAK4eUAQBr"
-          title="赚钱平台"
+          title="Nebula Admin"
           containerStyle={{
             backgroundColor: 'rgba(0, 0, 0,0.65)',
             backdropFilter: 'blur(4px)',
           }}
-          subTitle="全球最大的赚钱平台"
-          activityConfig={{
-            style: {
-              boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.2)',
-              color: token.colorTextHeading,
-              borderRadius: 8,
-              backgroundColor: 'rgba(255,255,255,0.25)',
-              backdropFilter: 'blur(4px)',
-            },
-            title: '活动标题，可配置图片',
-            subTitle: '活动介绍说明文字',
-            action: (
-              <Button
-                size="large"
-                style={{
-                  borderRadius: 20,
-                  background: token.colorBgElevated,
-                  color: token.colorPrimary,
-                  width: 120,
-                }}
-              >
-                去看看
-              </Button>
-            ),
-          }}
+          subTitle="基于React和Ant Design的开发平台"
+          // activityConfig={{
+          //   style: {
+          //     boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.2)',
+          //     color: token.colorTextHeading,
+          //     borderRadius: 8,
+          //     backgroundColor: 'rgba(255,255,255,0.25)',
+          //     backdropFilter: 'blur(4px)',
+          //   },
+          //   title: '活动标题，可配置图片',
+          //   subTitle: '活动介绍说明文字',
+          //   action: (
+          //     <Button
+          //       size="large"
+          //       style={{
+          //         borderRadius: 20,
+          //         background: token.colorBgElevated,
+          //         color: token.colorPrimary,
+          //         width: 120,
+          //       }}
+          //     >
+          //       去看看
+          //     </Button>
+          //   ),
+          // }}
           actions={
             <div
               style={{
@@ -202,7 +204,7 @@ const Page = () => {
                 key: 'phone',
                 label: '手机号登录',
                 children: '手机号登录的内容区域',
-              }
+              },
             ]}
           />
           {loginType === 'account' && (
@@ -332,7 +334,6 @@ const Page = () => {
         </LoginFormPage>
       </div>
     </>
-
   );
 };
 

@@ -1,30 +1,39 @@
+import BizUnitSelectTree from '@/components/BizUnitSelectTree';
+import services from '@/services/organization/dept';
+import { buildTreeData, getParentNode } from '@/utils/tools';
 import {
   PageContainer,
   ProCard,
   ProForm,
   // ProFormRadio,
   ProFormText,
-  ProFormTextArea
+  ProFormTextArea,
 } from '@ant-design/pro-components';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Button, Empty, Flex, Input, Popconfirm, Space, Tree, message } from 'antd';
 import type { TreeDataNode } from 'antd';
+import {
+  Button,
+  Empty,
+  Flex,
+  Input,
+  Popconfirm,
+  Space,
+  Tree,
+  message,
+} from 'antd';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './index.less';
-import  services  from '@/services/organization/dept';
-import { buildTreeData, getParentNode } from '@/utils/tools';
-import BizUnitSelectTree from '@/components/BizUnitSelectTree';
 
-const { queryDeptList, queryDeptById, updateDept, deleteDept, createDept } = services.DeptController;
+const { queryDeptList, queryDeptById, updateDept, deleteDept, createDept } =
+  services.DeptController;
 const { Search } = Input;
-
 
 enum FormStatus {
   ROOT, // 根节点
-  CREAT_ROOT,  // 创建根节点
+  CREAT_ROOT, // 创建根节点
   NO_DATA, // 暂无数据
   CREAT_CHILD, // 创建子节点
-  EDIT_NODE,  // 编辑节点
-  VIEW_NODE,  // 查看节点
+  EDIT_NODE, // 编辑节点
+  VIEW_NODE, // 查看节点
 }
 
 const dataList: { key: React.Key; title: string }[] = [];
@@ -37,7 +46,8 @@ const generateList = (data: TreeDataNode[]) => {
 
     if (typeof title === 'function') {
       const titleNode = title(node);
-      titleString = typeof titleNode === 'string' ? titleNode : titleNode?.toString() ?? '';
+      titleString =
+        typeof titleNode === 'string' ? titleNode : titleNode?.toString() ?? '';
     } else if (typeof title === 'string') {
       titleString = title;
     } else {
@@ -66,29 +76,33 @@ const getParentKey = (key: React.Key, tree: TreeDataNode[]): React.Key => {
   return parentKey!;
 };
 
-const _setFormFieldValues = (data: any, formRef: any, parentNode: TreeDataNode|null)=>{
+const _setFormFieldValues = (
+  data: any,
+  formRef: any,
+  parentNode: TreeDataNode | null,
+) => {
   //const parentNode = getParentNode(Number(checkedKey), defaultData);
   if (parentNode) {
     formRef?.current?.setFieldsValue({
       ...data,
-      pName: parentNode.title // 安全地访问 title 属性
+      pName: parentNode.title, // 安全地访问 title 属性
     });
   } else {
     formRef?.current?.setFieldsValue({
       ...data,
-      pName: '' // parentNode 为 null 或 undefined 时的默认值
+      pName: '', // parentNode 为 null 或 undefined 时的默认值
     });
   }
-}
+};
 const OrgList: React.FC<unknown> = () => {
   const [messageApi, contextHolder] = message.useMessage();
-  const [bizUnitId, setBizUnitId] = useState<number|string>(1);
+  const [bizUnitId, setBizUnitId] = useState<number | string>(1);
   /// 左侧树-START
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const [autoExpandParent, setAutoExpandParent] = useState(true);
   const [defaultTreeData, setDefaultTreeData] = useState<TreeDataNode[]>([]);
- /// 左侧树-END
+  /// 左侧树-END
 
   /// 表单-START
   const [formStatus, setFormStatus] = useState<FormStatus>(FormStatus.ROOT);
@@ -100,12 +114,12 @@ const OrgList: React.FC<unknown> = () => {
   //   code: '',
   //   simpleName:''
   // });
-  const [checkedKey, setCheckedKey] = useState<number|string>();
+  const [checkedKey, setCheckedKey] = useState<number | string>();
   const [currentNodeData, setCurrentNodeData] = useState<any>({});
   const [parentNodeData, setParentNodeData] = useState<any>({});
- /// 表单-END
+  /// 表单-END
 
-   /// 左侧树-START
+  /// 左侧树-START
   const onExpand = (newExpandedKeys: React.Key[]) => {
     setExpandedKeys(newExpandedKeys);
     setAutoExpandParent(false);
@@ -120,7 +134,10 @@ const OrgList: React.FC<unknown> = () => {
         }
         return null;
       })
-      .filter((item, i, self): item is React.Key => !!(item && self.indexOf(item) === i));
+      .filter(
+        (item, i, self): item is React.Key =>
+          !!(item && self.indexOf(item) === i),
+      );
     setExpandedKeys(newExpandedKeys);
     setSearchValue(value);
     setAutoExpandParent(true);
@@ -152,27 +169,27 @@ const OrgList: React.FC<unknown> = () => {
           key: item.key,
         };
       });
-      if(defaultTreeData.length === 0){
-        return []
-      }
-      const data = loop(defaultTreeData);
+    if (defaultTreeData.length === 0) {
+      return [];
+    }
+    const data = loop(defaultTreeData);
     return data;
   }, [searchValue, defaultTreeData]);
-  const refreshTreeHandler = async ()=>{
+  const refreshTreeHandler = async () => {
     const res = await queryDeptList(bizUnitId);
     const treeData = buildTreeData(res.data, {
       idKey: 'id',
       nameKey: 'name',
-      pidKey: 'pid'
-    })
-    setDefaultTreeData(treeData)
+      pidKey: 'pid',
+    });
+    setDefaultTreeData(treeData);
     generateList(treeData);
-    return treeData
-  }
+    return treeData;
+  };
   /// 左侧树-END
-  
+
   useEffect(() => {
-    setFormStatus(FormStatus.ROOT)
+    setFormStatus(FormStatus.ROOT);
     // const queryOrgs = async ()=>{
     //     const treeData = await refreshTreeHandler();
     //     setFormStatus(treeData.length>0?FormStatus.NO_DATA:FormStatus.ROOT);
@@ -182,247 +199,300 @@ const OrgList: React.FC<unknown> = () => {
 
   /// 表单-START
 
-
   // 编辑 界面
-  const openEditHandler = ()=>{
-    setFormStatus(FormStatus.EDIT_NODE)
-  }
+  const openEditHandler = () => {
+    setFormStatus(FormStatus.EDIT_NODE);
+  };
 
   // 新增 子节点界面
-  const openAddSubHandler = async ()=>{
+  const openAddSubHandler = async () => {
     formRef?.current?.resetFields();
-    if(checkedKey === undefined){
+    if (checkedKey === undefined) {
       messageApi.error('请选择要新增的节点');
-      return
+      return;
     }
-    formRef?.current?.setFieldsValue({pName:currentNodeData.name})
-    setFormStatus(FormStatus.CREAT_CHILD)
-  }
+    formRef?.current?.setFieldsValue({ pName: currentNodeData.name });
+    setFormStatus(FormStatus.CREAT_CHILD);
+  };
 
   // 新增 根节点子界面
-  const openAddRootHandler = ()=>{
-    setFormStatus(FormStatus.CREAT_ROOT)
-  }
+  const openAddRootHandler = () => {
+    setFormStatus(FormStatus.CREAT_ROOT);
+  };
 
   //
-  const cancleHandler = async ()=>{
-    if(checkedKey !== undefined){
+  const cancleHandler = async () => {
+    if (checkedKey !== undefined) {
       if (currentNodeData) {
-        _setFormFieldValues(currentNodeData, formRef, parentNodeData)
-        setFormStatus(FormStatus.VIEW_NODE)
+        _setFormFieldValues(currentNodeData, formRef, parentNodeData);
+        setFormStatus(FormStatus.VIEW_NODE);
       } else {
-        setFormStatus(FormStatus.NO_DATA)
+        setFormStatus(FormStatus.NO_DATA);
       }
     } else {
       formRef?.current?.resetFields();
-      setFormStatus(FormStatus.ROOT)
+      setFormStatus(FormStatus.ROOT);
     }
-    
-  }
+  };
 
-  const deleteHanlder = async ()=>{
-    if(checkedKey !== undefined){
+  const deleteHanlder = async () => {
+    if (checkedKey !== undefined) {
       const res = await deleteDept(checkedKey);
       if (res.code === 200) {
         await refreshTreeHandler();
-        setFormStatus(FormStatus.ROOT)
+        setFormStatus(FormStatus.ROOT);
         formRef?.current?.resetFields();
         messageApi.success('删除成功');
       }
     }
-  }  
+  };
   /// 表单-END
-
 
   return (
     <PageContainer
       header={{
-        title: '组织管理',
+        title: '部门管理',
       }}
     >
       {contextHolder}
-      <ProCard split="vertical" title={
-        <Space>
-          <BizUnitSelectTree onChange={async (value: string) => {
-            const res = await queryDeptList(value);
-            if (res.code === 200) {
-              const treeData = buildTreeData(res.data, {
-                idKey: 'id',
-                nameKey: 'name',
-                pidKey: 'pid'
-              })
-              setDefaultTreeData(treeData)
-              generateList(treeData);
-              setBizUnitId(parseInt(value))
-              setFormStatus(FormStatus.ROOT)
-              setCheckedKey(undefined)
-              formRef?.current?.resetFields();
-            }
-          }}/>
-        </Space>
-      }  bordered headerBordered>
+      <ProCard
+        split="vertical"
+        title={
+          <Space>
+            <BizUnitSelectTree
+              onChange={async (value: string) => {
+                const res = await queryDeptList(value);
+                if (res.code === 200) {
+                  const treeData = buildTreeData(res.data, {
+                    idKey: 'id',
+                    nameKey: 'name',
+                    pidKey: 'pid',
+                  });
+                  setDefaultTreeData(treeData);
+                  generateList(treeData);
+                  setBizUnitId(parseInt(value));
+                  setFormStatus(FormStatus.ROOT);
+                  setCheckedKey(undefined);
+                  formRef?.current?.resetFields();
+                }
+              }}
+            />
+          </Space>
+        }
+        bordered
+        headerBordered
+      >
         <ProCard title="部门" colSpan="20%">
-        <Search style={{ marginBottom: 8 }} placeholder="查询" onChange={onChange} />
-        <Tree
-          onExpand={onExpand}
-          expandedKeys={expandedKeys}
-          autoExpandParent={autoExpandParent}
-          selectedKeys={checkedKey?[checkedKey]:[]}
-          onSelect={async ( selectedKeys) => {
+          <Search
+            style={{ marginBottom: 8 }}
+            placeholder="查询"
+            onChange={onChange}
+          />
+          <Tree
+            onExpand={onExpand}
+            expandedKeys={expandedKeys}
+            autoExpandParent={autoExpandParent}
+            selectedKeys={checkedKey ? [checkedKey] : []}
+            onSelect={async (selectedKeys) => {
               if (selectedKeys.length > 0) {
                 const res = await queryDeptById(Number(selectedKeys[0]));
                 if (res.code === 200) {
                   formRef?.current?.resetFields();
-                  const parentNode = getParentNode(Number(selectedKeys[0]), defaultTreeData);
-                  setCurrentNodeData(res.data)
+                  const parentNode = getParentNode(
+                    Number(selectedKeys[0]),
+                    defaultTreeData,
+                  );
+                  setCurrentNodeData(res.data);
                   setParentNodeData(parentNode);
-                  setCheckedKey(Number(selectedKeys[0]))
-                  _setFormFieldValues(res.data, formRef, parentNode)
-                  setFormStatus(FormStatus.VIEW_NODE)
+                  setCheckedKey(Number(selectedKeys[0]));
+                  _setFormFieldValues(res.data, formRef, parentNode);
+                  setFormStatus(FormStatus.VIEW_NODE);
                 } else {
-                  setFormStatus(FormStatus.NO_DATA)
+                  setFormStatus(FormStatus.NO_DATA);
                 }
               } else {
                 formRef?.current?.resetFields();
-                setCurrentNodeData(null)
-                setParentNodeData(null)
-                setCheckedKey(undefined)
-                setFormStatus(FormStatus.ROOT)
+                setCurrentNodeData(null);
+                setParentNodeData(null);
+                setCheckedKey(undefined);
+                setFormStatus(FormStatus.ROOT);
               }
-              
-            }
-          }
-          treeData={treeData}
-        />
+            }}
+            treeData={treeData}
+          />
         </ProCard>
-        <ProCard title={`部门信息${formStatus===FormStatus.VIEW_NODE?'-查看':formStatus===FormStatus.EDIT_NODE?'-编辑':formStatus===FormStatus.CREAT_CHILD?'-新增子级':formStatus===FormStatus.CREAT_ROOT?'-新增根级':''}`} headerBordered
+        <ProCard
+          title={`部门信息${
+            formStatus === FormStatus.VIEW_NODE
+              ? '-查看'
+              : formStatus === FormStatus.EDIT_NODE
+              ? '-编辑'
+              : formStatus === FormStatus.CREAT_CHILD
+              ? '-新增子级'
+              : formStatus === FormStatus.CREAT_ROOT
+              ? '-新增根级'
+              : ''
+          }`}
+          headerBordered
           style={{ minHeight: '500px' }}
           extra={
             <Space>
-            {
-              formStatus === FormStatus.VIEW_NODE?
-              <>
-                <Button onClick={openEditHandler}>编辑</Button>
-                <Button type='primary' onClick={openAddSubHandler}>新增子级</Button>
-                <Popconfirm
-                  title="警告"
-                  description="确认删除当前部门?"
-                  onConfirm={deleteHanlder}
-                  okText="是"
-                  cancelText="否"
-                >
-                  <Button danger type='primary'>删除</Button>
-                </Popconfirm>
-                
-              </>:null
-            }
-            {
-              formStatus === FormStatus.CREAT_ROOT || formStatus === FormStatus.CREAT_CHILD || formStatus === FormStatus.EDIT_NODE ? (
-                <Button danger onClick={cancleHandler}>取消</Button>
-              ) : null
-            }
-              
+              {formStatus === FormStatus.VIEW_NODE ? (
+                <>
+                  <Button onClick={openEditHandler}>编辑</Button>
+                  <Button type="primary" onClick={openAddSubHandler}>
+                    新增子级
+                  </Button>
+                  <Popconfirm
+                    title="警告"
+                    description="确认删除当前部门?"
+                    onConfirm={deleteHanlder}
+                    okText="是"
+                    cancelText="否"
+                  >
+                    <Button danger type="primary">
+                      删除
+                    </Button>
+                  </Popconfirm>
+                </>
+              ) : null}
+              {formStatus === FormStatus.CREAT_ROOT ||
+              formStatus === FormStatus.CREAT_CHILD ||
+              formStatus === FormStatus.EDIT_NODE ? (
+                <Button danger onClick={cancleHandler}>
+                  取消
+                </Button>
+              ) : null}
             </Space>
           }
-          >
-            <ProForm
-              hidden={formStatus === FormStatus.ROOT || formStatus === FormStatus.NO_DATA}
-              formRef={formRef}
-              grid={true}
-              readonly={formStatus === FormStatus.CREAT_ROOT || formStatus === FormStatus.CREAT_CHILD || formStatus === FormStatus.EDIT_NODE?false:true}
-              onFinish={async () => {
-                const values = formRef.current?.getFieldsValue();
-                let pid:number =0;
-                if (parentNodeData) {
-                  pid = Number(parentNodeData.key);
-                } 
+        >
+          <ProForm
+            hidden={
+              formStatus === FormStatus.ROOT ||
+              formStatus === FormStatus.NO_DATA
+            }
+            formRef={formRef}
+            grid={true}
+            readonly={
+              formStatus === FormStatus.CREAT_ROOT ||
+              formStatus === FormStatus.CREAT_CHILD ||
+              formStatus === FormStatus.EDIT_NODE
+                ? false
+                : true
+            }
+            onFinish={async () => {
+              const values = formRef.current?.getFieldsValue();
+              let pid: number = 0;
+              if (parentNodeData) {
+                pid = Number(parentNodeData.key);
+              }
 
-                if(formStatus === FormStatus.CREAT_ROOT || formStatus === FormStatus.CREAT_CHILD){
-                  const pid = formStatus === FormStatus.CREAT_ROOT?0:Number(checkedKey);
-                  const res = await createDept(bizUnitId, {...values, pid});
-                  if(res.code === 200){
-                    await refreshTreeHandler();
-                    setFormStatus(FormStatus.VIEW_NODE)
-                    setExpandedKeys([res.data.id])
-                    setAutoExpandParent(true);
-                    setCheckedKey(res.data.id)
-                    setParentNodeData({key: currentNodeData.id, title: currentNodeData.name})
-                    setCurrentNodeData({...values,pid, bizUnitId, id:res.data.id})
-                    messageApi.success('提交成功');
-                  }
-                }
-                if(formStatus === FormStatus.EDIT_NODE){
-                  const res = await updateDept(Number(checkedKey), {...values, pid, bizUnitId});
-                  if(res.code === 200){
-                    await refreshTreeHandler();
-                    setCurrentNodeData({...values,pid, bizUnitId, id:Number(checkedKey)})
-                    setFormStatus(FormStatus.VIEW_NODE)
-                    messageApi.success('提交成功');
-                  }
-                }
-              }}
-              onReset={
-                () => {
-                  if(formStatus === FormStatus.CREAT_CHILD){
-                    formRef.current?.setFieldsValue({
-                      id:currentNodeData?.id,
-                      pid:currentNodeData?.pid,
-                      pName:currentNodeData?.name
-                    })
-                  }
-
-                  if(formStatus === FormStatus.EDIT_NODE){
-                    formRef.current?.setFieldsValue({
-                      id:currentNodeData?.id,
-                      code:currentNodeData?.code,
-                      pid:currentNodeData?.pid,
-                      pName:parentNodeData?.title
-                    })
-                  }
+              if (
+                formStatus === FormStatus.CREAT_ROOT ||
+                formStatus === FormStatus.CREAT_CHILD
+              ) {
+                const pid =
+                  formStatus === FormStatus.CREAT_ROOT ? 0 : Number(checkedKey);
+                const res = await createDept(bizUnitId, { ...values, pid });
+                if (res.code === 200) {
+                  await refreshTreeHandler();
+                  setFormStatus(FormStatus.VIEW_NODE);
+                  setExpandedKeys([res.data.id]);
+                  setAutoExpandParent(true);
+                  setCheckedKey(res.data.id);
+                  setParentNodeData({
+                    key: currentNodeData.id,
+                    title: currentNodeData.name,
+                  });
+                  setCurrentNodeData({
+                    ...values,
+                    pid,
+                    bizUnitId,
+                    id: res.data.id,
+                  });
+                  messageApi.success('提交成功');
                 }
               }
-              submitter={{
-                render: (props, doms) => {
-                  return formStatus !== FormStatus.VIEW_NODE?
-                    <Flex justify="flex-end" align="center">
-                      <Space>{doms}</Space>
-                    </Flex> :null;
-                },
-              }}
-                // syncToUrl={(values, type) => {
-                //   console.log('syncToUrl', values, type)
-                //   if (type === 'get') {
-                //     // 为了配合 transform
-                //     // startTime 和 endTime 拼成 createTimeRanger
-                //     return {
-                //       ...values,
-                //       createTimeRanger:
-                //         values.startTime || values.endTime
-                //           ? [values.startTime, values.endTime]
-                //           : undefined,
-                //     };
-                //   }
-                //   // expirationTime 不同步到 url
-                //   return {
-                //     ...values,
-                //     expirationTime: undefined,
-                //   };
-                // }}
-              initialValues={{
-                id: null,
-                name: '',
-                pid: 0,
-                code: '',
-                simpleName:'',
-                tel:'',
-                //orgType:null,
-                manager:'',
-                phone:'',
-                remark:''
-              }}
-              autoFocusFirstInput
-              >
-              {/* <ProFormRadio.Group
+              if (formStatus === FormStatus.EDIT_NODE) {
+                const res = await updateDept(Number(checkedKey), {
+                  ...values,
+                  pid,
+                  bizUnitId,
+                });
+                if (res.code === 200) {
+                  await refreshTreeHandler();
+                  setCurrentNodeData({
+                    ...values,
+                    pid,
+                    bizUnitId,
+                    id: Number(checkedKey),
+                  });
+                  setFormStatus(FormStatus.VIEW_NODE);
+                  messageApi.success('提交成功');
+                }
+              }
+            }}
+            onReset={() => {
+              if (formStatus === FormStatus.CREAT_CHILD) {
+                formRef.current?.setFieldsValue({
+                  id: currentNodeData?.id,
+                  pid: currentNodeData?.pid,
+                  pName: currentNodeData?.name,
+                });
+              }
+
+              if (formStatus === FormStatus.EDIT_NODE) {
+                formRef.current?.setFieldsValue({
+                  id: currentNodeData?.id,
+                  code: currentNodeData?.code,
+                  pid: currentNodeData?.pid,
+                  pName: parentNodeData?.title,
+                });
+              }
+            }}
+            submitter={{
+              render: (props, doms) => {
+                return formStatus !== FormStatus.VIEW_NODE ? (
+                  <Flex justify="flex-end" align="center">
+                    <Space>{doms}</Space>
+                  </Flex>
+                ) : null;
+              },
+            }}
+            // syncToUrl={(values, type) => {
+            //   console.log('syncToUrl', values, type)
+            //   if (type === 'get') {
+            //     // 为了配合 transform
+            //     // startTime 和 endTime 拼成 createTimeRanger
+            //     return {
+            //       ...values,
+            //       createTimeRanger:
+            //         values.startTime || values.endTime
+            //           ? [values.startTime, values.endTime]
+            //           : undefined,
+            //     };
+            //   }
+            //   // expirationTime 不同步到 url
+            //   return {
+            //     ...values,
+            //     expirationTime: undefined,
+            //   };
+            // }}
+            initialValues={{
+              id: null,
+              name: '',
+              pid: 0,
+              code: '',
+              simpleName: '',
+              tel: '',
+              //orgType:null,
+              manager: '',
+              phone: '',
+              remark: '',
+            }}
+            autoFocusFirstInput
+          >
+            {/* <ProFormRadio.Group
                 colProps={{ span: 12 }}
                 label="组织类型"
                 name="orgType"
@@ -457,66 +527,78 @@ const OrgList: React.FC<unknown> = () => {
                   },
                 ]}
               /> */}
-              <ProFormText
-                colProps={{ span: 12 }}
-                width="md"
-                name="pName"
-                readonly={true}
-                label="上级部门名称"
-              />
-              <ProFormText
-                colProps={{ span: 12 }}
-                width="md"
-                name="code"
-                readonly={formStatus === FormStatus.EDIT_NODE}
-                label="部门代码"
-                placeholder="请输入部门代码"
-                rules={[{ required: true }]}
-              />
-              <ProFormText
-                colProps={{ span: 12 }}
-                width="md"
-                name="name"
-                label="部门名称"
-                placeholder="请输入部门名称"
-                rules={[{ required: true }]}
-              />
-              <ProFormText
-                colProps={{ span: 12 }}
-                width="md"
-                name="simpleName"
-                label="部门简称"
-                placeholder="请输入部门简称"
-              />
-              <ProFormText
-                colProps={{ span: 12 }}
-                width="md"
-                name="tel"
-                label="联系电话"
-                placeholder="请输入联系电话"
-              />
-              <ProFormText
-                colProps={{ span: 12 }}
-                width="md"
-                name="manager"
-                label="负责人"
-                placeholder="请输入负责人"
-              />
-              <ProFormText
-                colProps={{ span: 12 }}
-                width="md"
-                name="phone"
-                label="负责人电话"
-                placeholder="请输入负责人电话"
-              />
-              <ProFormTextArea width="xl" label="备注" name="remark" />
-            </ProForm>
-            <Empty
-              style={{ display: formStatus === FormStatus.NO_DATA|| formStatus === FormStatus.ROOT ? 'block' : 'none' }}
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
-              >
-              <Button hidden={formStatus!==FormStatus.ROOT} type="primary" onClick={openAddRootHandler}>创建根部门</Button>
-            </Empty>
+            <ProFormText
+              colProps={{ span: 12 }}
+              width="md"
+              name="pName"
+              readonly={true}
+              label="上级部门名称"
+            />
+            <ProFormText
+              colProps={{ span: 12 }}
+              width="md"
+              name="code"
+              readonly={formStatus === FormStatus.EDIT_NODE}
+              label="部门代码"
+              placeholder="请输入部门代码"
+              rules={[{ required: true }]}
+            />
+            <ProFormText
+              colProps={{ span: 12 }}
+              width="md"
+              name="name"
+              label="部门名称"
+              placeholder="请输入部门名称"
+              rules={[{ required: true }]}
+            />
+            <ProFormText
+              colProps={{ span: 12 }}
+              width="md"
+              name="simpleName"
+              label="部门简称"
+              placeholder="请输入部门简称"
+            />
+            <ProFormText
+              colProps={{ span: 12 }}
+              width="md"
+              name="tel"
+              label="联系电话"
+              placeholder="请输入联系电话"
+            />
+            <ProFormText
+              colProps={{ span: 12 }}
+              width="md"
+              name="manager"
+              label="负责人"
+              placeholder="请输入负责人"
+            />
+            <ProFormText
+              colProps={{ span: 12 }}
+              width="md"
+              name="phone"
+              label="负责人电话"
+              placeholder="请输入负责人电话"
+            />
+            <ProFormTextArea width="xl" label="备注" name="remark" />
+          </ProForm>
+          <Empty
+            style={{
+              display:
+                formStatus === FormStatus.NO_DATA ||
+                formStatus === FormStatus.ROOT
+                  ? 'block'
+                  : 'none',
+            }}
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+          >
+            <Button
+              hidden={formStatus !== FormStatus.ROOT}
+              type="primary"
+              onClick={openAddRootHandler}
+            >
+              创建根部门
+            </Button>
+          </Empty>
         </ProCard>
       </ProCard>
     </PageContainer>
