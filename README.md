@@ -131,10 +131,13 @@ routes: [
 
 #### 联系信息
 
-1.  QQ 群: 766104737
-
-<img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/qrcode_1723007085212.jpg" width="200" />
-
-2. Discord:
-
-<img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/httpsdiscord.gg4YrRkht9.png" width="200" />
+<table>
+  <tr>
+    <th>QQ 群: 766104737</th>
+    <th>Discord: <a href="https://discord.gg/WrP5J9Ea7z">https://discord.gg/WrP5J9Ea7z</a></th>
+  </tr>
+  <tr>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/qrcode_1723007085212.jpg" width="200" /></td>
+    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/httpsdiscord.ggWrP5J9Ea7z.png" width="200" /></td>
+  </tr>
+</table>
