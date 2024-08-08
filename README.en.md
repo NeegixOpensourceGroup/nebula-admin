@@ -137,6 +137,6 @@ routes: [
   </tr>
   <tr>
     <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/qrcode_1723007085212.jpg" width="200" /></td>
-    <td><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/httpsdiscord.ggWrP5J9Ea7z.png" width="200" /></td>
+    <td align=center><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/httpsdiscord.ggWrP5J9Ea7z.png" width="200" /></td>
   </tr>
 </table>
