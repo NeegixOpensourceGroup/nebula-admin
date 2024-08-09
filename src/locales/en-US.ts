@@ -2,7 +2,8 @@ export default {
   welcome: "Welcome to Neegix's world!",
   login: {
     title: 'Nebula Admin',
-    subtitle: 'A development platform built with React and Ant Design.',
+    subtitle:
+      'Knowledge changes fate, can find a target and try to complete it is good!',
   },
   menu: {
     home: 'Home',
@@ -29,5 +30,62 @@ export default {
       api: 'Api',
     },
     permission: 'Permission Demo',
+  },
+  message: {
+    success: 'Success',
+    failed: 'Failed',
+  },
+  layout: {
+    header: {
+      profile: 'Your Profile',
+      logout: 'Logout',
+    },
+    common: {
+      info: 'Info',
+      view: 'View',
+      edit: 'Edit',
+      delete: 'Delete',
+      add: 'Add',
+      subNode: 'Sub',
+      rootNode: 'Root',
+      save: 'Save',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      reset: 'Reset',
+      search: 'Search',
+      warning: 'Warning',
+      resetSearch: 'Reset Search',
+      resetPassword: 'Reset Password',
+      resetPasswordConfirm: 'Confirm Reset Password',
+    },
+    organization: {
+      organization: {
+        title: 'Organization',
+        info: 'Organization Info',
+        createRoot: 'Create Root',
+        orgType: {
+          title: 'Type',
+          tooltip: 'Department type can only add sub department',
+          headquarter: 'Headquarter',
+          branch: 'Branch',
+          external: 'External',
+        },
+        parent: 'Parent',
+        code: 'Code',
+        name: 'Name',
+        shortName: 'Short Name',
+        tel: 'Tel',
+        manager: 'Manager',
+        phone: 'Phone',
+        remark: 'Remark',
+        message: {
+          sure: 'Are you sure to delete current organization?',
+          select: 'Please select the node to be added',
+        },
+      },
+      dept: 'Department',
+      psn: 'Personnel',
+      position: 'Position',
+    },
   },
 };

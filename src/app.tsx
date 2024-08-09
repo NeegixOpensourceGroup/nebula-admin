@@ -2,7 +2,7 @@ import { GiteeFilled } from '@/icons/GiteeFilled';
 import accessServices from '@/services/system/access';
 import services from '@/services/system/auth';
 import { GithubFilled, LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { RunTimeLayoutConfig, SelectLang } from '@umijs/max';
+import { FormattedMessage, RunTimeLayoutConfig, SelectLang } from '@umijs/max';
 import { Dropdown, message } from 'antd';
 import { history, RequestConfig } from 'umi';
 import logo from '/public/images/logo.png';
@@ -48,12 +48,12 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
                 {
                   key: 'psn',
                   icon: <UserOutlined />,
-                  label: '个人信息',
+                  label: <FormattedMessage id="layout.header.profile" />,
                 },
                 {
                   key: 'logout',
                   icon: <LogoutOutlined />,
-                  label: '退出登录',
+                  label: <FormattedMessage id="layout.header.logout" />,
                   onClick: async () => {
                     const res = await logout();
                     if (res.status === 200) {
