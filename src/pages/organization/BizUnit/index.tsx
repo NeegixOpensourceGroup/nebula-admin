@@ -213,9 +213,7 @@ const BizUnitList: React.FC<unknown> = () => {
   const openAddSubHandler = async () => {
     formRef?.current?.resetFields();
     if (checkedKey === undefined) {
-      messageApi.warning(
-        <FormattedMessage id="menu.organization.organization.message.select" />,
-      );
+      messageApi.warning(<FormattedMessage id="layout.organization.select" />);
       return;
     }
     formRef?.current?.setFieldsValue({
@@ -266,7 +264,12 @@ const BizUnitList: React.FC<unknown> = () => {
   return (
     <PageContainer
       header={{
-        title: <FormattedMessage id="menu.organization.title" />,
+        title: (
+          <>
+            <FormattedMessage id="layout.organization.organization.title" />{' '}
+            <FormattedMessage id="layout.organization.management" />
+          </>
+        ),
       }}
     >
       {contextHolder}
@@ -316,8 +319,8 @@ const BizUnitList: React.FC<unknown> = () => {
         </ProCard>
         <ProCard
           title={`${intl.formatMessage({
-            id: 'layout.organization.organization.info',
-          })}${
+            id: 'layout.organization.organization.title',
+          })} ${intl.formatMessage({ id: 'layout.organization.info' })}${
             formStatus === FormStatus.VIEW_NODE
               ? `-${intl.formatMessage({ id: 'layout.common.view' })}`
               : formStatus === FormStatus.EDIT_NODE

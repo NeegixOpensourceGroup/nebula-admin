@@ -59,6 +59,9 @@ export default {
       resetPasswordConfirm: 'Confirm Reset Password',
     },
     organization: {
+      info: 'Information',
+      management: 'Management',
+      select: 'Please select the node to be added',
       organization: {
         title: 'Organization',
         info: 'Organization Info',
@@ -80,10 +83,24 @@ export default {
         remark: 'Remark',
         message: {
           sure: 'Are you sure to delete current organization?',
-          select: 'Please select the node to be added',
         },
       },
-      dept: 'Department',
+      dept: {
+        title: 'Department',
+        info: 'Department Info',
+        createRoot: 'Create Root',
+        parent: 'Parent',
+        code: 'Code',
+        name: 'Name',
+        shortName: 'Short Name',
+        tel: 'Tel',
+        manager: 'Manager',
+        phone: 'Phone',
+        remark: 'Remark',
+        message: {
+          sure: 'Are you sure to delete current department?',
+        },
+      },
       psn: 'Personnel',
       position: 'Position',
     },

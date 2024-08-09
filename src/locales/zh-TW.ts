@@ -58,6 +58,9 @@ export default {
       resetPasswordConfirm: '確認重設密碼',
     },
     organization: {
+      info: '資訊',
+      management: '管理',
+      select: '請選擇要新增的節點',
       organization: {
         title: '組織',
         info: '組織資訊',
@@ -79,10 +82,23 @@ export default {
         remark: '備註',
         message: {
           sure: '確認刪除當前組織?',
-          select: '請選擇要新增的節點',
         },
       },
-      dept: '部門',
+      dept: {
+        title: '部門',
+        createRoot: '創建根部門',
+        parent: '上級部門',
+        code: '部門代碼',
+        name: '部門名稱',
+        shortName: '部門簡稱',
+        tel: '聯絡電話',
+        manager: '負責人',
+        phone: '負責人電話',
+        remark: '備註',
+        message: {
+          sure: '確認刪除當前部門?',
+        },
+      },
       psn: '人員',
       position: '崗位',
     },

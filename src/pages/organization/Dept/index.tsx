@@ -5,10 +5,10 @@ import {
   PageContainer,
   ProCard,
   ProForm,
-  // ProFormRadio,
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
+import { FormattedMessage } from '@umijs/max';
 import type { TreeDataNode } from 'antd';
 import {
   Button,
@@ -21,6 +21,7 @@ import {
   message,
 } from 'antd';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useIntl } from 'umi';
 import styles from './index.less';
 
 const { queryDeptList, queryDeptById, updateDept, deleteDept, createDept } =
@@ -96,6 +97,7 @@ const _setFormFieldValues = (
 };
 const OrgList: React.FC<unknown> = () => {
   const [messageApi, contextHolder] = message.useMessage();
+  const intl = useIntl();
   const [bizUnitId, setBizUnitId] = useState<number | string>(1);
   /// 左侧树-START
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
@@ -107,13 +109,6 @@ const OrgList: React.FC<unknown> = () => {
   /// 表单-START
   const [formStatus, setFormStatus] = useState<FormStatus>(FormStatus.ROOT);
   const formRef = useRef<any>();
-  // const [formData, setFormData] = useState<any>({
-  //   id: null,
-  //   name: '',
-  //   pid: 0,
-  //   code: '',
-  //   simpleName:''
-  // });
   const [checkedKey, setCheckedKey] = useState<number | string>();
   const [currentNodeData, setCurrentNodeData] = useState<any>({});
   const [parentNodeData, setParentNodeData] = useState<any>({});
@@ -190,11 +185,6 @@ const OrgList: React.FC<unknown> = () => {
 
   useEffect(() => {
     setFormStatus(FormStatus.ROOT);
-    // const queryOrgs = async ()=>{
-    //     const treeData = await refreshTreeHandler();
-    //     setFormStatus(treeData.length>0?FormStatus.NO_DATA:FormStatus.ROOT);
-    // }
-    // queryOrgs()
   }, []);
 
   /// 表单-START
@@ -208,7 +198,7 @@ const OrgList: React.FC<unknown> = () => {
   const openAddSubHandler = async () => {
     formRef?.current?.resetFields();
     if (checkedKey === undefined) {
-      messageApi.error('请选择要新增的节点');
+      messageApi.warning(<FormattedMessage id="layout.organization.select" />);
       return;
     }
     formRef?.current?.setFieldsValue({ pName: currentNodeData.name });
@@ -242,7 +232,7 @@ const OrgList: React.FC<unknown> = () => {
         await refreshTreeHandler();
         setFormStatus(FormStatus.ROOT);
         formRef?.current?.resetFields();
-        messageApi.success('删除成功');
+        messageApi.success(intl.formatMessage({ id: 'message.success' }));
       }
     }
   };
@@ -251,7 +241,12 @@ const OrgList: React.FC<unknown> = () => {
   return (
     <PageContainer
       header={{
-        title: '部门管理',
+        title: (
+          <>
+            <FormattedMessage id="layout.organization.dept.title" />{' '}
+            <FormattedMessage id="layout.organization.management" />
+          </>
+        ),
       }}
     >
       {contextHolder}
@@ -282,10 +277,13 @@ const OrgList: React.FC<unknown> = () => {
         bordered
         headerBordered
       >
-        <ProCard title="部门" colSpan="20%">
+        <ProCard
+          title={<FormattedMessage id="layout.organization.dept.title" />}
+          colSpan="20%"
+        >
           <Search
             style={{ marginBottom: 8 }}
-            placeholder="查询"
+            placeholder={intl.formatMessage({ id: 'layout.common.search' })}
             onChange={onChange}
           />
           <Tree
@@ -322,15 +320,21 @@ const OrgList: React.FC<unknown> = () => {
           />
         </ProCard>
         <ProCard
-          title={`部门信息${
+          title={`${intl.formatMessage({
+            id: 'layout.organization.dept.title',
+          })} ${intl.formatMessage({ id: 'layout.organization.info' })}${
             formStatus === FormStatus.VIEW_NODE
-              ? '-查看'
+              ? `-${intl.formatMessage({ id: 'layout.common.view' })}`
               : formStatus === FormStatus.EDIT_NODE
-              ? '-编辑'
+              ? `-${intl.formatMessage({ id: 'layout.common.edit' })}`
               : formStatus === FormStatus.CREAT_CHILD
-              ? '-新增子级'
+              ? `-${intl.formatMessage({
+                  id: 'layout.common.add',
+                })} ${intl.formatMessage({ id: 'layout.common.subNode' })}`
               : formStatus === FormStatus.CREAT_ROOT
-              ? '-新增根级'
+              ? `-${intl.formatMessage({
+                  id: 'layout.common.add',
+                })} ${intl.formatMessage({ id: 'layout.common.rootNode' })}`
               : ''
           }`}
           headerBordered
@@ -339,19 +343,22 @@ const OrgList: React.FC<unknown> = () => {
             <Space>
               {formStatus === FormStatus.VIEW_NODE ? (
                 <>
-                  <Button onClick={openEditHandler}>编辑</Button>
+                  <Button onClick={openEditHandler}>
+                    <FormattedMessage id="layout.common.edit" />
+                  </Button>
                   <Button type="primary" onClick={openAddSubHandler}>
-                    新增子级
+                    <FormattedMessage id="layout.common.add" />{' '}
+                    <FormattedMessage id="layout.common.subNode" />
                   </Button>
                   <Popconfirm
-                    title="警告"
-                    description="确认删除当前部门?"
+                    title={<FormattedMessage id="layout.common.warning" />}
+                    description={
+                      <FormattedMessage id="layout.organization.dept.message.sure" />
+                    }
                     onConfirm={deleteHanlder}
-                    okText="是"
-                    cancelText="否"
                   >
                     <Button danger type="primary">
-                      删除
+                      <FormattedMessage id="layout.common.delete" />
                     </Button>
                   </Popconfirm>
                 </>
@@ -360,7 +367,7 @@ const OrgList: React.FC<unknown> = () => {
               formStatus === FormStatus.CREAT_CHILD ||
               formStatus === FormStatus.EDIT_NODE ? (
                 <Button danger onClick={cancleHandler}>
-                  取消
+                  <FormattedMessage id="layout.common.cancel" />
                 </Button>
               ) : null}
             </Space>
@@ -410,7 +417,9 @@ const OrgList: React.FC<unknown> = () => {
                     bizUnitId,
                     id: res.data.id,
                   });
-                  messageApi.success('提交成功');
+                  messageApi.success(
+                    intl.formatMessage({ id: 'layout.common.success' }),
+                  );
                 }
               }
               if (formStatus === FormStatus.EDIT_NODE) {
@@ -428,7 +437,9 @@ const OrgList: React.FC<unknown> = () => {
                     id: Number(checkedKey),
                   });
                   setFormStatus(FormStatus.VIEW_NODE);
-                  messageApi.success('提交成功');
+                  messageApi.success(
+                    intl.formatMessage({ id: 'layout.common.success' }),
+                  );
                 }
               }
             }}
@@ -459,25 +470,6 @@ const OrgList: React.FC<unknown> = () => {
                 ) : null;
               },
             }}
-            // syncToUrl={(values, type) => {
-            //   console.log('syncToUrl', values, type)
-            //   if (type === 'get') {
-            //     // 为了配合 transform
-            //     // startTime 和 endTime 拼成 createTimeRanger
-            //     return {
-            //       ...values,
-            //       createTimeRanger:
-            //         values.startTime || values.endTime
-            //           ? [values.startTime, values.endTime]
-            //           : undefined,
-            //     };
-            //   }
-            //   // expirationTime 不同步到 url
-            //   return {
-            //     ...values,
-            //     expirationTime: undefined,
-            //   };
-            // }}
             initialValues={{
               id: null,
               name: '',
@@ -485,101 +477,77 @@ const OrgList: React.FC<unknown> = () => {
               code: '',
               simpleName: '',
               tel: '',
-              //orgType:null,
               manager: '',
               phone: '',
               remark: '',
             }}
             autoFocusFirstInput
           >
-            {/* <ProFormRadio.Group
-                colProps={{ span: 12 }}
-                label="组织类型"
-                name="orgType"
-                tooltip="部门类型下只能新增子部门"
-                rules={[
-                  {
-                    required: true,
-                    message: '请选择组织类型',
-                  },
-                ]}
-                readonly={formStatus === FormStatus.EDIT_NODE}
-                options={[
-                  {
-                    label: '总部',
-                    value: 1,
-                    disabled: formStatus === FormStatus.CREAT_CHILD,
-                  },
-                  {
-                    label: '子公司',
-                    value: 2,
-                    disabled: formStatus === FormStatus.CREAT_ROOT || forbidden,
-                  },
-                  {
-                    label: '部门',
-                    value: 3,
-                    disabled: formStatus === FormStatus.CREAT_ROOT,
-                  },
-                  {
-                    label: '外部公司',
-                    value: 4,
-                    disabled: formStatus === FormStatus.CREAT_ROOT || forbidden,
-                  },
-                ]}
-              /> */}
             <ProFormText
               colProps={{ span: 12 }}
               width="md"
               name="pName"
               readonly={true}
-              label="上级部门名称"
+              label={intl.formatMessage({
+                id: 'layout.organization.dept.parent',
+              })}
             />
             <ProFormText
               colProps={{ span: 12 }}
               width="md"
               name="code"
               readonly={formStatus === FormStatus.EDIT_NODE}
-              label="部门代码"
-              placeholder="请输入部门代码"
+              label={intl.formatMessage({
+                id: 'layout.organization.dept.code',
+              })}
               rules={[{ required: true }]}
             />
             <ProFormText
               colProps={{ span: 12 }}
               width="md"
               name="name"
-              label="部门名称"
-              placeholder="请输入部门名称"
+              label={intl.formatMessage({
+                id: 'layout.organization.dept.name',
+              })}
               rules={[{ required: true }]}
             />
             <ProFormText
               colProps={{ span: 12 }}
               width="md"
               name="simpleName"
-              label="部门简称"
-              placeholder="请输入部门简称"
+              label={intl.formatMessage({
+                id: 'layout.organization.dept.shortName',
+              })}
             />
             <ProFormText
               colProps={{ span: 12 }}
               width="md"
               name="tel"
-              label="联系电话"
-              placeholder="请输入联系电话"
+              label={intl.formatMessage({ id: 'layout.organization.dept.tel' })}
             />
             <ProFormText
               colProps={{ span: 12 }}
               width="md"
               name="manager"
-              label="负责人"
-              placeholder="请输入负责人"
+              label={intl.formatMessage({
+                id: 'layout.organization.dept.manager',
+              })}
             />
             <ProFormText
               colProps={{ span: 12 }}
               width="md"
               name="phone"
-              label="负责人电话"
-              placeholder="请输入负责人电话"
+              label={intl.formatMessage({
+                id: 'layout.organization.dept.phone',
+              })}
             />
-            <ProFormTextArea width="xl" label="备注" name="remark" />
+            <ProFormTextArea
+              width="xl"
+              label={intl.formatMessage({
+                id: 'layout.organization.dept.remark',
+              })}
+              name="remark"
+            />
           </ProForm>
           <Empty
             style={{
@@ -596,7 +564,7 @@ const OrgList: React.FC<unknown> = () => {
               type="primary"
               onClick={openAddRootHandler}
             >
-              创建根部门
+              <FormattedMessage id="layout.organization.dept.createRoot" />
             </Button>
           </Empty>
         </ProCard>

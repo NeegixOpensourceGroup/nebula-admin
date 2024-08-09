@@ -58,6 +58,9 @@ export default {
       resetPasswordConfirm: '确认重置密码',
     },
     organization: {
+      info: '信息',
+      management: '管理',
+      select: '请选择要新增的节点',
       organization: {
         title: '组织',
         info: '组织信息',
@@ -79,10 +82,23 @@ export default {
         remark: '备注',
         message: {
           sure: '确认删除当前组织?',
-          select: '请选择要新增的节点',
         },
       },
-      dept: '部门',
+      dept: {
+        title: '部门',
+        createRoot: '创建根部门',
+        parent: '上级部门',
+        code: '部门编码',
+        name: '部门名称',
+        shortName: '部门简称',
+        tel: '联系电话',
+        manager: '负责人',
+        phone: '负责人电话',
+        remark: '备注',
+        message: {
+          sure: '确认删除当前部门?',
+        },
+      },
       psn: '人员',
       position: '岗位',
     },
