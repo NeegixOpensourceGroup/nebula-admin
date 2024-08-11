@@ -266,7 +266,7 @@ const BizUnitList: React.FC<unknown> = () => {
       header={{
         title: (
           <>
-            <FormattedMessage id="layout.organization.organization.title" />{' '}
+            <FormattedMessage id="layout.organization.bizUnit.title" />{' '}
             <FormattedMessage id="layout.organization.management" />
           </>
         ),
@@ -275,9 +275,7 @@ const BizUnitList: React.FC<unknown> = () => {
       {contextHolder}
       <ProCard split="vertical">
         <ProCard
-          title={
-            <FormattedMessage id="layout.organization.organization.title" />
-          }
+          title={<FormattedMessage id="layout.organization.bizUnit.title" />}
           colSpan="20%"
         >
           <Search
@@ -319,7 +317,7 @@ const BizUnitList: React.FC<unknown> = () => {
         </ProCard>
         <ProCard
           title={`${intl.formatMessage({
-            id: 'layout.organization.organization.title',
+            id: 'layout.organization.bizUnit.title',
           })} ${intl.formatMessage({ id: 'layout.organization.info' })}${
             formStatus === FormStatus.VIEW_NODE
               ? `-${intl.formatMessage({ id: 'layout.common.view' })}`
@@ -351,7 +349,7 @@ const BizUnitList: React.FC<unknown> = () => {
                   <Popconfirm
                     title={<FormattedMessage id="layout.common.warning" />}
                     description={
-                      <FormattedMessage id="layout.organization.organization.message.sure" />
+                      <FormattedMessage id="layout.organization.bizUnit.message.sure" />
                     }
                     onConfirm={deleteHanlder}
                   >
@@ -499,11 +497,11 @@ const BizUnitList: React.FC<unknown> = () => {
             <ProFormRadio.Group
               colProps={{ span: 12 }}
               label={intl.formatMessage({
-                id: 'layout.organization.organization.orgType.title',
+                id: 'layout.organization.bizUnit.orgType.title',
               })}
               name="orgType"
               tooltip={
-                <FormattedMessage id="layout.organization.organization.orgType.tooltip" />
+                <FormattedMessage id="layout.organization.bizUnit.orgType.tooltip" />
               }
               rules={[
                 {
@@ -514,21 +512,21 @@ const BizUnitList: React.FC<unknown> = () => {
               options={[
                 {
                   label: (
-                    <FormattedMessage id="layout.organization.organization.orgType.headquarter" />
+                    <FormattedMessage id="layout.organization.bizUnit.orgType.headquarter" />
                   ),
                   value: 1,
                   disabled: formStatus === FormStatus.CREAT_CHILD,
                 },
                 {
                   label: (
-                    <FormattedMessage id="layout.organization.organization.orgType.branch" />
+                    <FormattedMessage id="layout.organization.bizUnit.orgType.branch" />
                   ),
                   value: 2,
                   disabled: formStatus === FormStatus.CREAT_ROOT,
                 },
                 {
                   label: (
-                    <FormattedMessage id="layout.organization.organization.orgType.external" />
+                    <FormattedMessage id="layout.organization.bizUnit.orgType.external" />
                   ),
                   value: 3,
                   disabled: formStatus === FormStatus.CREAT_ROOT,
@@ -541,7 +539,7 @@ const BizUnitList: React.FC<unknown> = () => {
               name="pName"
               readonly={true}
               label={
-                <FormattedMessage id="layout.organization.organization.parent" />
+                <FormattedMessage id="layout.organization.bizUnit.parent" />
               }
             />
             <ProFormText
@@ -550,7 +548,7 @@ const BizUnitList: React.FC<unknown> = () => {
               name="code"
               readonly={formStatus === FormStatus.EDIT_NODE}
               label={intl.formatMessage({
-                id: 'layout.organization.organization.code',
+                id: 'layout.organization.bizUnit.code',
               })}
               rules={[{ required: true }]}
             />
@@ -559,7 +557,7 @@ const BizUnitList: React.FC<unknown> = () => {
               width="md"
               name="name"
               label={intl.formatMessage({
-                id: 'layout.organization.organization.name',
+                id: 'layout.organization.bizUnit.name',
               })}
               rules={[{ required: true }]}
             />
@@ -568,23 +566,21 @@ const BizUnitList: React.FC<unknown> = () => {
               width="md"
               name="simpleName"
               label={
-                <FormattedMessage id="layout.organization.organization.shortName" />
+                <FormattedMessage id="layout.organization.bizUnit.shortName" />
               }
             />
             <ProFormText
               colProps={{ span: 12 }}
               width="md"
               name="tel"
-              label={
-                <FormattedMessage id="layout.organization.organization.tel" />
-              }
+              label={<FormattedMessage id="layout.organization.bizUnit.tel" />}
             />
             <ProFormText
               colProps={{ span: 12 }}
               width="md"
               name="manager"
               label={
-                <FormattedMessage id="layout.organization.organization.manager" />
+                <FormattedMessage id="layout.organization.bizUnit.manager" />
               }
             />
             <ProFormText
@@ -592,13 +588,13 @@ const BizUnitList: React.FC<unknown> = () => {
               width="md"
               name="phone"
               label={
-                <FormattedMessage id="layout.organization.organization.phone" />
+                <FormattedMessage id="layout.organization.bizUnit.phone" />
               }
             />
             <ProFormTextArea
               width="xl"
               label={
-                <FormattedMessage id="layout.organization.organization.remark" />
+                <FormattedMessage id="layout.organization.bizUnit.remark" />
               }
               name="remark"
             />
@@ -618,7 +614,7 @@ const BizUnitList: React.FC<unknown> = () => {
               type="primary"
               onClick={openAddRootHandler}
             >
-              <FormattedMessage id="layout.organization.organization.createRoot" />
+              <FormattedMessage id="layout.organization.bizUnit.createRoot" />
             </Button>
           </Empty>
         </ProCard>

@@ -52,7 +52,7 @@ export default defineConfig({
           redirect: '/organization/biz-unit',
         },
         {
-          title: 'menu.organization.title',
+          title: 'menu.organization.bizUnit',
           path: '/organization/biz-unit',
           component: './organization/BizUnit',
           wrappers: ['@/wrappers/auth'],

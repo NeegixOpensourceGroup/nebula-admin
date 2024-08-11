@@ -9,6 +9,7 @@ export default {
     home: 'Home',
     organization: {
       title: 'Organization',
+      bizUnit: 'Business Unit',
       dept: 'Department',
       psn: 'Personnel',
       position: 'Position',
@@ -62,9 +63,9 @@ export default {
       info: 'Information',
       management: 'Management',
       select: 'Please select the node to be added',
-      organization: {
-        title: 'Organization',
-        info: 'Organization Info',
+      bizUnit: {
+        title: 'Business Unit',
+        info: 'Business Unit Info',
         createRoot: 'Create Root',
         orgType: {
           title: 'Type',
@@ -82,7 +83,7 @@ export default {
         phone: 'Phone',
         remark: 'Remark',
         message: {
-          sure: 'Are you sure to delete current organization?',
+          sure: 'Are you sure to delete current Business Unit?',
         },
       },
       dept: {

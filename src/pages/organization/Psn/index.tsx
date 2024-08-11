@@ -11,6 +11,7 @@ import {
   ProColumns,
   ProTable,
 } from '@ant-design/pro-components';
+import { FormattedMessage } from '@umijs/max';
 import {
   Button,
   Divider,
@@ -22,6 +23,7 @@ import {
   TreeDataNode,
 } from 'antd';
 import React, { useMemo, useRef, useState } from 'react';
+import { useIntl } from 'umi';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
 import styles from './index.less';
@@ -74,6 +76,7 @@ const getParentKey = (key: React.Key, tree: TreeDataNode[]): React.Key => {
 
 const PsnList: React.FC<unknown> = () => {
   const [messageApi, contextHolder] = message.useMessage();
+  const intl = useIntl();
   const [bizUnitId, setBizUnitId] = useState<number | string>(1);
   /// 左侧树-START
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
@@ -230,7 +233,7 @@ const PsnList: React.FC<unknown> = () => {
 
   const columns: ProColumns<API.PsnInfo>[] = [
     {
-      title: '编码',
+      title: intl.formatMessage({ id: 'layout.organization.psn.code' }),
       dataIndex: 'code',
       tooltip: '编码是唯一的 key',
       formItemProps: {
@@ -243,7 +246,7 @@ const PsnList: React.FC<unknown> = () => {
       },
     },
     {
-      title: '名称',
+      title: intl.formatMessage({ id: 'layout.organization.psn.name' }),
       dataIndex: 'name',
       formItemProps: {
         rules: [
@@ -255,12 +258,12 @@ const PsnList: React.FC<unknown> = () => {
       },
     },
     {
-      title: '昵称',
+      title: intl.formatMessage({ id: 'layout.organization.psn.nickname' }),
       dataIndex: 'nickname',
       valueType: 'text',
     },
     {
-      title: '性别',
+      title: intl.formatMessage({ id: 'layout.organization.psn.gender' }),
       dataIndex: 'gender',
       valueType: 'select',
       fieldProps: () => {
@@ -278,7 +281,7 @@ const PsnList: React.FC<unknown> = () => {
       },
     },
     {
-      title: '操作',
+      title: intl.formatMessage({ id: 'layout.common.operate' }),
       dataIndex: 'option',
       width: 150,
       valueType: 'option',
@@ -292,15 +295,17 @@ const PsnList: React.FC<unknown> = () => {
           />
           <Divider type="vertical" />
           <Popconfirm
-            title="警告"
-            description="确认删除当前组织?"
+            title={<FormattedMessage id="layout.common.warning" />}
+            description={
+              <FormattedMessage id="layout.organization.psn.message.sure" />
+            }
             onConfirm={() =>
               record.id !== undefined ? handleSingleRemove(record.id) : null
             }
-            okText="是"
-            cancelText="否"
           >
-            <a>删除</a>
+            <a>
+              <FormattedMessage id="layout.common.delete" />
+            </a>
           </Popconfirm>
         </>
       ),
@@ -310,7 +315,12 @@ const PsnList: React.FC<unknown> = () => {
   return (
     <PageContainer
       header={{
-        title: '人员管理',
+        title: (
+          <>
+            <FormattedMessage id="layout.organization.psn.title" />{' '}
+            <FormattedMessage id="layout.organization.management" />
+          </>
+        ),
       }}
     >
       {contextHolder}
@@ -339,10 +349,13 @@ const PsnList: React.FC<unknown> = () => {
         bordered
         headerBordered
       >
-        <ProCard title="部门" colSpan="20%">
+        <ProCard
+          title={<FormattedMessage id="layout.organization.dept.title" />}
+          colSpan="20%"
+        >
           <Search
             style={{ marginBottom: 8 }}
-            placeholder="查询"
+            placeholder={intl.formatMessage({ id: 'layout.common.search' })}
             onChange={onChange}
           />
           <Tree
@@ -359,9 +372,11 @@ const PsnList: React.FC<unknown> = () => {
             treeData={treeData}
           />
         </ProCard>
-        <ProCard title="人员" colSpan="80%">
+        <ProCard
+          title={<FormattedMessage id="layout.organization.psn.title" />}
+          colSpan="80%"
+        >
           <ProTable<API.PsnInfo>
-            headerTitle="查询表格"
             actionRef={actionRef}
             rowKey="id"
             search={{
@@ -395,13 +410,13 @@ const PsnList: React.FC<unknown> = () => {
           />
           {selectedRowsState?.length > 0 && (
             <FooterToolbar
-              extra={
-                <div>
-                  已选择{' '}
-                  <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-                  项&nbsp;&nbsp;
-                </div>
-              }
+            // extra={
+            //   <div>
+            //     已选择{' '}
+            //     <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
+            //     项&nbsp;&nbsp;
+            //   </div>
+            // }
             >
               <Button
                 onClick={async () => {
@@ -410,9 +425,13 @@ const PsnList: React.FC<unknown> = () => {
                   actionRef.current?.reloadAndRest?.();
                 }}
               >
-                批量删除
+                <FormattedMessage id={'layout.common.batch'} />{' '}
+                <FormattedMessage id={'layout.common.delete'} />
               </Button>
-              <Button type="primary">批量审批</Button>
+              <Button type="primary">
+                <FormattedMessage id={'layout.common.batch'} />{' '}
+                <FormattedMessage id={'layout.common.audit'} />
+              </Button>
             </FooterToolbar>
           )}
         </ProCard>
