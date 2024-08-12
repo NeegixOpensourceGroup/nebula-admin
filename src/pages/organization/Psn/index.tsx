@@ -235,27 +235,10 @@ const PsnList: React.FC<unknown> = () => {
     {
       title: intl.formatMessage({ id: 'layout.organization.psn.code' }),
       dataIndex: 'code',
-      tooltip: '编码是唯一的 key',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '编码为必填项',
-          },
-        ],
-      },
     },
     {
       title: intl.formatMessage({ id: 'layout.organization.psn.name' }),
       dataIndex: 'name',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '名称为必填项',
-          },
-        ],
-      },
     },
     {
       title: intl.formatMessage({ id: 'layout.organization.psn.nickname' }),
@@ -380,7 +363,7 @@ const PsnList: React.FC<unknown> = () => {
             actionRef={actionRef}
             rowKey="id"
             search={{
-              labelWidth: 50,
+              labelWidth: 'auto',
             }}
             toolBarRender={() => [
               <CreateForm
