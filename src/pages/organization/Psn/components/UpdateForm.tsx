@@ -342,7 +342,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, bizUnitId, onSubmit }) => {
             record: () => ({
               id: Date.now(),
               bizUnitPk: bizUnitId,
-              code: '000001',
+              code: '',
               kind: '',
               dept: '',
               major: false,
