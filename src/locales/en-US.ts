@@ -136,7 +136,16 @@ export default {
           sure: 'Are you sure to delete this personnel?',
         },
       },
-      position: 'Position',
+      position: {
+        title: 'Position',
+        code: 'Position Code',
+        name: 'Position Name',
+        enabled: 'Enable',
+        createTime: 'Create Time',
+        message: {
+          sure: 'Are you sure to delete this position?',
+        },
+      },
     },
   },
 };

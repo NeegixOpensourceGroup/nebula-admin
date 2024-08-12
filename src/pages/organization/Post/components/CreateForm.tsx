@@ -7,7 +7,9 @@ import {
   ProFormSwitch,
   ProFormText,
 } from '@ant-design/pro-components';
+import { FormattedMessage } from '@umijs/max';
 import { Button, Form, message } from 'antd';
+import { useIntl } from 'umi';
 const { addPost } = services.PostController;
 
 interface CreateFormProps {
@@ -21,6 +23,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ actionRef }) => {
     enabled: boolean;
   }>();
   const [messageApi, contextHolder] = message.useMessage();
+  const intl = useIntl();
 
   return (
     <DrawerForm<{
@@ -28,13 +31,18 @@ const CreateForm: React.FC<CreateFormProps> = ({ actionRef }) => {
       name: string;
       enabled: boolean;
     }>
-      title="新建岗位"
+      title={
+        <>
+          <FormattedMessage id="layout.common.add" />{' '}
+          <FormattedMessage id="layout.organization.position.title" />
+        </>
+      }
       width={'30%'}
       form={form}
       trigger={
         <Button type="primary">
           <PlusOutlined />
-          新建
+          <FormattedMessage id="layout.common.add" />
         </Button>
       }
       autoFocusFirstInput
@@ -65,8 +73,9 @@ const CreateForm: React.FC<CreateFormProps> = ({ actionRef }) => {
           ]}
           name="code"
           width="md"
-          label="岗位编码"
-          placeholder="请输入岗位编码"
+          label={intl.formatMessage({
+            id: 'layout.organization.position.code',
+          })}
         />
         <ProFormText
           rules={[
@@ -76,10 +85,17 @@ const CreateForm: React.FC<CreateFormProps> = ({ actionRef }) => {
           ]}
           width="md"
           name="name"
-          label="岗位名称"
-          placeholder="请输入岗位名称"
+          label={intl.formatMessage({
+            id: 'layout.organization.position.name',
+          })}
         />
-        <ProFormSwitch width="md" name="enabled" label="是否启用" />
+        <ProFormSwitch
+          width="md"
+          name="enabled"
+          label={intl.formatMessage({
+            id: 'layout.organization.position.enabled',
+          })}
+        />
       </ProForm.Group>
     </DrawerForm>
   );

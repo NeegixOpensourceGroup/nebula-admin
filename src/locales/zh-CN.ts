@@ -135,7 +135,16 @@ export default {
           sure: '确认删除当前人员?',
         },
       },
-      position: '岗位',
+      position: {
+        title: '岗位',
+        code: '岗位编码',
+        name: '岗位名称',
+        enabled: '是否启用',
+        createTime: '创建时间',
+        message: {
+          sure: '确认删除当前岗位?',
+        },
+      },
     },
   },
 };

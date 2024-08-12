@@ -135,7 +135,16 @@ export default {
           sure: '確認刪除當前人員?',
         },
       },
-      position: '崗位',
+      position: {
+        title: '崗位',
+        code: '崗位代碼',
+        name: '崗位名稱',
+        enabled: '是否啟用',
+        createTime: '建立時間',
+        message: {
+          sure: '確認刪除當前崗位?',
+        },
+      },
     },
   },
 };

@@ -6,7 +6,9 @@ import {
   ProFormSwitch,
   ProFormText,
 } from '@ant-design/pro-components';
+import { FormattedMessage } from '@umijs/max';
 import { Form, message } from 'antd';
+import { useIntl } from 'umi';
 const { updatePost, queryPostDetail } = services.PostController;
 
 interface UpdateFormProps {
@@ -20,7 +22,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, actionRef }) => {
     enabled: boolean;
   }>();
   const [messageApi, contextHolder] = message.useMessage();
-
+  const intl = useIntl();
   const roleDetailHanlder = async () => {
     const res = await queryPostDetail(id);
     if (res.code === 200) {
@@ -38,10 +40,19 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, actionRef }) => {
       name: string;
       enabled: boolean;
     }>
-      title="编辑接口"
+      title={
+        <>
+          <FormattedMessage id="layout.common.edit" />{' '}
+          <FormattedMessage id="layout.organization.position.title" />
+        </>
+      }
       width={'30%'}
       form={form}
-      trigger={<a onClick={roleDetailHanlder}>编辑</a>}
+      trigger={
+        <a onClick={roleDetailHanlder}>
+          <FormattedMessage id="layout.common.edit" />
+        </a>
+      }
       autoFocusFirstInput
       drawerProps={{
         destroyOnClose: true,
@@ -70,8 +81,9 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, actionRef }) => {
           ]}
           name="code"
           width="md"
-          label="岗位编码"
-          placeholder="请输入岗位编码"
+          label={intl.formatMessage({
+            id: 'layout.organization.position.code',
+          })}
         />
         <ProFormText
           rules={[
@@ -81,10 +93,17 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, actionRef }) => {
           ]}
           width="md"
           name="name"
-          label="岗位名称"
-          placeholder="请输入岗位名称"
+          label={intl.formatMessage({
+            id: 'layout.organization.position.name',
+          })}
         />
-        <ProFormSwitch width="md" name="enabled" label="是否启用" />
+        <ProFormSwitch
+          width="md"
+          name="enabled"
+          label={intl.formatMessage({
+            id: 'layout.organization.position.enabled',
+          })}
+        />
       </ProForm.Group>
     </DrawerForm>
   );

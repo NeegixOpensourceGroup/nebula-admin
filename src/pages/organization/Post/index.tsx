@@ -5,8 +5,10 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
+import { FormattedMessage } from '@umijs/max';
 import { Button, message, Popconfirm } from 'antd';
 import { useRef, useState } from 'react';
+import { useIntl } from 'umi';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
 
@@ -21,20 +23,21 @@ type PostItem = {
 
 export default () => {
   const [messageApi, contextHolder] = message.useMessage();
+  const intl = useIntl();
   const [selectedRowsState, setSelectedRows] = useState<any[]>([]);
   const actionRef = useRef<ActionType>();
 
   const columns: ProColumns<PostItem>[] = [
     {
-      title: '岗位编码',
+      title: intl.formatMessage({ id: 'layout.organization.position.code' }),
       dataIndex: 'code',
     },
     {
-      title: '岗位名称',
+      title: intl.formatMessage({ id: 'layout.organization.position.name' }),
       dataIndex: 'name',
     },
     {
-      title: '是否启用',
+      title: intl.formatMessage({ id: 'layout.organization.position.enabled' }),
       dataIndex: 'enabled',
       valueType: 'select',
       valueEnum: {
@@ -43,13 +46,17 @@ export default () => {
       },
     },
     {
-      title: '创建时间',
+      title: intl.formatMessage({
+        id: 'layout.organization.position.createTime',
+      }),
       dataIndex: 'created_at',
       valueType: 'date',
       hideInSearch: true,
     },
     {
-      title: '创建时间',
+      title: intl.formatMessage({
+        id: 'layout.organization.position.createTime',
+      }),
       dataIndex: 'created_at',
       valueType: 'dateRange',
       hideInTable: true,
@@ -63,18 +70,22 @@ export default () => {
       },
     },
     {
-      title: '操作',
+      title: intl.formatMessage({ id: 'layout.common.operate' }),
       valueType: 'option',
       key: 'option',
       render: (text, record, _, action) => [
         <UpdateForm key={'updateForm'} id={record.id} actionRef={action} />,
         <a target="_blank" rel="noopener noreferrer" key="view">
-          查看
+          <FormattedMessage id={'layout.common.view'} />
         </a>,
         <Popconfirm
-          title="警告"
+          title={<FormattedMessage id="layout.common.warning" />}
           key="remove"
-          description="确认删除当前角色?"
+          description={
+            <FormattedMessage
+              id={'layout.organization.position.message.sure'}
+            />
+          }
           onConfirm={async () => {
             const res = await deletePost(record.id);
             if (res.code === 200) {
@@ -86,10 +97,10 @@ export default () => {
               return false;
             }
           }}
-          okText="是"
-          cancelText="否"
         >
-          <a>删除</a>
+          <a>
+            <FormattedMessage id={'layout.common.delete'} />
+          </a>
         </Popconfirm>,
       ],
     },
@@ -127,7 +138,12 @@ export default () => {
   return (
     <PageContainer
       header={{
-        title: '岗位管理',
+        title: (
+          <>
+            <FormattedMessage id="layout.organization.position.title" />{' '}
+            <FormattedMessage id="layout.organization.management" />
+          </>
+        ),
       }}
     >
       {contextHolder}
@@ -187,13 +203,13 @@ export default () => {
       />
       {selectedRowsState?.length > 0 && (
         <FooterToolbar
-          extra={
-            <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
-            </div>
-          }
+        // extra={
+        //   <div>
+        //     已选择{' '}
+        //     <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
+        //     项&nbsp;&nbsp;
+        //   </div>
+        // }
         >
           <Button
             onClick={async () => {
@@ -202,7 +218,8 @@ export default () => {
               actionRef.current?.reloadAndRest?.();
             }}
           >
-            批量删除
+            <FormattedMessage id={'layout.common.batch'} />{' '}
+            <FormattedMessage id={'layout.common.delete'} />
           </Button>
         </FooterToolbar>
       )}
