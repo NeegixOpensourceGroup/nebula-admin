@@ -267,7 +267,7 @@ const BizUnitList: React.FC<unknown> = () => {
         title: (
           <>
             <FormattedMessage id="layout.organization.bizUnit.title" />{' '}
-            <FormattedMessage id="layout.organization.management" />
+            <FormattedMessage id="layout.common.management" />
           </>
         ),
       }}

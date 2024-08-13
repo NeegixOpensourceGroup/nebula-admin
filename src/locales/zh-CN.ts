@@ -56,6 +56,7 @@ export default {
       search: '搜索',
       warning: '警告',
       operate: '操作',
+      management: '管理',
       resetPassword: '重置密码',
       resetPasswordSuccess: '重置密码成功',
       resetPasswordFailed: '重置密码失败',
@@ -63,7 +64,6 @@ export default {
     },
     organization: {
       info: '信息',
-      management: '管理',
       select: '请选择要新增的节点',
       bizUnit: {
         title: '业务单元',
@@ -144,6 +144,25 @@ export default {
         message: {
           sure: '确认删除当前岗位?',
         },
+      },
+    },
+    system: {
+      dictionary: {
+        title: '字典',
+        type: '字典类型',
+        code: '字典编码',
+        name: '字典名称',
+        value: '字典值',
+        remark: '备注',
+        message: {
+          sure: '确认删除当前字典?',
+        },
+      },
+      role: {
+        title: '角色',
+        code: '角色编码',
+        name: '角色名称',
+        remark: '备注',
       },
     },
   },

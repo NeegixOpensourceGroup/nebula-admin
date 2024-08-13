@@ -301,7 +301,7 @@ const PsnList: React.FC<unknown> = () => {
         title: (
           <>
             <FormattedMessage id="layout.organization.psn.title" />{' '}
-            <FormattedMessage id="layout.organization.management" />
+            <FormattedMessage id="layout.common.management" />
           </>
         ),
       }}

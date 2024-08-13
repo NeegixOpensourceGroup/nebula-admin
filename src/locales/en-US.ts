@@ -57,6 +57,7 @@ export default {
       search: 'Search',
       warning: 'Warning',
       operate: 'Operate',
+      management: 'Management',
       resetPassword: 'Reset Password',
       resetPasswordSuccess: 'Password reset successful',
       resetPasswordFailed: 'Password reset failed',
@@ -64,7 +65,6 @@ export default {
     },
     organization: {
       info: 'Information',
-      management: 'Management',
       select: 'Please select the node to add',
       bizUnit: {
         title: 'Business Unit',

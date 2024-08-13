@@ -244,7 +244,7 @@ const OrgList: React.FC<unknown> = () => {
         title: (
           <>
             <FormattedMessage id="layout.organization.dept.title" />{' '}
-            <FormattedMessage id="layout.organization.management" />
+            <FormattedMessage id="layout.common.management" />
           </>
         ),
       }}

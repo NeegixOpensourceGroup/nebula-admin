@@ -141,7 +141,7 @@ export default () => {
         title: (
           <>
             <FormattedMessage id="layout.organization.position.title" />{' '}
-            <FormattedMessage id="layout.organization.management" />
+            <FormattedMessage id="layout.common.management" />
           </>
         ),
       }}
