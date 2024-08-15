@@ -6,9 +6,11 @@ import {
   ProFormSwitch,
   ProFormText,
 } from '@ant-design/pro-components';
+import { FormattedMessage } from '@umijs/max';
 import type { TabsProps } from 'antd';
 import { Form, message, Tabs } from 'antd';
 import { Key, useState } from 'react';
+import { useIntl } from 'umi';
 import ApiTable from './ApiTable';
 import MenuTree from './MenuTree';
 const { updateRole, getRole } = services.RoleController;
@@ -26,6 +28,7 @@ interface UpdateFormProps {
   actionRef?: ProCoreActionType | undefined;
 }
 const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
+  const intl = useIntl();
   const [form] = Form.useForm<{
     name: string;
     description: string;
@@ -62,12 +65,22 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
   const items: TabsProps['items'] = [
     {
       key: '1',
-      label: '菜单/按钮权限',
+      label: (
+        <>
+          <FormattedMessage id="layout.system.role.module" />{' '}
+          <FormattedMessage id="layout.common.access" />
+        </>
+      ),
       children: <MenuTree onCheck={onCheck} checkedKeys={checkedKeys} />,
     },
     {
       key: '2',
-      label: '接口权限',
+      label: (
+        <>
+          <FormattedMessage id="layout.system.role.api" />{' '}
+          <FormattedMessage id="layout.common.access" />
+        </>
+      ),
       children: (
         <ApiTable
           onTableSelected={onTableSelected}
@@ -77,12 +90,22 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
     },
     {
       key: '3',
-      label: '数据权限',
+      label: (
+        <>
+          <FormattedMessage id="layout.system.role.data" />{' '}
+          <FormattedMessage id="layout.common.access" />
+        </>
+      ),
       children: 'Content of Tab Pane 3',
     },
     {
       key: '4',
-      label: '字段权限',
+      label: (
+        <>
+          <FormattedMessage id="layout.system.role.field" />{' '}
+          <FormattedMessage id="layout.common.access" />
+        </>
+      ),
       children: 'Content of Tab Pane 4',
     },
   ];
@@ -93,10 +116,19 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
       description: string;
       permission: Key[];
     }>
-      title="编辑角色"
+      title={
+        <>
+          <FormattedMessage id="layout.common.edit" />{' '}
+          <FormattedMessage id="layout.system.role.title" />
+        </>
+      }
       width={'30%'}
       form={form}
-      trigger={<a onClick={roleDetailHanlder}>编辑</a>}
+      trigger={
+        <a onClick={roleDetailHanlder}>
+          <FormattedMessage id="layout.common.edit" />
+        </a>
+      }
       autoFocusFirstInput
       drawerProps={{
         destroyOnClose: true,
@@ -129,8 +161,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
           ]}
           name="name"
           width="md"
-          label="标识"
-          placeholder="请输入标识"
+          label={intl.formatMessage({ id: 'layout.system.role.name' })}
         />
         <ProFormText
           rules={[
@@ -140,8 +171,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
           ]}
           width="md"
           name="description"
-          label="描述"
-          placeholder="请输入描述"
+          label={intl.formatMessage({ id: 'layout.system.role.description' })}
         />
         <ProFormSwitch
           rules={[
@@ -151,7 +181,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
           ]}
           name="enabled"
           width="md"
-          label="是否启用"
+          label={intl.formatMessage({ id: 'layout.system.role.enabled' })}
         />
       </ProForm.Group>
       <Tabs defaultActiveKey="1" items={items} onChange={onChange} />

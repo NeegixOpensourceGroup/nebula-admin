@@ -1,8 +1,10 @@
 import services from '@/services/development/api';
+import { FormattedMessage } from '@umijs/max';
 import type { GetProps, TableColumnsType, TableProps } from 'antd';
 import { Input, Space, Table } from 'antd';
 import { TablePaginationConfig } from 'antd/lib';
 import React, { Key, useEffect, useState } from 'react';
+import { useIntl } from 'umi';
 
 const { queryApiList } = services.ApiController;
 type TableRowSelection<T> = TableProps<T>['rowSelection'];
@@ -21,15 +23,15 @@ const { Search } = Input;
 
 const columns: TableColumnsType<DataType> = [
   {
-    title: '接口标识',
+    title: <FormattedMessage id="layout.development.api.name" />,
     dataIndex: 'name',
   },
   {
-    title: '接口描述',
+    title: <FormattedMessage id="layout.development.api.description" />,
     dataIndex: 'description',
   },
   {
-    title: '权限识别杩',
+    title: <FormattedMessage id="layout.development.api.access" />,
     dataIndex: 'access',
   },
 ];
@@ -41,6 +43,7 @@ const ApiTable: React.FC<ApiTableProps> = ({
   onTableSelected,
   tableSelectedKeys,
 }) => {
+  const intl = useIntl();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [apiData, setApiData] = useState<DataType[]>([]);
   const [pagination, setPagination] = useState<TablePaginationConfig>({
@@ -80,7 +83,14 @@ const ApiTable: React.FC<ApiTableProps> = ({
       size="large"
       style={{ width: '100%', display: 'flex' }}
     >
-      <Search placeholder="接口标识/接口描述/权限识别码" onSearch={onSearch} />
+      <Search
+        placeholder={`${intl.formatMessage({
+          id: 'layout.development.api.name',
+        })}/${intl.formatMessage({
+          id: 'layout.development.api.description',
+        })}/${intl.formatMessage({ id: 'layout.development.api.access' })}`}
+        onSearch={onSearch}
+      />
       <Table
         rowKey={(record) => record.id}
         pagination={{

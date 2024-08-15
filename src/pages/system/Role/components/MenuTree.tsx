@@ -1,12 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Tree, Input } from 'antd';
-import type { TreeDataNode, TreeProps } from 'antd';
 import menuServices from '@/services/development/menu';
-import styles from './index.less';
 import { buildTreeData } from '@/utils/tools';
+import type { TreeDataNode, TreeProps } from 'antd';
+import { Input, Tree } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useIntl } from 'umi';
+import styles from './index.less';
 const { Search } = Input;
 const { queryMenuList } = menuServices.MenuController;
-
 
 const dataList: { key: React.Key; title: string }[] = [];
 const generateList = (data: TreeDataNode[]) => {
@@ -18,7 +18,8 @@ const generateList = (data: TreeDataNode[]) => {
 
     if (typeof title === 'function') {
       const titleNode = title(node);
-      titleString = typeof titleNode === 'string' ? titleNode : titleNode?.toString() ?? '';
+      titleString =
+        typeof titleNode === 'string' ? titleNode : titleNode?.toString() ?? '';
     } else if (typeof title === 'string') {
       titleString = title;
     } else {
@@ -52,14 +53,18 @@ interface MenuTreeProps {
   checkedKeys?: React.Key[];
 }
 
-const MenuTree: React.FC<MenuTreeProps> = ({ onCheck, checkedKeys:defaultCheckedKeys }) => {
+const MenuTree: React.FC<MenuTreeProps> = ({
+  onCheck,
+  checkedKeys: defaultCheckedKeys,
+}) => {
+  const intl = useIntl();
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState('');
   const [defaultTreeData, setDefaultTreeData] = useState<TreeDataNode[]>([]);
-  console.log("defaultCheckedKeys", defaultCheckedKeys)
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     const newExpandedKeys = dataList
@@ -69,7 +74,10 @@ const MenuTree: React.FC<MenuTreeProps> = ({ onCheck, checkedKeys:defaultChecked
         }
         return null;
       })
-      .filter((item, i, self): item is React.Key => !!(item && self.indexOf(item) === i));
+      .filter(
+        (item, i, self): item is React.Key =>
+          !!(item && self.indexOf(item) === i),
+      );
     setExpandedKeys(newExpandedKeys);
     setSearchValue(value);
     setAutoExpandParent(true);
@@ -80,16 +88,15 @@ const MenuTree: React.FC<MenuTreeProps> = ({ onCheck, checkedKeys:defaultChecked
       const treeData = buildTreeData(res.data, {
         idKey: 'id',
         nameKey: 'name',
-        pidKey: 'pid'
-      })
-      setDefaultTreeData(treeData)
+        pidKey: 'pid',
+      });
+      setDefaultTreeData(treeData);
       generateList(treeData);
-      if(defaultCheckedKeys) {
-        setCheckedKeys(defaultCheckedKeys)
-        setExpandedKeys(defaultCheckedKeys)
+      if (defaultCheckedKeys) {
+        setCheckedKeys(defaultCheckedKeys);
+        setExpandedKeys(defaultCheckedKeys);
       }
     });
-    
   }, [defaultCheckedKeys]);
 
   let treeData = useMemo(() => {
@@ -118,10 +125,10 @@ const MenuTree: React.FC<MenuTreeProps> = ({ onCheck, checkedKeys:defaultChecked
           key: item.key,
         };
       });
-      if(defaultTreeData.length === 0){
-        return []
-      }
-      const data = loop(defaultTreeData);
+    if (defaultTreeData.length === 0) {
+      return [];
+    }
+    const data = loop(defaultTreeData);
     return data;
   }, [searchValue, defaultTreeData]);
 
@@ -133,7 +140,10 @@ const MenuTree: React.FC<MenuTreeProps> = ({ onCheck, checkedKeys:defaultChecked
     setAutoExpandParent(false);
   };
 
-  const onInnerCheck: TreeProps['onCheck'] = (checkedKeysValue, {halfCheckedKeys}) => {
+  const onInnerCheck: TreeProps['onCheck'] = (
+    checkedKeysValue,
+    { halfCheckedKeys },
+  ) => {
     // setCheckedKeys(checkedKeysValue as React.Key[]);
     if (onCheck) {
       onCheck(checkedKeysValue as React.Key[], halfCheckedKeys as React.Key[]);
@@ -148,7 +158,11 @@ const MenuTree: React.FC<MenuTreeProps> = ({ onCheck, checkedKeys:defaultChecked
 
   return (
     <>
-      <Search style={{ marginBottom: 8 }} placeholder="查询" onChange={onChange} />
+      <Search
+        style={{ marginBottom: 8 }}
+        placeholder={intl.formatMessage({ id: 'layout.common.search' })}
+        onChange={onChange}
+      />
       <Tree
         checkable
         onExpand={onExpand}
@@ -161,7 +175,6 @@ const MenuTree: React.FC<MenuTreeProps> = ({ onCheck, checkedKeys:defaultChecked
         treeData={treeData}
       />
     </>
-
   );
 };
 

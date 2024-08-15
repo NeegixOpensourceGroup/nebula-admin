@@ -168,7 +168,32 @@ export default {
       },
       role: {
         title: '角色',
-        code: '角色代碼',
+        name: '標識',
+        description: '描述',
+        createTime: '建立時間',
+        enabled: '是否啟用',
+        module: '模組',
+        api: '接口',
+        data: '數據',
+        field: '字段',
+        message: {
+          sure: '確認刪除當前角色?',
+        },
+        remark: '備註',
+      },
+    },
+    development: {
+      api: {
+        title: '接口',
+        name: '接口名稱',
+        description: '描述',
+        access: '訪問标识',
+        module: '模組',
+        createTime: '建立時間',
+        remark: '備註',
+        message: {
+          sure: '確認刪除當前接口?',
+        },
       },
     },
   },

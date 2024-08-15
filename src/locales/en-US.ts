@@ -59,6 +59,7 @@ export default {
       warning: 'Warning',
       operate: 'Operate',
       management: 'Management',
+      access: 'Access',
       placeholderInput: 'Please enter',
       placeholderSelect: 'Please select',
       resetPassword: 'Reset Password',
@@ -166,6 +167,35 @@ export default {
           group: {
             sure: 'Are you sure to delete this dictionary group?',
           },
+        },
+      },
+      role: {
+        title: 'Role',
+        name: 'Name',
+        description: 'Description',
+        createTime: 'Create Time',
+        enabled: 'Enable',
+        module: 'Module',
+        api: 'Interface',
+        data: 'Data',
+        field: 'Field',
+        message: {
+          sure: 'Are you sure to delete this role?',
+        },
+        remark: 'Remarks',
+      },
+    },
+    development: {
+      api: {
+        title: 'API',
+        name: 'API Name',
+        description: 'Description',
+        access: 'Access Identifier',
+        module: 'Module',
+        createTime: 'Create Time',
+        remark: 'Remarks',
+        message: {
+          sure: 'Are you sure to delete this API?',
         },
       },
     },
