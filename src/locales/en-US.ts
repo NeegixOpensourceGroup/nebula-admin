@@ -42,6 +42,7 @@ export default {
       logout: 'Logout',
     },
     common: {
+      sn: 'SN',
       view: 'View',
       edit: 'Edit',
       add: 'Add',
@@ -58,6 +59,8 @@ export default {
       warning: 'Warning',
       operate: 'Operate',
       management: 'Management',
+      placeholderInput: 'Please enter',
+      placeholderSelect: 'Please select',
       resetPassword: 'Reset Password',
       resetPasswordSuccess: 'Password reset successful',
       resetPasswordFailed: 'Password reset failed',
@@ -144,6 +147,25 @@ export default {
         createTime: 'Create Time',
         message: {
           sure: 'Are you sure to delete this position?',
+        },
+      },
+    },
+    system: {
+      dictionary: {
+        title: 'Dictionary',
+        group: 'Group',
+        groupName: 'Group Name',
+        item: 'Item',
+        code: 'Dictionary Code',
+        name: ' Name',
+        value: 'Value',
+        enabled: 'Enable',
+        createTime: 'Create Time',
+        message: {
+          sure: 'Are you sure to delete this dictionary?',
+          group: {
+            sure: 'Are you sure to delete this dictionary group?',
+          },
         },
       },
     },

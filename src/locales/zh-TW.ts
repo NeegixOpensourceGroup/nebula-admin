@@ -41,6 +41,7 @@ export default {
       logout: '登出',
     },
     common: {
+      sn: '序號',
       view: '檢視',
       edit: '編輯',
       add: '新增',
@@ -57,6 +58,8 @@ export default {
       warning: '警告',
       operate: '操作',
       management: '管理',
+      placeholderInput: '請輸入',
+      placeholderSelect: '請選擇',
       resetPassword: '重設密碼',
       resetPasswordSuccess: '重設密碼成功',
       resetPasswordFailed: '重設密碼失敗',
@@ -149,13 +152,18 @@ export default {
     system: {
       dictionary: {
         title: '字典',
-        type: '字典類型',
-        code: '字典代碼',
-        name: '字典名稱',
-        value: '字典值',
+        group: '字典組',
+        groupName: '字典組名稱',
+        item: '字典項',
+        code: '字典項代碼',
+        name: '字典項名稱',
+        value: '字典項值',
         remark: '備註',
         message: {
           sure: '確認刪除當前字典?',
+          group: {
+            sure: '確認刪除當前字典組?',
+          },
         },
       },
       role: {

@@ -41,6 +41,7 @@ export default {
       logout: '退出登录',
     },
     common: {
+      sn: '序号',
       view: '查看',
       edit: '编辑',
       add: '新增',
@@ -57,6 +58,8 @@ export default {
       warning: '警告',
       operate: '操作',
       management: '管理',
+      placeholderInput: '请输入',
+      placeholderSelect: '请选择',
       resetPassword: '重置密码',
       resetPasswordSuccess: '重置密码成功',
       resetPasswordFailed: '重置密码失败',
@@ -149,13 +152,18 @@ export default {
     system: {
       dictionary: {
         title: '字典',
-        type: '字典类型',
+        group: '字典分组',
+        groupName: '字典分组名称',
+        item: '字典项',
         code: '字典编码',
-        name: '字典名称',
-        value: '字典值',
+        name: '字典项名称',
+        value: '字典项值',
         remark: '备注',
         message: {
           sure: '确认删除当前字典?',
+          group: {
+            sure: '确认删除当前字典分组?',
+          },
         },
       },
       role: {
