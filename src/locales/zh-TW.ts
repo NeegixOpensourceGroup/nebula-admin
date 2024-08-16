@@ -215,6 +215,20 @@ export default {
       },
     },
     development: {
+      menu: {
+        title: '菜單',
+        button: '按鈕',
+        type: '類型',
+        info: '菜單資訊',
+        parent: '上級菜單',
+        name: '名稱',
+        access: '訪問标识',
+        remark: '備註',
+        addRoot: '創建菜單',
+        message: {
+          sure: '確認刪除當前的',
+        },
+      },
       api: {
         title: '接口',
         name: '接口名稱',

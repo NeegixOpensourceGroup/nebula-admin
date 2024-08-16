@@ -8,7 +8,9 @@ import {
   ProFormText,
   ProFormTreeSelect,
 } from '@ant-design/pro-components';
+import { FormattedMessage } from '@umijs/max';
 import { Form, message } from 'antd';
+import { useIntl } from 'umi';
 const { updateApi, queryApiById } = services.ApiController;
 const { queryMenuList } = menuServices.MenuController;
 
@@ -17,6 +19,7 @@ interface UpdateFormProps {
   actionRef?: ProCoreActionType | undefined;
 }
 const UpdateForm: React.FC<UpdateFormProps> = ({ id, actionRef }) => {
+  const intl = useIntl();
   const [form] = Form.useForm<{
     name: string;
     description: string;
@@ -44,10 +47,19 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, actionRef }) => {
       module: number;
       access: string;
     }>
-      title="编辑接口"
+      title={
+        <>
+          <FormattedMessage id="layout.common.edit" />{' '}
+          <FormattedMessage id="layout.development.api.title" />
+        </>
+      }
       width={'30%'}
       form={form}
-      trigger={<a onClick={roleDetailHanlder}>编辑</a>}
+      trigger={
+        <a onClick={roleDetailHanlder}>
+          <FormattedMessage id="layout.common.edit" />
+        </a>
+      }
       autoFocusFirstInput
       drawerProps={{
         destroyOnClose: true,
@@ -76,8 +88,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, actionRef }) => {
           ]}
           name="name"
           width="md"
-          label="接口标识"
-          placeholder="请输入接口标识"
+          label={intl.formatMessage({ id: 'layout.development.api.name' })}
         />
         <ProFormText
           rules={[
@@ -87,8 +98,9 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, actionRef }) => {
           ]}
           width="md"
           name="description"
-          label="接口描述"
-          placeholder="请输入接口描述"
+          label={intl.formatMessage({
+            id: 'layout.development.api.description',
+          })}
         />
         <ProFormText
           rules={[
@@ -98,14 +110,12 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, actionRef }) => {
           ]}
           width="md"
           name="access"
-          label="权限识别码"
-          placeholder="请输入权限识别码"
+          label={intl.formatMessage({ id: 'layout.development.api.access' })}
         />
         <ProFormTreeSelect
           width="md"
           name="module"
-          label="所属模块"
-          placeholder="请选择权限识别码"
+          label={intl.formatMessage({ id: 'layout.development.api.module' })}
           allowClear
           fieldProps={{
             showSearch: true,

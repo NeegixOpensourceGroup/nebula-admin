@@ -8,6 +8,7 @@ import {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
+import { FormattedMessage } from '@umijs/max';
 import type { TreeDataNode } from 'antd';
 import {
   Button,
@@ -20,7 +21,9 @@ import {
   message,
 } from 'antd';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useIntl } from 'umi';
 import styles from './index.less';
+
 const { queryMenuList, queryMenuById, createMenu, updateMenu, deleteMenu } =
   menuServices.MenuController;
 const { Search } = Input;
@@ -94,6 +97,7 @@ const _setFormFieldValues = (
 };
 const BizUnitList: React.FC<unknown> = () => {
   const [messageApi, contextHolder] = message.useMessage();
+  const intl = useIntl();
   /// 左侧树-START
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const [searchValue, setSearchValue] = useState('');
@@ -244,15 +248,23 @@ const BizUnitList: React.FC<unknown> = () => {
   return (
     <PageContainer
       header={{
-        title: '菜单管理',
+        title: (
+          <>
+            <FormattedMessage id="layout.development.menu.title" />{' '}
+            <FormattedMessage id="layout.common.management" />
+          </>
+        ),
       }}
     >
       {contextHolder}
       <ProCard split="vertical">
-        <ProCard title="菜单" colSpan="20%">
+        <ProCard
+          title={<FormattedMessage id="layout.development.menu.title" />}
+          colSpan="20%"
+        >
           <Search
             style={{ marginBottom: 8 }}
-            placeholder="查询"
+            placeholder={intl.formatMessage({ id: 'layout.common.search' })}
             onChange={onChange}
           />
           <Tree
@@ -289,15 +301,21 @@ const BizUnitList: React.FC<unknown> = () => {
           />
         </ProCard>
         <ProCard
-          title={`菜单信息${
+          title={`${intl.formatMessage({
+            id: 'layout.development.menu.info',
+          })}${
             formStatus === FormStatus.VIEW_NODE
-              ? '-查看'
+              ? `-${intl.formatMessage({ id: 'layout.common.view' })}`
               : formStatus === FormStatus.EDIT_NODE
-              ? '-编辑'
+              ? `-${intl.formatMessage({ id: 'layout.common.edit' })}`
               : formStatus === FormStatus.CREAT_CHILD
-              ? '-新增子级'
+              ? `-${intl.formatMessage({
+                  id: 'layout.common.add',
+                })} ${intl.formatMessage({ id: 'layout.common.subNode' })}`
               : formStatus === FormStatus.CREAT_ROOT
-              ? '-新增根级'
+              ? `-${intl.formatMessage({
+                  id: 'layout.common.add',
+                })} ${intl.formatMessage({ id: 'layout.common.rootNode' })}`
               : ''
           }`}
           headerBordered
@@ -309,20 +327,27 @@ const BizUnitList: React.FC<unknown> = () => {
                   <Button onClick={openEditHandler}>编辑</Button>
                   {currentNodeData.type !== 2 ? (
                     <Button type="primary" onClick={openAddSubHandler}>
-                      新增子级
+                      <FormattedMessage id="layout.common.add" />{' '}
+                      <FormattedMessage id="layout.common.subNode" />
                     </Button>
                   ) : null}
                   <Popconfirm
-                    title="警告"
-                    description={`确认删除当前的${
-                      currentNodeData.type === 1 ? '菜单' : '按钮'
+                    title={intl.formatMessage({ id: 'layout.common.warning' })}
+                    description={`${intl.formatMessage({
+                      id: 'layout.development.menu.message.sure',
+                    })} ${
+                      currentNodeData.type === 1
+                        ? intl.formatMessage({
+                            id: 'layout.development.menu.title',
+                          })
+                        : intl.formatMessage({
+                            id: 'layout.development.menu.button',
+                          })
                     }?`}
                     onConfirm={deleteHanlder}
-                    okText="是"
-                    cancelText="否"
                   >
                     <Button danger type="primary">
-                      删除
+                      <FormattedMessage id="layout.common.delete" />
                     </Button>
                   </Popconfirm>
                 </>
@@ -331,7 +356,7 @@ const BizUnitList: React.FC<unknown> = () => {
               formStatus === FormStatus.CREAT_CHILD ||
               formStatus === FormStatus.EDIT_NODE ? (
                 <Button danger onClick={cancleHandler}>
-                  取消
+                  <FormattedMessage id="layout.common.cancel" />
                 </Button>
               ) : null}
             </Space>
@@ -445,22 +470,25 @@ const BizUnitList: React.FC<unknown> = () => {
           >
             <ProFormRadio.Group
               colProps={{ span: 12 }}
-              label="类型"
+              label={intl.formatMessage({ id: 'layout.development.menu.type' })}
               name="type"
               rules={[
                 {
                   required: true,
-                  message: '请选择类型',
                 },
               ]}
               readonly={formStatus === FormStatus.EDIT_NODE}
               options={[
                 {
-                  label: '菜单',
+                  label: intl.formatMessage({
+                    id: 'layout.development.menu.title',
+                  }),
                   value: 1,
                 },
                 {
-                  label: '按钮',
+                  label: intl.formatMessage({
+                    id: 'layout.development.menu.button',
+                  }),
                   value: 2,
                 },
               ]}
@@ -470,24 +498,32 @@ const BizUnitList: React.FC<unknown> = () => {
               width="md"
               name="pName"
               readonly={true}
-              label="上级菜单名称"
+              label={intl.formatMessage({
+                id: 'layout.development.menu.parent',
+              })}
             />
             <ProFormText
               colProps={{ span: 12 }}
               width="md"
               name="name"
-              label="名称"
-              placeholder="请输入名称"
+              label={intl.formatMessage({ id: 'layout.development.menu.name' })}
               rules={[{ required: true }]}
             />
             <ProFormText
               colProps={{ span: 12 }}
               width="md"
               name="access"
-              label="权限识别码"
-              placeholder="请输入简称"
+              label={intl.formatMessage({
+                id: 'layout.development.menu.access',
+              })}
             />
-            <ProFormTextArea width="xl" label="备注" name="remark" />
+            <ProFormTextArea
+              width="xl"
+              label={intl.formatMessage({
+                id: 'layout.development.menu.remark',
+              })}
+              name="remark"
+            />
           </ProForm>
           <Empty
             style={{
@@ -504,7 +540,7 @@ const BizUnitList: React.FC<unknown> = () => {
               type="primary"
               onClick={openAddRootHandler}
             >
-              创建菜单
+              <FormattedMessage id={'layout.development.menu.addRoot'} />
             </Button>
           </Empty>
         </ProCard>

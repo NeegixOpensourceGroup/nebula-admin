@@ -218,6 +218,20 @@ export default {
       },
     },
     development: {
+      menu: {
+        title: 'Menu',
+        button: 'Button',
+        type: 'Type',
+        info: 'Menu Information',
+        parent: 'Parent Menu',
+        name: 'Name',
+        access: 'Access Identifier',
+        remark: 'Remarks',
+        addRoot: 'Create Menu',
+        message: {
+          sure: 'Are you sure to delete this ',
+        },
+      },
       api: {
         title: 'API',
         name: 'API Name',

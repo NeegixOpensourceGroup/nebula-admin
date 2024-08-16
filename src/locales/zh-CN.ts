@@ -216,6 +216,20 @@ export default {
       },
     },
     development: {
+      menu: {
+        title: '菜单',
+        button: '按钮',
+        type: '类型',
+        info: '菜单信息',
+        parent: '上级菜单',
+        name: '名称',
+        access: '访问标识',
+        remark: '备注',
+        addRoot: '创建菜单',
+        message: {
+          sure: '确认删除当前的',
+        },
+      },
       api: {
         title: '接口',
         name: '接口标识',

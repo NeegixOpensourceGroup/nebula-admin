@@ -6,6 +6,7 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
+import { FormattedMessage } from '@umijs/max';
 import { Button, message, Popconfirm } from 'antd';
 import { useRef, useState } from 'react';
 import CreateForm from './components/CreateForm';
@@ -28,19 +29,19 @@ export default () => {
 
   const columns: ProColumns<ApiItem>[] = [
     {
-      title: '接口标识',
+      title: <FormattedMessage id="layout.development.api.name" />,
       dataIndex: 'name',
     },
     {
-      title: '接口描述',
+      title: <FormattedMessage id="layout.development.api.description" />,
       dataIndex: 'description',
     },
     {
-      title: '权限识别码',
+      title: <FormattedMessage id="layout.development.api.access" />,
       dataIndex: 'access',
     },
     {
-      title: '所属模块',
+      title: <FormattedMessage id="layout.development.api.module" />,
       dataIndex: 'module',
       valueType: 'select',
       fieldProps: () => {
@@ -57,13 +58,13 @@ export default () => {
       },
     },
     {
-      title: '创建时间',
+      title: <FormattedMessage id="layout.development.api.createTime" />,
       dataIndex: 'created_at',
       valueType: 'date',
       hideInSearch: true,
     },
     {
-      title: '创建时间',
+      title: <FormattedMessage id="layout.development.api.createTime" />,
       dataIndex: 'created_at',
       valueType: 'dateRange',
       hideInTable: true,
@@ -77,18 +78,20 @@ export default () => {
       },
     },
     {
-      title: '操作',
+      title: <FormattedMessage id="layout.common.operate" />,
       valueType: 'option',
       key: 'option',
       render: (text, record, _, action) => [
         <UpdateForm key={'updateForm'} id={record.id} actionRef={action} />,
         <a target="_blank" rel="noopener noreferrer" key="view">
-          查看
+          <FormattedMessage id="layout.common.view" />
         </a>,
         <Popconfirm
-          title="警告"
+          title={<FormattedMessage id="layout.common.warning" />}
           key="remove"
-          description="确认删除当前角色?"
+          description={
+            <FormattedMessage id="layout.development.api.message.sure" />
+          }
           onConfirm={async () => {
             const res = await deleteApi(record.id);
             if (res.code === 200) {
@@ -100,10 +103,10 @@ export default () => {
               return false;
             }
           }}
-          okText="是"
-          cancelText="否"
         >
-          <a>删除</a>
+          <a>
+            <FormattedMessage id="layout.common.delete" />
+          </a>
         </Popconfirm>,
       ],
     },
@@ -141,7 +144,12 @@ export default () => {
   return (
     <PageContainer
       header={{
-        title: '接口管理',
+        title: (
+          <>
+            <FormattedMessage id="layout.development.api.title" />{' '}
+            <FormattedMessage id="layout.common.management" />
+          </>
+        ),
       }}
     >
       {contextHolder}
@@ -201,13 +209,13 @@ export default () => {
       />
       {selectedRowsState?.length > 0 && (
         <FooterToolbar
-          extra={
-            <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
-            </div>
-          }
+        // extra={
+        //   <div>
+        //     已选择{' '}
+        //     <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
+        //     项&nbsp;&nbsp;
+        //   </div>
+        // }
         >
           <Button
             onClick={async () => {
@@ -216,9 +224,13 @@ export default () => {
               actionRef.current?.reloadAndRest?.();
             }}
           >
-            批量删除
+            <FormattedMessage id="layout.common.batch" />{' '}
+            <FormattedMessage id="layout.common.delete" />
           </Button>
-          <Button type="primary">批量审批</Button>
+          <Button type="primary">
+            <FormattedMessage id="layout.common.batch" />{' '}
+            <FormattedMessage id="layout.common.audit" />
+          </Button>
         </FooterToolbar>
       )}
     </PageContainer>
