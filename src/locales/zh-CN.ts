@@ -183,6 +183,38 @@ export default {
         remark: '备注',
       },
     },
+    log: {
+      title: '日志',
+      operate: {
+        title: '操作日志',
+        user: '操作用户',
+        optModule: '操作模块',
+        optType: '操作类型',
+        optDesc: '操作描述',
+        optTime: '操作时间',
+        message: {
+          sure: '确认删除当前操作日志?',
+        },
+      },
+      login: {
+        title: '登录日志',
+        user: '登录用户',
+        loginLocation: '登录地点',
+        loginTime: '登录时间',
+        message: {
+          sure: '确认删除当前登录日志?',
+        },
+      },
+      exception: {
+        title: '异常日志',
+        level: '日志级别',
+        info: '日志信息',
+        loginTime: '日志时间',
+        message: {
+          sure: '确认删除当前异常日志?',
+        },
+      },
+    },
     development: {
       api: {
         title: '接口',

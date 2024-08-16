@@ -182,6 +182,38 @@ export default {
         remark: '備註',
       },
     },
+    log: {
+      title: '日誌',
+      operate: {
+        title: '操作日誌',
+        user: '用戶',
+        optModule: '模組',
+        optType: '類型',
+        optDesc: '描述',
+        optTime: '操作時間',
+        message: {
+          sure: '確認刪除當前操作日誌?',
+        },
+      },
+      login: {
+        title: '登入日誌',
+        user: '登入用戶',
+        loginLocation: '登入地點',
+        loginTime: '登入時間',
+        message: {
+          sure: '確認刪除當前登入日誌?',
+        },
+      },
+      exception: {
+        title: '異常日誌',
+        level: '日誌級別',
+        info: '日誌信息',
+        loginTime: '日誌時間',
+        message: {
+          sure: '確認刪除當前異常日誌?',
+        },
+      },
+    },
     development: {
       api: {
         title: '接口',

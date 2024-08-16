@@ -185,6 +185,38 @@ export default {
         remark: 'Remarks',
       },
     },
+    log: {
+      title: 'Log',
+      operate: {
+        title: 'Operation Log',
+        user: 'User',
+        optModule: 'Module',
+        optType: 'Type',
+        optDesc: 'Description',
+        optTime: 'Operation Time',
+        message: {
+          sure: 'Are you sure to delete this operation log?',
+        },
+      },
+      login: {
+        title: 'Login Log',
+        user: 'Login User',
+        loginLocation: 'Login Location',
+        loginTime: 'Login Time',
+        message: {
+          sure: 'Are you sure to delete this login log?',
+        },
+      },
+      exception: {
+        title: 'Exception Log',
+        level: 'Log Level',
+        info: 'Log Information',
+        loginTime: 'Log Time',
+        message: {
+          sure: 'Are you sure to delete this exception log?',
+        },
+      },
+    },
     development: {
       api: {
         title: 'API',

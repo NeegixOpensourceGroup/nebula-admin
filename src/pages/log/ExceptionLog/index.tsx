@@ -5,6 +5,7 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
+import { FormattedMessage } from '@umijs/max';
 import { Button, message } from 'antd';
 import { useRef, useState } from 'react';
 
@@ -29,21 +30,21 @@ export default () => {
       dataIndex: 'ip',
     },
     {
-      title: '日志级别',
+      title: <FormattedMessage id="layout.log.exception.level" />,
       dataIndex: 'level',
     },
     {
-      title: '日志信息',
-      dataIndex: 'message',
+      title: <FormattedMessage id="layout.log.exception.info" />,
+      dataIndex: 'info',
     },
     {
-      title: '日志时间',
+      title: <FormattedMessage id="layout.log.exception.loginTime" />,
       dataIndex: 'loginTime',
       valueType: 'date',
       hideInSearch: true,
     },
     {
-      title: '日志时间',
+      title: <FormattedMessage id="layout.log.exception.loginTime" />,
       dataIndex: 'loginTime',
       valueType: 'dateRange',
       hideInTable: true,
@@ -57,12 +58,12 @@ export default () => {
       },
     },
     {
-      title: '操作',
+      title: <FormattedMessage id="layout.common.operate" />,
       valueType: 'option',
       key: 'option',
       render: () => [
         <a target="_blank" rel="noopener noreferrer" key="view">
-          查看
+          <FormattedMessage id="layout.common.view" />
         </a>,
       ],
     },
@@ -100,7 +101,7 @@ export default () => {
   return (
     <PageContainer
       header={{
-        title: '异常日志',
+        title: <FormattedMessage id="layout.log.exception.title" />,
       }}
     >
       {contextHolder}
@@ -157,13 +158,13 @@ export default () => {
       />
       {selectedRowsState?.length > 0 && (
         <FooterToolbar
-          extra={
-            <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
-            </div>
-          }
+        // extra={
+        //   <div>
+        //     已选择{' '}
+        //     <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
+        //     项&nbsp;&nbsp;
+        //   </div>
+        // }
         >
           <Button
             type="primary"
@@ -173,7 +174,8 @@ export default () => {
               actionRef.current?.reloadAndRest?.();
             }}
           >
-            批量删除
+            <FormattedMessage id="layout.common.batch" />{' '}
+            <FormattedMessage id="layout.common.delete" />
           </Button>
         </FooterToolbar>
       )}

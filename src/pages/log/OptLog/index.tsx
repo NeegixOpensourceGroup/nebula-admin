@@ -5,6 +5,7 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
+import { FormattedMessage } from '@umijs/max';
 import { Button, message } from 'antd';
 import { useRef, useState } from 'react';
 
@@ -27,29 +28,29 @@ export default () => {
 
   const columns: ProColumns<OptItem>[] = [
     {
-      title: '操作人',
+      title: <FormattedMessage id={'layout.log.operate.user'} />,
       dataIndex: 'user',
     },
     {
-      title: '操作模块',
+      title: <FormattedMessage id={'layout.log.operate.optModule'} />,
       dataIndex: 'optModule',
     },
     {
-      title: '操作类型',
+      title: <FormattedMessage id={'layout.log.operate.optType'} />,
       dataIndex: 'optType',
     },
     {
-      title: '操作描述',
+      title: <FormattedMessage id={'layout.log.operate.optDesc'} />,
       dataIndex: 'optDesc',
     },
     {
-      title: '操作时间',
+      title: <FormattedMessage id={'layout.log.operate.optTime'} />,
       dataIndex: 'optTime',
       valueType: 'date',
       hideInSearch: true,
     },
     {
-      title: '操作时间',
+      title: <FormattedMessage id={'layout.log.operate.optTime'} />,
       dataIndex: 'optTime',
       valueType: 'dateRange',
       hideInTable: true,
@@ -63,12 +64,12 @@ export default () => {
       },
     },
     {
-      title: '操作',
+      title: <FormattedMessage id={'layout.common.operate'} />,
       valueType: 'option',
       key: 'option',
       render: () => [
         <a target="_blank" rel="noopener noreferrer" key="view">
-          查看
+          <FormattedMessage id={'layout.common.view'} />
         </a>,
       ],
     },
@@ -106,7 +107,7 @@ export default () => {
   return (
     <PageContainer
       header={{
-        title: '操作日志',
+        title: <FormattedMessage id={'layout.log.operate.title'} />,
       }}
     >
       {contextHolder}
@@ -163,13 +164,13 @@ export default () => {
       />
       {selectedRowsState?.length > 0 && (
         <FooterToolbar
-          extra={
-            <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
-            </div>
-          }
+        // extra={
+        //   <div>
+        //     已选择{' '}
+        //     <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
+        //     项&nbsp;&nbsp;
+        //   </div>
+        // }
         >
           <Button
             type="primary"
@@ -179,7 +180,8 @@ export default () => {
               actionRef.current?.reloadAndRest?.();
             }}
           >
-            批量删除
+            <FormattedMessage id={'layout.common.batch'} />{' '}
+            <FormattedMessage id={'layout.common.delete'} />
           </Button>
         </FooterToolbar>
       )}
