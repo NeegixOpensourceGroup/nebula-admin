@@ -195,7 +195,7 @@ export default {
         cardNo: 'ID Number',
         phone: 'Mobile Phone',
         email: 'Email',
-        status: 'Status',
+        enabled: 'Enable',
         createTime: 'Create Time',
         message: {
           sure: 'Are you sure todelete this user?',

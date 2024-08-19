@@ -189,13 +189,9 @@ export default {
         password: '密碼',
         phone: '手機號碼',
         email: '電子郵件',
-        remark: '備註',
+        enabled: '是否啟用',
         message: {
           sure: '確認刪除當前用戶?',
-        },
-        role: {
-          title: '角色',
-          name: '角色名稱',
         },
       },
     },

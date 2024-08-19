@@ -195,7 +195,6 @@ export default {
         message: {
           sure: '确认删除当前用户?',
         },
-        remark: '备注',
       },
     },
     log: {
