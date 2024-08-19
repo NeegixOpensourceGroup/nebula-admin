@@ -17,6 +17,7 @@ export default {
       title: '系统管理',
       dictionary: '字典管理',
       role: '角色管理',
+      user: '用户管理',
     },
     log: {
       title: '日志管理',
@@ -179,6 +180,20 @@ export default {
         field: '字段',
         message: {
           sure: '确认删除当前角色?',
+        },
+        remark: '备注',
+      },
+      user: {
+        title: '用户',
+        name: '用户名',
+        desc: '描述',
+        email: '邮箱',
+        phone: '手机号码',
+        password: '密码',
+        enabled: '是否启用',
+        createTime: '创建时间',
+        message: {
+          sure: '确认删除当前用户?',
         },
         remark: '备注',
       },

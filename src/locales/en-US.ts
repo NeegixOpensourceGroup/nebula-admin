@@ -18,6 +18,7 @@ export default {
       title: 'System Management',
       dictionary: 'Dictionary Management',
       role: 'Role Management',
+      user: 'User Management',
     },
     log: {
       title: 'Log Management',
@@ -183,6 +184,22 @@ export default {
           sure: 'Are you sure to delete this role?',
         },
         remark: 'Remarks',
+      },
+      user: {
+        title: 'User',
+        name: 'Name',
+        desc: 'Description',
+        gender: 'Gender',
+        birthday: 'Date of Birth',
+        cardKind: 'ID Type',
+        cardNo: 'ID Number',
+        phone: 'Mobile Phone',
+        email: 'Email',
+        status: 'Status',
+        createTime: 'Create Time',
+        message: {
+          sure: 'Are you sure todelete this user?',
+        },
       },
     },
     log: {

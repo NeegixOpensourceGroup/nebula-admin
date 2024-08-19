@@ -17,6 +17,7 @@ export default {
       title: '系統管理',
       dictionary: '字典管理',
       role: '角色管理',
+      user: '用戶管理',
     },
     log: {
       title: '日誌管理',
@@ -180,6 +181,22 @@ export default {
           sure: '確認刪除當前角色?',
         },
         remark: '備註',
+      },
+      user: {
+        title: '用戶',
+        name: '用戶名',
+        desc: '描述',
+        password: '密碼',
+        phone: '手機號碼',
+        email: '電子郵件',
+        remark: '備註',
+        message: {
+          sure: '確認刪除當前用戶?',
+        },
+        role: {
+          title: '角色',
+          name: '角色名稱',
+        },
       },
     },
     log: {

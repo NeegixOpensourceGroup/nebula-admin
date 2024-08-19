@@ -99,6 +99,12 @@ export default defineConfig({
           component: './system/Role',
           wrappers: ['@/wrappers/auth'],
         },
+        {
+          title: 'menu.system.user',
+          path: '/system/user',
+          component: './system/User',
+          wrappers: ['@/wrappers/auth'],
+        },
       ],
     },
     {
