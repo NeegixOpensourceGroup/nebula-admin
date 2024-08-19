@@ -190,6 +190,7 @@ export default {
         phone: '手機號碼',
         email: '電子郵件',
         enabled: '是否啟用',
+        createTime: '建立時間',
         message: {
           sure: '確認刪除當前用戶?',
         },
