@@ -1,7 +1,21 @@
 let posts = [
-  { id: 1, name: '董事长', code: '10', enabled: true },
-  { id: 2, name: '总经理', code: '1001', enabled: true },
-  { id: 3, name: '总经理助理', code: '', enabled: true },
+  { id: 1, bizUnitId: 1, deptId: 1, name: '董事长', code: '10', enabled: true },
+  {
+    id: 2,
+    bizUnitId: 1,
+    deptId: 1,
+    name: '总经理',
+    code: '1001',
+    enabled: true,
+  },
+  {
+    id: 3,
+    bizUnitId: 1,
+    deptId: 1,
+    name: '总经理助理',
+    code: '',
+    enabled: true,
+  },
 ];
 
 export default {
@@ -19,15 +33,25 @@ export default {
     });
   },
   'GET /api/v1/post': (req: any, res: any) => {
-    const { current = 1, pageSize = 10 } = req.query;
+    const { current = 1, pageSize = 10, bizUnitId, checkedKey } = req.query;
+
+    let filterPosts = posts.filter(
+      (post) =>
+        post.bizUnitId === parseInt(bizUnitId) &&
+        post.deptId === parseInt(checkedKey),
+    );
+
     res.send({
       code: 200,
       message: '查询成功',
       data: {
-        total: posts.length,
+        total: filterPosts.length,
         current,
         pageSize,
-        list: [...posts].slice((current - 1) * pageSize, current * pageSize),
+        list: [...filterPosts].slice(
+          (current - 1) * pageSize,
+          current * pageSize,
+        ),
       },
     });
   },

@@ -12,10 +12,17 @@ import { useIntl } from 'umi';
 const { updatePost, queryPostDetail } = services.PostController;
 
 interface UpdateFormProps {
-  id: number | string;
+  id?: string | number;
+  bizUnitId: string | number;
+  deptId?: string | number;
   actionRef?: ProCoreActionType | undefined;
 }
-const UpdateForm: React.FC<UpdateFormProps> = ({ id, actionRef }) => {
+const UpdateForm: React.FC<UpdateFormProps> = ({
+  id,
+  bizUnitId,
+  deptId,
+  actionRef,
+}) => {
   const [form] = Form.useForm<{
     code: string;
     name: string;
@@ -24,6 +31,9 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, actionRef }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const intl = useIntl();
   const roleDetailHanlder = async () => {
+    if (!id) {
+      return;
+    }
     const res = await queryPostDetail(id);
     if (res.code === 200) {
       form.setFieldsValue({
@@ -59,7 +69,10 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, actionRef }) => {
       }}
       submitTimeout={2000}
       onFinish={async (values) => {
-        const res = await updatePost(id, values);
+        if (!id) {
+          return;
+        }
+        const res = await updatePost(id, { ...values, bizUnitId, deptId });
         if (res.code === 200) {
           messageApi.success(res.message);
           actionRef?.reload();

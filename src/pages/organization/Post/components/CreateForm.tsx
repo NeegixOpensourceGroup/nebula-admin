@@ -13,10 +13,16 @@ import { useIntl } from 'umi';
 const { addPost } = services.PostController;
 
 interface CreateFormProps {
+  bizUnitId: string | number;
+  deptId?: string | number;
   actionRef: ProCoreActionType | undefined;
 }
 
-const CreateForm: React.FC<CreateFormProps> = ({ actionRef }) => {
+const CreateForm: React.FC<CreateFormProps> = ({
+  actionRef,
+  bizUnitId,
+  deptId,
+}) => {
   const [form] = Form.useForm<{
     code: string;
     name: string;
@@ -51,7 +57,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ actionRef }) => {
       }}
       submitTimeout={2000}
       onFinish={async (values) => {
-        const res = await addPost(values);
+        const res = await addPost({ ...values, bizUnitId, deptId });
         if (res.code === 200) {
           messageApi.success(res.message);
           actionRef?.reload();
