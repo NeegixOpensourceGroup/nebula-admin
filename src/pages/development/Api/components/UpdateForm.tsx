@@ -97,18 +97,6 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, actionRef }) => {
             },
           ]}
           width="md"
-          name="description"
-          label={intl.formatMessage({
-            id: 'layout.development.api.description',
-          })}
-        />
-        <ProFormText
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          width="md"
           name="access"
           label={intl.formatMessage({ id: 'layout.development.api.access' })}
         />

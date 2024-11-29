@@ -84,8 +84,15 @@ nebula-admin is a management system built on the umimax framework, complemented 
 
 #### Installation
 
+`npm` installation:
+
 1. Install dependencies: `npm install`
 2. Start: `npm run dev`
+
+`yarn` installation:
+
+1. Install dependencies: `yarn`
+2. Start: `yarn start`
 
 #### Instructions
 

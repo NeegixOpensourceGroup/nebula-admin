@@ -2,34 +2,30 @@ let api = [
   {
     id: 1,
     access: 'system:psn:query',
-    name: 'third_psn',
-    description: '第三方查询人员接口',
+    name: '第三方查询人员接口',
     module: 1,
     created_at: '2023-03-01 00:00:00',
   },
   {
     id: 2,
     access: 'system:psn:create',
-    name: 'third_psn_create',
-    description: '第三方创建人员接口',
+    name: '第三方创建人员接口',
     module: 1,
     created_at: '2023-03-01 00:00:00',
   },
   {
     id: 3,
     access: 'system:psn:update',
-    name: 'third_psn_update',
-    description: '第三方更新人员接口',
+    name: '第三方更新人员接口',
     module: 1,
     created_at: '2023-03-01 00:00:00',
   },
   {
     id: 4,
     access: 'system:psn:delete',
-    name: 'third_psn_delete',
-    description: '第三方删除人员接口',
+    name: '第三方删除人员接口',
     module: 1,
-    created_at: '2023-03-01 00:00:00',
+    createTime: '2023-03-01 00:00:00',
   },
   {
     id: 5,
@@ -74,7 +70,7 @@ let api = [
 ];
 
 export default {
-  'DELETE /api/v1/api/:id': (req: any, res: any) => {
+  'DELETE /api/v1/api': (req: any, res: any) => {
     const { id } = req.params;
     id.split(',').forEach((item: any) => {
       api.splice(
@@ -87,7 +83,7 @@ export default {
       code: 200,
     });
   },
-  'GET /api/v1/api': (req: any, res: any) => {
+  'GET /api/v1/api/:current/:pageSize': (req: any, res: any) => {
     const { current = 1, pageSize = 10 } = req.query;
     res.json({
       code: 200,
@@ -96,7 +92,7 @@ export default {
         total: api.length,
         pageSize,
         current,
-        list: [...api].reverse().splice((current - 1) * pageSize, pageSize),
+        result: [...api].reverse().splice((current - 1) * pageSize, pageSize),
       },
     });
   },

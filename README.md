@@ -84,8 +84,15 @@
 
 #### 安装教程
 
+`npm` 安装
+
 1. 安装依赖: `npm install`
 2. 启动: `npm run dev`
+
+`yarn` 安装
+
+1. 安装依赖: `yarn`
+2. 启动: `yarn start`
 
 #### 使用说明
 

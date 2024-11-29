@@ -15,13 +15,15 @@ export async function queryDictList(
   },
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>('/api/v1/dict', {
-    method: 'GET',
-    params: {
-      ...params,
+  const { current, pageSize, ...rest } = params;
+  return request<NEBULA_API.Result>(
+    `/api/v1/dictGroup/${current}/${pageSize}`,
+    {
+      method: 'GET',
+      params: rest,
+      ...(options || {}),
     },
-    ...(options || {}),
-  });
+  );
 }
 
 export async function updateDict(
@@ -31,12 +33,12 @@ export async function updateDict(
   },
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/dict/${body.id}`, {
+  return request<NEBULA_API.Result>(`/api/v1/dictGroup/${body.id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    data: { ...body},
+    data: { ...body },
     ...(options || {}),
   });
 }
@@ -48,18 +50,22 @@ export async function addDict(
   },
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>('/api/v1/dict', {
+  return request<NEBULA_API.Result>('/api/v1/dictGroup', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    data: { ...body},
+    data: { ...body },
     ...(options || {}),
   });
 }
 
-export async function removeDict(id: number, options?: { [key: string]: any }){
-  return request<NEBULA_API.Result>(`/api/v1/dict/${id}`, {
+export async function removeDict(
+  ids: Array<number | string>,
+  options?: { [key: string]: any },
+) {
+  return request<NEBULA_API.Result>(`/api/v1/dictGroup`, {
+    data: ids,
     method: 'DELETE',
   });
 }
@@ -80,13 +86,15 @@ export async function queryDictItemList(
   },
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/dictItem/${params.dictId}`, {
-    method: 'GET',
-    params: {
-      ...params,
+  const { current, pageSize, dictId, ...rest } = params;
+  return request<NEBULA_API.Result>(
+    `/api/v1/dictItem/${current}/${pageSize}/${dictId}`,
+    {
+      method: 'GET',
+      params: rest,
+      ...(options || {}),
     },
-    ...(options || {}),
-  });
+  );
 }
 
 export async function updateDictItem(
@@ -98,16 +106,18 @@ export async function updateDictItem(
   },
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/dictItem/${body.dictId}/${body.id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
+  return request<NEBULA_API.Result>(
+    `/api/v1/dictItem/${body.dictId}/${body.id}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: { ...body },
+      ...(options || {}),
     },
-    data: { ...body},
-    ...(options || {}),
-  });
+  );
 }
-
 
 export async function addDictItem(
   body: {
@@ -123,24 +133,28 @@ export async function addDictItem(
     headers: {
       'Content-Type': 'application/json',
     },
-    data: { ...body},
+    data: { ...body },
     ...(options || {}),
   });
 }
 
-export async function removeDictItem(dictId: number, id: number, options?: { [key: string]: any }){
+export async function removeDictItem(
+  dictId: number,
+  id: number,
+  options?: { [key: string]: any },
+) {
   return request<NEBULA_API.Result>(`/api/v1/dictItem/${dictId}/${id}`, {
     method: 'DELETE',
     ...(options || {}),
   });
 }
 
- export async function queryDictItemByDictCode(
+export async function queryDictItemByDictCode(
   code: string,
   options?: { [key: string]: any },
 ) {
   return request<NEBULA_API.Result>(`/api/v1/dictItem/dictCode/${code}`, {
     method: 'GET',
     ...(options || {}),
-  })
+  });
 }

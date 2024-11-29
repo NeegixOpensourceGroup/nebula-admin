@@ -1,8 +1,6 @@
 import { request } from '@umijs/max';
 
-export async function queryMenuList(
-  options?: { [key: string]: any },
-) {
+export async function queryMenuList(options?: { [key: string]: any }) {
   return request<NEBULA_API.Result>('/api/v1/menu', {
     method: 'GET',
     ...(options || {}),
@@ -10,7 +8,7 @@ export async function queryMenuList(
 }
 
 export async function queryMenuById(
-  id: number|string,
+  id: number | string,
   options?: { [key: string]: any },
 ) {
   return request<NEBULA_API.Result>(`/api/v1/menu/${id}`, {
@@ -19,10 +17,7 @@ export async function queryMenuById(
   });
 }
 
-export async function createMenu(
-  body: any,
-  options?: { [key: string]: any },
-) {
+export async function createMenu(body: any, options?: { [key: string]: any }) {
   return request<NEBULA_API.Result>('/api/v1/menu', {
     method: 'POST',
     headers: {
@@ -49,11 +44,12 @@ export async function updateMenu(
 }
 
 export async function deleteMenu(
-  id: number|string,
+  ids: Array<number | string>,
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/menu/${id}`, {
+  return request<NEBULA_API.Result>(`/api/v1/menu`, {
     method: 'DELETE',
+    data: ids,
     ...(options || {}),
   });
 }

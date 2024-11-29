@@ -149,7 +149,7 @@ export const request: RequestConfig = {
     (response) => {
       // 不再需要异步处理读取返回体内容，可直接在data中读出，部分字段可在 config 中找到
       const { data = {} as any } = response;
-      if (data.code === 504 || data.code === 500) {
+      if (data.code !== 200) {
         return Promise.reject(data);
       }
       // do something
@@ -161,10 +161,22 @@ export const request: RequestConfig = {
         return response;
       },
       (error: any) => {
-        const { response } = error;
-        if (response.status === 401) {
+        let result = error;
+        if (error.response) {
+          result = error.response.data;
+        }
+        const { code, message: errorMessage } = result;
+        if (code === 500 || code === 405) {
           message.open({
-            content: '登录失效，请重新登录',
+            content: errorMessage,
+            type: 'error',
+            duration: 1,
+          });
+        }
+
+        if (code === 401 || code === 403) {
+          message.open({
+            content: errorMessage,
             type: 'error',
             duration: 1,
             onClose: () => {
@@ -174,7 +186,7 @@ export const request: RequestConfig = {
           });
         }
 
-        if (response.status === 504) {
+        if (code > 500 && code < 600) {
           message.open({
             content: '服务器异常',
             type: 'error',

@@ -234,7 +234,7 @@ const BizUnitList: React.FC<unknown> = () => {
 
   const deleteHanlder = async () => {
     if (checkedKey !== undefined) {
-      const res = await deleteMenu(checkedKey);
+      const res = await deleteMenu([checkedKey]);
       if (res.code === 200) {
         await refreshTreeHandler();
         setFormStatus(FormStatus.ROOT);

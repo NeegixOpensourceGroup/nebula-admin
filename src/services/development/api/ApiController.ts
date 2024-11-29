@@ -7,9 +7,10 @@ export async function queryApiList(
   },
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>('/api/v1/api', {
+  const { current, pageSize, ...rest } = params;
+  return request<NEBULA_API.Result>(`/api/v1/api/${current}/${pageSize}`, {
     method: 'GET',
-    params,
+    params: rest,
     ...(options || {}),
   });
 }
@@ -51,11 +52,12 @@ export async function updateApi(
 }
 
 export async function deleteApi(
-  id: number | string,
+  ids: Array<number | string>,
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/api/${id}`, {
+  return request<NEBULA_API.Result>(`/api/v1/api`, {
     method: 'DELETE',
+    data: ids,
     ...(options || {}),
   });
 }

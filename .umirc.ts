@@ -3,6 +3,7 @@ export default defineConfig({
   antd: {
     compact: true,
   },
+  mock: false,
   access: {},
   model: {},
   initialState: {},

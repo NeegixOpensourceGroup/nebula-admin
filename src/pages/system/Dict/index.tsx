@@ -69,9 +69,9 @@ const DictList: React.FC = () => {
   useEffect(() => {
     const queryDictGroupFun = async () => {
       const res = await queryDictList({ ...groupPagination });
-      setGroupDataSource(res.data?.list);
+      setGroupDataSource(res.data?.result);
       setGroupPagination({
-        current: res.data?.current,
+        current: res.data?.currentPage,
         pageSize: res.data?.pageSize,
         total: res.data?.total,
       });
@@ -83,15 +83,15 @@ const DictList: React.FC = () => {
   const onSearch: SearchProps['onSearch'] = async (value) => {
     if (value) {
       const res = await queryDictList({ ...groupPagination, name: value });
-      setGroupDataSource(res.data?.list);
+      setGroupDataSource(res.data?.result);
       setGroupPagination({
-        current: res.data?.current,
+        current: res.data?.currentPage,
         pageSize: res.data?.pageSize,
         total: res.data?.total,
       });
     } else {
       const res = await queryDictList({ ...groupPagination });
-      setGroupDataSource(res.data?.list);
+      setGroupDataSource(res.data?.result);
     }
   };
 
@@ -142,9 +142,9 @@ const DictList: React.FC = () => {
       }
     }
     const resList = await queryDictList({ ...groupPagination });
-    setGroupDataSource(resList.data?.list);
+    setGroupDataSource(resList.data?.result);
     setGroupPagination({
-      current: resList.data?.current,
+      current: resList.data?.currentPage,
       pageSize: resList.data?.pageSize,
       total: resList.data?.total,
     });
@@ -156,13 +156,13 @@ const DictList: React.FC = () => {
       e.stopPropagation();
     }
 
-    const res = await removeDict(groupData?.id || 1);
+    const res = await removeDict([groupData?.id || 1]);
     if (res.code === 200) {
       setGroupData(undefined);
       const resList = await queryDictList({ ...groupPagination });
-      setGroupDataSource(resList.data?.list);
+      setGroupDataSource(resList.data?.result);
       setGroupPagination({
-        current: resList.data?.current,
+        current: resList.data?.currentPage,
         pageSize: resList.data?.pageSize,
         total: resList.data?.total,
       });
@@ -365,11 +365,11 @@ const DictList: React.FC = () => {
                   });
                   if (res.code === 200) {
                     setGroupPagination({
-                      current: res.data?.current,
+                      current: res.data?.currentPage,
                       pageSize: res.data?.pageSize,
                       total: res.data?.total,
                     });
-                    setGroupDataSource(res.data?.list);
+                    setGroupDataSource(res.data?.result);
                   }
                 },
               }}
