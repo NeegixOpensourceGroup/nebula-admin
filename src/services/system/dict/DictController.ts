@@ -74,7 +74,7 @@ export async function queryDictItemList(
   params: {
     // query
     /** dictId */
-    dictId?: number;
+    pkDictGroup?: number;
     /** name */
     name?: string;
     /** value */
@@ -86,9 +86,9 @@ export async function queryDictItemList(
   },
   options?: { [key: string]: any },
 ) {
-  const { current, pageSize, dictId, ...rest } = params;
+  const { current, pageSize, pkDictGroup, ...rest } = params;
   return request<NEBULA_API.Result>(
-    `/api/v1/dictItem/${current}/${pageSize}/${dictId}`,
+    `/api/v1/dictItem/${current}/${pageSize}/${pkDictGroup}`,
     {
       method: 'GET',
       params: rest,
@@ -100,23 +100,21 @@ export async function queryDictItemList(
 export async function updateDictItem(
   body: {
     id?: number;
-    dictId?: number;
+    pkDictGroup?: number;
     name?: string;
     value?: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(
-    `/api/v1/dictItem/${body.dictId}/${body.id}`,
-    {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: { ...body },
-      ...(options || {}),
+  const { id, pkDictGroup, ...rest } = body;
+  return request<NEBULA_API.Result>(`/api/v1/dictItem/${pkDictGroup}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
+    data: rest,
+    ...(options || {}),
+  });
 }
 
 export async function addDictItem(
@@ -128,23 +126,25 @@ export async function addDictItem(
   },
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/dictItem/${body.dictId}`, {
+  const { dictId, ...rest } = body;
+  return request<NEBULA_API.Result>(`/api/v1/dictItem/${dictId}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    data: { ...body },
+    data: rest,
     ...(options || {}),
   });
 }
 
 export async function removeDictItem(
   dictId: number,
-  id: number,
+  ids: Array<number | string>,
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/dictItem/${dictId}/${id}`, {
+  return request<NEBULA_API.Result>(`/api/v1/dictItem/${dictId}`, {
     method: 'DELETE',
+    data: ids,
     ...(options || {}),
   });
 }

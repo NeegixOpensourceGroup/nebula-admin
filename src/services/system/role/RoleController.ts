@@ -9,28 +9,24 @@ export async function queryRoleList(
   },
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>('/api/v1/role', {
+  const { current, pageSize, ...rest } = params;
+  return request<NEBULA_API.Result>(`/api/v1/role/${current}/${pageSize}`, {
     method: 'GET',
-    params: {
-     ...params,
-    },
+    params: rest,
     ...(options || {}),
-  })
+  });
 }
 
-export async function createRole(
-  body: any,
-  options?: { [key: string]: any },
-) {
+export async function createRole(body: any, options?: { [key: string]: any }) {
   return request<NEBULA_API.Result>('/api/v1/role', {
     method: 'POST',
     data: body,
     ...(options || {}),
-  })
+  });
 }
 
 export async function updateRole(
-  id: number|string,
+  id: number | string,
   body: any,
   options?: { [key: string]: any },
 ) {
@@ -38,25 +34,26 @@ export async function updateRole(
     method: 'PUT',
     data: body,
     ...(options || {}),
-  })
+  });
 }
 
 export async function deleteRole(
-  id: number|string,
+  ids: Array<number | string>,
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/role/${id}`, {
+  return request<NEBULA_API.Result>(`/api/v1/role`, {
     method: 'DELETE',
+    data: ids,
     ...(options || {}),
-  })
+  });
 }
 
 export async function getRole(
-  id: number|string,
+  id: number | string,
   options?: { [key: string]: any },
 ) {
   return request<NEBULA_API.Result>(`/api/v1/role/${id}`, {
     method: 'GET',
     ...(options || {}),
-  })
+  });
 }

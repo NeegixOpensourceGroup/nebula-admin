@@ -5,7 +5,7 @@ interface DictGroupDataType {
 
 interface DictItemDataType {
   id: number;
-  dictId: number;
+  pkDictGroup: number;
   name: string;
   value: string;
 }

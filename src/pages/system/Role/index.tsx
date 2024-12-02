@@ -24,8 +24,8 @@ type GithubIssueItem = {
   }[];
   state: string;
   comments: number;
-  created_at: string;
-  updated_at: string;
+  createTime: string;
+  updateTime: string;
   closed_at?: string;
 };
 
@@ -47,20 +47,28 @@ export default () => {
     },
     {
       title: <FormattedMessage id="layout.system.role.createTime" />,
-      dataIndex: 'created_at',
+      dataIndex: 'createTime',
       valueType: 'date',
       hideInSearch: true,
     },
     {
       title: <FormattedMessage id="layout.system.role.createTime" />,
-      dataIndex: 'created_at',
+      dataIndex: 'createTime',
       valueType: 'dateRange',
       hideInTable: true,
       search: {
         transform: (value) => {
+          let endDate = value[1] ? new Date(value[1]) : null;
+          if (endDate) {
+            endDate.setDate(endDate.getDate() + 1); // 增加一天
+          }
+          const endCreateTime = endDate ? endDate.toISOString() : undefined;
+          const startCreateTime = value[0]
+            ? new Date(value[0]).toISOString()
+            : undefined;
           return {
-            startTime: value[0],
-            endTime: value[1],
+            startCreateTime,
+            endCreateTime,
           };
         },
       },
@@ -86,7 +94,7 @@ export default () => {
             <FormattedMessage id="layout.system.role.message.sure" />
           }
           onConfirm={async () => {
-            const res = await deleteRole(record.id);
+            const res = await deleteRole([record.id]);
             if (res.code === 200) {
               messageApi.success('删除成功，即将刷新');
               action?.reload();
@@ -114,13 +122,11 @@ export default () => {
     if (!selectedRows) return true;
     try {
       //const res  = await deletePsn(selectedRows.map(item=>item.id).join(","));
-      const res = await deleteRole(
-        selectedRows.map((item) => item.id).join(','),
-      );
+      const res = await deleteRole(selectedRows.map((item) => item.id));
       if (res.code === 200) {
         actionRef.current?.reload();
         hide();
-        messageApi.success('删除成功，即将刷新');
+        messageApi.success('删除成功!');
         return true;
       } else {
         hide();
@@ -155,7 +161,11 @@ export default () => {
         cardBordered
         request={async (params) => {
           const res = await queryRoleList(params);
-          return { data: res.data.list, total: res.data.total, success: true };
+          return {
+            data: res.data.result,
+            total: res.data.total,
+            success: true,
+          };
         }}
         editable={{
           type: 'multiple',
@@ -185,7 +195,7 @@ export default () => {
             if (type === 'get') {
               return {
                 ...values,
-                created_at: [values.startTime, values.endTime],
+                createTime: [values.startTime, values.endTime],
               };
             }
             return values;

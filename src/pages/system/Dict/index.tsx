@@ -179,7 +179,7 @@ const DictList: React.FC = () => {
     if (e && typeof e.stopPropagation === 'function') {
       e.stopPropagation();
     }
-    const res = await removeDictItem(groupData?.id || 1, itemData?.id || 1);
+    const res = await removeDictItem(groupData?.id || 1, [itemData?.id || 1]);
     if (res.code === 200) {
       actionRef.current?.reload();
       message.open({
@@ -193,7 +193,8 @@ const DictList: React.FC = () => {
   const onItemFinish: FormProps<DictItemDataType>['onFinish'] = async (
     values,
   ) => {
-    if (itemData?.id) {
+    if (itemData?.id && groupData?.id) {
+      itemData.pkDictGroup = groupData?.id;
       const res = await updateDictItem({ ...itemData, ...values });
       if (res.code === 200) {
         message.open({
@@ -398,7 +399,7 @@ const DictList: React.FC = () => {
             pagination={{
               pageSize: 10,
             }}
-            params={{ dictId: groupData?.id }}
+            params={{ pkDictGroup: groupData?.id }}
             request={async (params) => {
               if (groupData?.id === undefined) {
                 return {
@@ -408,7 +409,7 @@ const DictList: React.FC = () => {
               }
               const res = await queryDictItemList({ ...params });
               return {
-                data: res.data?.list,
+                data: res.data?.result,
                 total: res.data.total,
                 success: true,
               };

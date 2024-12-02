@@ -40,8 +40,8 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
   const [tableSelectedKeys, setTableSelectedKeys] = useState<Key[]>([]);
   const onCheck = (checkedKeysValue: Key[], halfCheckedKeys: Key[]) => {
     pagePermissions = [
-      ...checkedKeysValue.map((item) => ({ menuId: item, isHalf: false })),
-      ...halfCheckedKeys.map((item) => ({ menuId: item, isHalf: true })),
+      ...checkedKeysValue.map((item) => ({ pkMenu: item, isHalf: false })),
+      ...halfCheckedKeys.map((item) => ({ pkMenu: item, isHalf: true })),
     ];
   };
 
@@ -57,8 +57,14 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
         description: res.data.description,
         enabled: res.data.enabled,
       });
-      setCheckedKeys(res.data.pagePermissions?.map((item: any) => item.menuId));
+      setCheckedKeys(
+        res.data.pagePermissions
+          ?.filter((item: any) => !item.isHalf)
+          .map((item: any) => item.pkMenu),
+      );
       setTableSelectedKeys(res.data.apiPermissions);
+      apiPermissions = res.data.apiPermissions;
+      pagePermissions = res.data.pagePermissions;
     }
   };
 
@@ -111,81 +117,83 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
   ];
 
   return (
-    <DrawerForm<{
-      name: string;
-      description: string;
-      permission: Key[];
-    }>
-      title={
-        <>
-          <FormattedMessage id="layout.common.edit" />{' '}
-          <FormattedMessage id="layout.system.role.title" />
-        </>
-      }
-      width={'30%'}
-      form={form}
-      trigger={
-        <a onClick={roleDetailHanlder}>
-          <FormattedMessage id="layout.common.edit" />
-        </a>
-      }
-      autoFocusFirstInput
-      drawerProps={{
-        destroyOnClose: true,
-      }}
-      submitTimeout={2000}
-      onFinish={async (values) => {
-        const res = await updateRole(roleId, {
-          ...values,
-          pagePermissions,
-          apiPermissions,
-        });
-        if (res.code === 200) {
-          messageApi.success(res.message);
-          actionRef?.reload();
-        } else {
-          messageApi.error(res.message);
-        }
-
-        // 不返回不会关闭弹框
-        return true;
-      }}
-    >
+    <>
       {contextHolder}
-      <ProForm.Group>
-        <ProFormText
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          name="name"
-          width="md"
-          label={intl.formatMessage({ id: 'layout.system.role.name' })}
-        />
-        <ProFormText
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          width="md"
-          name="description"
-          label={intl.formatMessage({ id: 'layout.system.role.description' })}
-        />
-        <ProFormSwitch
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          name="enabled"
-          width="md"
-          label={intl.formatMessage({ id: 'layout.system.role.enabled' })}
-        />
-      </ProForm.Group>
-      <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
-    </DrawerForm>
+      <DrawerForm<{
+        name: string;
+        description: string;
+        permission: Key[];
+      }>
+        title={
+          <>
+            <FormattedMessage id="layout.common.edit" />{' '}
+            <FormattedMessage id="layout.system.role.title" />
+          </>
+        }
+        width={'30%'}
+        form={form}
+        trigger={
+          <a onClick={roleDetailHanlder}>
+            <FormattedMessage id="layout.common.edit" />
+          </a>
+        }
+        autoFocusFirstInput
+        drawerProps={{
+          destroyOnClose: true,
+        }}
+        submitTimeout={2000}
+        onFinish={async (values) => {
+          const res = await updateRole(roleId, {
+            ...values,
+            pagePermissions,
+            apiPermissions,
+          });
+          if (res.code === 200) {
+            messageApi.success(res.message);
+            actionRef?.reload();
+          } else {
+            messageApi.error(res.message);
+          }
+
+          // 不返回不会关闭弹框
+          return true;
+        }}
+      >
+        <ProForm.Group>
+          <ProFormText
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            name="name"
+            width="md"
+            label={intl.formatMessage({ id: 'layout.system.role.name' })}
+          />
+          <ProFormText
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            width="md"
+            name="description"
+            label={intl.formatMessage({ id: 'layout.system.role.description' })}
+          />
+          <ProFormSwitch
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            name="enabled"
+            width="md"
+            label={intl.formatMessage({ id: 'layout.system.role.enabled' })}
+          />
+        </ProForm.Group>
+        <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+      </DrawerForm>
+    </>
   );
 };
 

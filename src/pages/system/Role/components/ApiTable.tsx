@@ -65,7 +65,7 @@ const ApiTable: React.FC<ApiTableProps> = ({
 
   useEffect(() => {
     queryApiList({ ...pagination }).then((res) => {
-      setApiData(res.data.list);
+      setApiData(res.data.result);
       setPagination({
         total: res.data.total,
         current: res.data.current,
@@ -97,7 +97,7 @@ const ApiTable: React.FC<ApiTableProps> = ({
           ...pagination,
           onChange: (page, pageSize) => {
             queryApiList({ current: page, pageSize }).then((res) => {
-              setApiData(res.data.list);
+              setApiData(res.data.result);
               setPagination({
                 total: res.data.total,
                 current: res.data.current,
