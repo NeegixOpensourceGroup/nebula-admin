@@ -20,7 +20,7 @@ type UserItem = {
   title: string;
   state: string;
   comments: number;
-  created_at: string;
+  createTime: string;
   updated_at: string;
   closed_at?: string;
 };
@@ -39,7 +39,7 @@ export default () => {
     {
       disable: true,
       title: <FormattedMessage id="layout.system.user.desc" />,
-      dataIndex: 'desc',
+      dataIndex: 'description',
     },
     {
       title: <FormattedMessage id="layout.system.user.email" />,
@@ -48,7 +48,7 @@ export default () => {
     },
     {
       title: <FormattedMessage id="layout.system.user.phone" />,
-      dataIndex: 'phone',
+      dataIndex: 'mobilePhone',
       hideInSearch: true,
     },
     {
@@ -64,9 +64,17 @@ export default () => {
       hideInTable: true,
       search: {
         transform: (value) => {
+          let endDate = value[1] ? new Date(value[1]) : null;
+          if (endDate) {
+            endDate.setDate(endDate.getDate() + 1); // 增加一天
+          }
+          const endCreateTime = endDate ? endDate.toISOString() : undefined;
+          const startCreateTime = value[0]
+            ? new Date(value[0]).toISOString()
+            : undefined;
           return {
-            startTime: value[0],
-            endTime: value[1],
+            startCreateTime,
+            endCreateTime,
           };
         },
       },
@@ -89,10 +97,10 @@ export default () => {
           title={<FormattedMessage id="layout.common.warning" />}
           key="remove"
           description={
-            <FormattedMessage id="layout.system.role.message.sure" />
+            <FormattedMessage id="layout.system.user.message.sure" />
           }
           onConfirm={async () => {
-            const res = await deleteUser(record.id);
+            const res = await deleteUser([record.id]);
             if (res.code === 200) {
               messageApi.success('删除成功，即将刷新');
               action?.reload();
@@ -120,9 +128,7 @@ export default () => {
     if (!selectedRows) return true;
     try {
       //const res  = await deletePsn(selectedRows.map(item=>item.id).join(","));
-      const res = await deleteUser(
-        selectedRows.map((item) => item.id).join(','),
-      );
+      const res = await deleteUser(selectedRows.map((item) => item.id));
       if (res.code === 200) {
         actionRef.current?.reload();
         hide();
@@ -141,97 +147,103 @@ export default () => {
   };
 
   return (
-    <PageContainer
-      header={{
-        title: (
-          <>
-            <FormattedMessage id={'layout.system.user.title'} />{' '}
-            <FormattedMessage id={'layout.common.management'} />
-          </>
-        ),
-      }}
-    >
+    <>
       {contextHolder}
-      <ProTable<UserItem>
-        columns={columns}
-        actionRef={actionRef}
-        rowSelection={{
-          onChange: (_, selectedRows) => setSelectedRows(selectedRows),
+      <PageContainer
+        header={{
+          title: (
+            <>
+              <FormattedMessage id={'layout.system.user.title'} />{' '}
+              <FormattedMessage id={'layout.common.management'} />
+            </>
+          ),
         }}
-        cardBordered
-        request={async (params) => {
-          const res = await queryUserList(params);
-          return { data: res.data.list, total: res.data.total, success: true };
-        }}
-        editable={{
-          type: 'multiple',
-        }}
-        columnsState={{
-          persistenceKey: 'pro-table-singe-demos',
-          persistenceType: 'localStorage',
-          defaultValue: {
-            option: { fixed: 'right', disable: true },
-          },
-          onChange(value) {
-            console.log('value: ', value);
-          },
-        }}
-        rowKey="id"
-        search={{
-          labelWidth: 'auto',
-        }}
-        options={{
-          setting: {
-            listsHeight: 400,
-          },
-        }}
-        form={{
-          // 由于配置了 transform，提交的参数与定义的不同这里需要转化一下
-          syncToUrl: (values, type) => {
-            if (type === 'get') {
-              return {
-                ...values,
-                created_at: [values.startTime, values.endTime],
-              };
-            }
-            return values;
-          },
-        }}
-        pagination={{
-          pageSize: 5,
-          onChange: (page) => console.log(page),
-        }}
-        dateFormatter="string"
-        toolBarRender={() => [
-          <CreateForm key="createForm" actionRef={actionRef.current} />,
-        ]}
-      />
-      {selectedRowsState?.length > 0 && (
-        <FooterToolbar
-        // extra={
-        //   <div>
-        //     已选择{' '}
-        //     <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-        //     项&nbsp;&nbsp;
-        //   </div>
-        // }
-        >
-          <Button
-            onClick={async () => {
-              await handleRemove(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
+      >
+        <ProTable<UserItem>
+          columns={columns}
+          actionRef={actionRef}
+          rowSelection={{
+            onChange: (_, selectedRows) => setSelectedRows(selectedRows),
+          }}
+          cardBordered
+          request={async (params) => {
+            const res = await queryUserList(params);
+            return {
+              data: res.data.result,
+              total: res.data.total,
+              success: true,
+            };
+          }}
+          editable={{
+            type: 'multiple',
+          }}
+          columnsState={{
+            persistenceKey: 'pro-table-singe-demos',
+            persistenceType: 'localStorage',
+            defaultValue: {
+              option: { fixed: 'right', disable: true },
+            },
+            onChange(value) {
+              console.log('value: ', value);
+            },
+          }}
+          rowKey="id"
+          search={{
+            labelWidth: 'auto',
+          }}
+          options={{
+            setting: {
+              listsHeight: 400,
+            },
+          }}
+          form={{
+            // 由于配置了 transform，提交的参数与定义的不同这里需要转化一下
+            syncToUrl: (values, type) => {
+              if (type === 'get') {
+                return {
+                  ...values,
+                  createTime: [values.startTime, values.endTime],
+                };
+              }
+              return values;
+            },
+          }}
+          pagination={{
+            pageSize: 5,
+            onChange: (page) => console.log(page),
+          }}
+          dateFormatter="string"
+          toolBarRender={() => [
+            <CreateForm key="createForm" actionRef={actionRef.current} />,
+          ]}
+        />
+        {selectedRowsState?.length > 0 && (
+          <FooterToolbar
+          // extra={
+          //   <div>
+          //     已选择{' '}
+          //     <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
+          //     项&nbsp;&nbsp;
+          //   </div>
+          // }
           >
-            <FormattedMessage id={'layout.common.batch'} />{' '}
-            <FormattedMessage id={'layout.common.delete'} />
-          </Button>
-          <Button type="primary">
-            <FormattedMessage id={'layout.common.batch'} />{' '}
-            <FormattedMessage id={'layout.common.audit'} />
-          </Button>
-        </FooterToolbar>
-      )}
-    </PageContainer>
+            <Button
+              onClick={async () => {
+                await handleRemove(selectedRowsState);
+                setSelectedRows([]);
+                actionRef.current?.reloadAndRest?.();
+              }}
+            >
+              <FormattedMessage id={'layout.common.batch'} />{' '}
+              <FormattedMessage id={'layout.common.delete'} />
+            </Button>
+            <Button type="primary">
+              <FormattedMessage id={'layout.common.batch'} />{' '}
+              <FormattedMessage id={'layout.common.audit'} />
+            </Button>
+          </FooterToolbar>
+        )}
+      </PageContainer>
+    </>
   );
 };

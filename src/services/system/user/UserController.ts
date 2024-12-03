@@ -10,11 +10,10 @@ export async function queryUserList(
   },
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>('/api/v1/user', {
+  const { current, pageSize, ...rest } = params;
+  return request<NEBULA_API.Result>(`/api/v1/user/${current}/${pageSize}`, {
     method: 'GET',
-    params: {
-      ...params,
-    },
+    params: rest,
     ...(options || {}),
   });
 }
@@ -50,11 +49,12 @@ export async function updateUser(
 }
 
 export async function deleteUser(
-  id: number | string,
+  ids: Array<number | string>,
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/user/${id}`, {
+  return request<NEBULA_API.Result>(`/api/v1/user`, {
     method: 'DELETE',
+    data: ids,
     ...(options || {}),
   });
 }

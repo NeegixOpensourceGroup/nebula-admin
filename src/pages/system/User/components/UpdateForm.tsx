@@ -20,9 +20,9 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ userId, actionRef }) => {
   const intl = useIntl();
   const [form] = Form.useForm<{
     name: string;
-    desc: string;
+    description: string;
     email: string;
-    phone: string;
+    mobilePhone: string;
     enabled: boolean;
   }>();
   const [messageApi, contextHolder] = message.useMessage();
@@ -32,108 +32,110 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ userId, actionRef }) => {
     if (res.code === 200) {
       form.setFieldsValue({
         name: res.data.name,
-        desc: res.data.desc,
+        description: res.data.description,
         email: res.data.email,
-        phone: res.data.phone,
+        mobilePhone: res.data.mobilePhone,
         enabled: res.data.enabled,
       });
     }
   };
 
   return (
-    <DrawerForm<{
-      name: string;
-      description: string;
-      permission: Key[];
-    }>
-      title={
-        <>
-          <FormattedMessage id="layout.common.edit" />{' '}
-          <FormattedMessage id="layout.system.user.title" />
-        </>
-      }
-      width={'30%'}
-      form={form}
-      trigger={
-        <a onClick={roleDetailHanlder}>
-          <FormattedMessage id="layout.common.edit" />
-        </a>
-      }
-      autoFocusFirstInput
-      drawerProps={{
-        destroyOnClose: true,
-      }}
-      submitTimeout={2000}
-      onFinish={async (values) => {
-        const res = await updateUser(userId, {
-          ...values,
-        });
-        if (res.code === 200) {
-          messageApi.success(res.message);
-          actionRef?.reload();
-        } else {
-          messageApi.error(res.message);
-        }
-
-        // 不返回不会关闭弹框
-        return true;
-      }}
-    >
+    <>
       {contextHolder}
-      <ProForm.Group>
-        <ProFormText
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          name="name"
-          width="md"
-          label={intl.formatMessage({ id: 'layout.system.user.name' })}
-        />
-        <ProFormText
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          width="md"
-          name="desc"
-          label={intl.formatMessage({ id: 'layout.system.user.desc' })}
-        />
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              type: 'email',
-            },
-          ]}
-          width="md"
-          name="email"
-          label={intl.formatMessage({ id: 'layout.system.user.email' })}
-        />
-        <ProFormText
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          width="md"
-          name="phone"
-          label={intl.formatMessage({ id: 'layout.system.user.phone' })}
-        />
-        <ProFormSwitch
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          name="enabled"
-          width="md"
-          label={intl.formatMessage({ id: 'layout.system.user.enabled' })}
-        />
-      </ProForm.Group>
-    </DrawerForm>
+      <DrawerForm<{
+        name: string;
+        description: string;
+        permission: Key[];
+      }>
+        title={
+          <>
+            <FormattedMessage id="layout.common.edit" />{' '}
+            <FormattedMessage id="layout.system.user.title" />
+          </>
+        }
+        width={'30%'}
+        form={form}
+        trigger={
+          <a onClick={roleDetailHanlder}>
+            <FormattedMessage id="layout.common.edit" />
+          </a>
+        }
+        autoFocusFirstInput
+        drawerProps={{
+          destroyOnClose: true,
+        }}
+        submitTimeout={2000}
+        onFinish={async (values) => {
+          const res = await updateUser(userId, {
+            ...values,
+          });
+          if (res.code === 200) {
+            messageApi.success(res.message);
+            actionRef?.reload();
+          } else {
+            messageApi.error(res.message);
+          }
+
+          // 不返回不会关闭弹框
+          return true;
+        }}
+      >
+        <ProForm.Group>
+          <ProFormText
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            name="name"
+            width="md"
+            label={intl.formatMessage({ id: 'layout.system.user.name' })}
+          />
+          <ProFormText
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            width="md"
+            name="description"
+            label={intl.formatMessage({ id: 'layout.system.user.desc' })}
+          />
+          <ProFormText
+            rules={[
+              {
+                required: true,
+                type: 'email',
+              },
+            ]}
+            width="md"
+            name="email"
+            label={intl.formatMessage({ id: 'layout.system.user.email' })}
+          />
+          <ProFormText
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            width="md"
+            name="mobilePhone"
+            label={intl.formatMessage({ id: 'layout.system.user.phone' })}
+          />
+          <ProFormSwitch
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            name="enabled"
+            width="md"
+            label={intl.formatMessage({ id: 'layout.system.user.enabled' })}
+          />
+        </ProForm.Group>
+      </DrawerForm>
+    </>
   );
 };
 
