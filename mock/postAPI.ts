@@ -19,7 +19,7 @@ let posts = [
 ];
 
 export default {
-  'DELETE /api/v1/post/:id': (req: any, res: any) => {
+  'DELETE /api/v1/post': (req: any, res: any) => {
     const { id } = req.params;
     id.split(',').forEach((item: any) => {
       posts.splice(
@@ -32,7 +32,7 @@ export default {
       message: '删除成功',
     });
   },
-  'GET /api/v1/post': (req: any, res: any) => {
+  'GET /api/v1/post/:current/:pageSize': (req: any, res: any) => {
     const { current = 1, pageSize = 10, bizUnitId, checkedKey } = req.query;
 
     let filterPosts = posts.filter(

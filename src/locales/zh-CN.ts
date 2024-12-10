@@ -66,6 +66,7 @@ export default {
       resetPasswordSuccess: '重置密码成功',
       resetPasswordFailed: '重置密码失败',
       resetPasswordConfirm: '确认重置密码',
+      success: '操作成功',
     },
     organization: {
       info: '信息',
@@ -74,7 +75,7 @@ export default {
         title: '业务单元',
         info: '业务单元信息',
         createRoot: '创建业务单元总部',
-        orgType: {
+        type: {
           title: '业务单元类型',
           tooltip: '部门类型下只能新增子部门',
           headquarter: '总部',
@@ -84,7 +85,7 @@ export default {
         parent: '上级业务单元',
         code: '业务单元编码',
         name: '业务单元名称',
-        shortName: '业务单元简称',
+        abbreviation: '业务单元简称',
         tel: '联系电话',
         manager: '负责人',
         phone: '负责人电话',

@@ -65,6 +65,7 @@ export default {
       resetPasswordSuccess: '重設密碼成功',
       resetPasswordFailed: '重設密碼失敗',
       resetPasswordConfirm: '確認重設密碼',
+      success: '操作成功',
     },
     organization: {
       info: '資訊',
@@ -73,7 +74,7 @@ export default {
         title: '業務單元',
         info: '業務單元資訊',
         createRoot: '創建業務單元總部',
-        orgType: {
+        type: {
           title: '業務單元類型',
           tooltip: '部門類型下只能新增子部門',
           headquarter: '總部',
@@ -83,7 +84,7 @@ export default {
         parent: '上級業務單元',
         code: '業務單元代碼',
         name: '業務單元名稱',
-        shortName: '業務單元簡稱',
+        abbreviation: '業務單元簡稱',
         tel: '聯絡電話',
         manager: '負責人',
         phone: '負責人電話',

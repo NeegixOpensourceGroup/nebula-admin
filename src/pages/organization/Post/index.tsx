@@ -82,7 +82,7 @@ type PostItem = {
 const PostList: React.FC<unknown> = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const intl = useIntl();
-  const [bizUnitId, setBizUnitId] = useState<number | string>(1);
+  const [pkBizUnit, setPkBizUnit] = useState<number | string>(1);
   /// 左侧树-START
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const [searchValue, setSearchValue] = useState('');
@@ -215,10 +215,7 @@ const PostList: React.FC<unknown> = () => {
     const hide = messageApi.loading('正在删除');
     if (!selectedRows) return true;
     try {
-      console.log(selectedRows);
-      const res = await deletePost(
-        selectedRows.map((item) => item.id).join(','),
-      );
+      const res = await deletePost(selectedRows.map((item) => item.id));
       if (res.code === 200) {
         actionRef.current?.reload();
         hide();
@@ -286,8 +283,8 @@ const PostList: React.FC<unknown> = () => {
         <UpdateForm
           key={'updateForm'}
           id={record.id}
-          bizUnitId={bizUnitId}
-          deptId={checkedKey}
+          pkBizUnit={pkBizUnit}
+          pkDept={checkedKey}
           actionRef={action}
         />,
         <a target="_blank" rel="noopener noreferrer" key="view">
@@ -302,7 +299,7 @@ const PostList: React.FC<unknown> = () => {
             />
           }
           onConfirm={async () => {
-            const res = await deletePost(record.id);
+            const res = await deletePost([record.id]);
             if (res.code === 200) {
               messageApi.success('删除成功，即将刷新');
               action?.reload();
@@ -322,131 +319,133 @@ const PostList: React.FC<unknown> = () => {
   ];
 
   return (
-    <PageContainer
-      header={{
-        title: (
-          <>
-            <FormattedMessage id="layout.organization.position.title" />{' '}
-            <FormattedMessage id="layout.common.management" />
-          </>
-        ),
-      }}
-    >
+    <>
       {contextHolder}
-      <ProCard
-        title={
-          <Space>
-            <BizUnitSelectTree
-              onChange={async (value: string) => {
-                const res = await queryDeptList(value);
-                if (res.code === 200) {
-                  const treeData = buildTreeData(res.data, {
-                    idKey: 'id',
-                    nameKey: 'name',
-                    pidKey: 'pid',
-                  });
-                  setDefaultTreeData(treeData);
-                  generateList(treeData);
-                  setBizUnitId(parseInt(value));
+      <PageContainer
+        header={{
+          title: (
+            <>
+              <FormattedMessage id="layout.organization.position.title" />{' '}
+              <FormattedMessage id="layout.common.management" />
+            </>
+          ),
+        }}
+      >
+        <ProCard
+          title={
+            <Space>
+              <BizUnitSelectTree
+                onChange={async (value: string) => {
+                  const res = await queryDeptList(value);
+                  if (res.code === 200) {
+                    const treeData = buildTreeData(res.data, {
+                      idKey: 'id',
+                      nameKey: 'name',
+                      pidKey: 'pid',
+                    });
+                    setDefaultTreeData(treeData);
+                    generateList(treeData);
+                    setPkBizUnit(parseInt(value));
+                    setCheckedKey(undefined);
+                  }
+                }}
+              />
+            </Space>
+          }
+          split="vertical"
+          bordered
+          headerBordered
+        >
+          <ProCard
+            title={<FormattedMessage id="layout.organization.dept.title" />}
+            colSpan="20%"
+          >
+            <Search
+              style={{ marginBottom: 8 }}
+              placeholder={intl.formatMessage({ id: 'layout.common.search' })}
+              onChange={onChange}
+            />
+            <Tree
+              onExpand={onExpand}
+              expandedKeys={expandedKeys}
+              autoExpandParent={autoExpandParent}
+              onSelect={async (selectedKeys) => {
+                if (selectedKeys.length > 0) {
+                  setCheckedKey(Number(selectedKeys[0]));
+                } else {
                   setCheckedKey(undefined);
                 }
               }}
+              treeData={treeData}
             />
-          </Space>
-        }
-        split="vertical"
-        bordered
-        headerBordered
-      >
-        <ProCard
-          title={<FormattedMessage id="layout.organization.dept.title" />}
-          colSpan="20%"
-        >
-          <Search
-            style={{ marginBottom: 8 }}
-            placeholder={intl.formatMessage({ id: 'layout.common.search' })}
-            onChange={onChange}
-          />
-          <Tree
-            onExpand={onExpand}
-            expandedKeys={expandedKeys}
-            autoExpandParent={autoExpandParent}
-            onSelect={async (selectedKeys) => {
-              if (selectedKeys.length > 0) {
-                setCheckedKey(Number(selectedKeys[0]));
-              } else {
-                setCheckedKey(undefined);
-              }
-            }}
-            treeData={treeData}
-          />
-        </ProCard>
-        <ProCard
-          title={<FormattedMessage id="layout.organization.position.title" />}
-          colSpan="80%"
-        >
-          <ProTable<PostItem>
-            actionRef={actionRef}
-            rowKey="id"
-            search={{
-              labelWidth: 'auto',
-            }}
-            toolBarRender={() => [
-              <CreateForm
-                key={'userForm'}
-                actionRef={actionRef.current}
-                bizUnitId={bizUnitId}
-                deptId={checkedKey}
-              />,
-            ]}
-            params={{ bizUnitId, checkedKey }}
-            request={async (params, sorter, filter) => {
-              const { data, code } = await queryPostList({
-                ...params,
-                // FIXME: remove @ts-ignore
-                // @ts-ignore
-                sorter,
-                filter,
-              });
-              return {
-                data: data?.list || [],
-                success: code === 200,
-              };
-            }}
-            columns={columns}
-            rowSelection={{
-              onChange: (_, selectedRows) => setSelectedRows(selectedRows),
-            }}
-          />
-          {selectedRowsState?.length > 0 && (
-            <FooterToolbar
-            // extra={
-            //   <div>
-            //     已选择{' '}
-            //     <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-            //     项&nbsp;&nbsp;
-            //   </div>
-            // }
-            >
-              <Button
-                onClick={async () => {
-                  await handleRemove(selectedRowsState);
-                  setSelectedRows([]);
-                  actionRef.current?.reloadAndRest?.();
-                }}
+          </ProCard>
+          <ProCard
+            title={<FormattedMessage id="layout.organization.position.title" />}
+            colSpan="80%"
+          >
+            <ProTable<PostItem>
+              actionRef={actionRef}
+              rowKey="id"
+              search={{
+                labelWidth: 'auto',
+              }}
+              toolBarRender={() => [
+                <CreateForm
+                  key={'userForm'}
+                  actionRef={actionRef.current}
+                  pkBizUnit={pkBizUnit}
+                  pkDept={checkedKey}
+                />,
+              ]}
+              params={{ pkBizUnit, pkDept: checkedKey }}
+              request={async (params, sorter, filter) => {
+                const { data, code } = await queryPostList({
+                  ...params,
+                  // FIXME: remove @ts-ignore
+                  // @ts-ignore
+                  sorter,
+                  filter,
+                });
+                return {
+                  data: data?.result || [],
+                  success: code === 200,
+                };
+              }}
+              columns={columns}
+              rowSelection={{
+                onChange: (_, selectedRows) => setSelectedRows(selectedRows),
+              }}
+            />
+            {selectedRowsState?.length > 0 && (
+              <FooterToolbar
+              // extra={
+              //   <div>
+              //     已选择{' '}
+              //     <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
+              //     项&nbsp;&nbsp;
+              //   </div>
+              // }
               >
-                <FormattedMessage id={'layout.common.batch'} />{' '}
-                <FormattedMessage id={'layout.common.delete'} />
-              </Button>
-              <Button type="primary">
-                <FormattedMessage id={'layout.common.batch'} />{' '}
-                <FormattedMessage id={'layout.common.audit'} />
-              </Button>
-            </FooterToolbar>
-          )}
+                <Button
+                  onClick={async () => {
+                    await handleRemove(selectedRowsState);
+                    setSelectedRows([]);
+                    actionRef.current?.reloadAndRest?.();
+                  }}
+                >
+                  <FormattedMessage id={'layout.common.batch'} />{' '}
+                  <FormattedMessage id={'layout.common.delete'} />
+                </Button>
+                <Button type="primary">
+                  <FormattedMessage id={'layout.common.batch'} />{' '}
+                  <FormattedMessage id={'layout.common.audit'} />
+                </Button>
+              </FooterToolbar>
+            )}
+          </ProCard>
         </ProCard>
-      </ProCard>
-    </PageContainer>
+      </PageContainer>
+    </>
   );
 };
 

@@ -67,6 +67,7 @@ export default {
       resetPasswordSuccess: 'Password reset successful',
       resetPasswordFailed: 'Password reset failed',
       resetPasswordConfirm: 'Confirm password reset',
+      success: 'Success',
     },
     organization: {
       info: 'Information',
@@ -75,7 +76,7 @@ export default {
         title: 'Business Unit',
         info: 'Business Unit Information',
         createRoot: 'Create Business Unit Headquarters',
-        orgType: {
+        type: {
           title: 'Business Unit Type',
           tooltip: 'Only sub-departments can be added under department types',
           headquarter: 'Headquarters',
@@ -85,7 +86,7 @@ export default {
         parent: 'Parent Business Unit',
         code: 'Business Unit Code',
         name: 'Business Unit Name',
-        shortName: 'Business Unit Abbreviation',
+        abbreviation: 'Business Unit Abbreviation',
         tel: 'Phone Number',
         manager: 'Manager',
         phone: 'Manager Phone Number',

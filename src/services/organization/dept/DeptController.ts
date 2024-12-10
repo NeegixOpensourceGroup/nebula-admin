@@ -4,7 +4,7 @@ import { request } from '@umijs/max';
 
 /** 此处后端没有提供注释 GET /api/v1/queryUserList */
 export async function queryDeptList(
-  bizUnitId: number|string,
+  bizUnitId: number | string,
   options?: { [key: string]: any },
 ) {
   return request<NEBULA_API.Result>(`/api/v1/dept/bizUnit/${bizUnitId}`, {
@@ -14,7 +14,7 @@ export async function queryDeptList(
 }
 
 export async function queryDeptById(
-  id: number|string,
+  id: number | string,
   options?: { [key: string]: any },
 ) {
   return request<NEBULA_API.Result>(`/api/v1/dept/${id}`, {
@@ -24,7 +24,7 @@ export async function queryDeptById(
 }
 
 export async function createDept(
-  bizUnitId: number|string,
+  bizUnitId: number | string,
   body: NEBULA_API.Dept,
   options?: { [key: string]: any },
 ) {
@@ -38,28 +38,29 @@ export async function createDept(
   });
 }
 
-
 export async function updateDept(
-  id: number|string,
+  id: number | string,
+  bizUnitId: number | string,
   body: NEBULA_API.Dept,
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/dept/${id}`, {
+  return request<NEBULA_API.Result>(`/api/v1/dept/${id}/bizUnit/${bizUnitId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
     data: body,
-    ...(options ||{}),
-  })
+    ...(options || {}),
+  });
 }
 
 export async function deleteDept(
-  id: number|string,
+  ids: Array<number | string>,
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/dept/${id}`, {
+  return request<NEBULA_API.Result>(`/api/v1/dept`, {
     method: 'DELETE',
+    data: ids,
     ...(options || {}),
   });
 }

@@ -1,7 +1,7 @@
 let bizUnits = [
-  { id: 1, name: '赚钱集团总部', code: '10', orgType: 1, pid: 0 },
-  { id: 2, name: '赚钱集团-北京分公司', code: '1001', orgType: 2, pid: 1 },
-  { id: 3, name: '赚钱集团-上海分公司', code: '', orgType: 2, pid: 1 },
+  { id: 1, name: '赚钱集团总部', code: '10', type: 1, pid: 0 },
+  { id: 2, name: '赚钱集团-北京分公司', code: '1001', type: 2, pid: 1 },
+  { id: 3, name: '赚钱集团-上海分公司', code: '', type: 2, pid: 1 },
 ];
 function deleteBizUnitAndChildren(bizUnits: any[], id: any) {
   // 首先找到要删除的节点
@@ -62,7 +62,7 @@ export default {
       message: '更新成功',
     });
   },
-  'DELETE /api/v1/bizUnit/:id': (req: any, res: any) => {
+  'DELETE /api/v1/bizUnit': (req: any, res: any) => {
     const id = parseInt(req.params.id);
     deleteBizUnitAndChildren(bizUnits, id);
     res.json({

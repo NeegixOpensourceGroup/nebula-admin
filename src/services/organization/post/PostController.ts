@@ -6,11 +6,10 @@ export async function queryPostList(
   params: any,
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>('/api/v1/post', {
+  const { current, pageSize, ...rest } = params;
+  return request<NEBULA_API.Result>(`/api/v1/post/${current}/${pageSize}`, {
     method: 'GET',
-    params: {
-      ...params,
-    },
+    params: rest,
     ...(options || {}),
   });
 }
@@ -52,11 +51,12 @@ export async function updatePost(
 }
 
 export async function deletePost(
-  id: string | number,
+  ids: Array<any>,
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/post/${id}`, {
+  return request<NEBULA_API.Result>(`/api/v1/post`, {
     method: 'DELETE',
+    data: ids,
     ...(options || {}),
   });
 }

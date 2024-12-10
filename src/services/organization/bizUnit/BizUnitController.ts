@@ -3,9 +3,7 @@
 import { request } from '@umijs/max';
 
 /** 此处后端没有提供注释 GET /api/v1/queryUserList */
-export async function queryBizUnitList(
-  options?: { [key: string]: any },
-) {
+export async function queryBizUnitList(options?: { [key: string]: any }) {
   return request<NEBULA_API.Result>('/api/v1/bizUnit', {
     method: 'GET',
     ...(options || {}),
@@ -13,7 +11,7 @@ export async function queryBizUnitList(
 }
 
 export async function queryBizUnitById(
-  id: number|string,
+  id: number | string,
   options?: { [key: string]: any },
 ) {
   return request<NEBULA_API.Result>(`/api/v1/bizUnit/${id}`, {
@@ -36,9 +34,8 @@ export async function createBizUnit(
   });
 }
 
-
 export async function updateBizUnit(
-  id: number|string,
+  id: number | string,
   body: NEBULA_API.BizUnit,
   options?: { [key: string]: any },
 ) {
@@ -48,16 +45,17 @@ export async function updateBizUnit(
       'Content-Type': 'application/json',
     },
     data: body,
-    ...(options ||{}),
-  })
+    ...(options || {}),
+  });
 }
 
 export async function deleteBizUnit(
-  id: number|string,
+  ids: Array<number | string>,
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/bizUnit/${id}`, {
+  return request<NEBULA_API.Result>(`/api/v1/bizUnit`, {
     method: 'DELETE',
+    data: ids,
     ...(options || {}),
   });
 }
