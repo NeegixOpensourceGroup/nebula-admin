@@ -7,11 +7,15 @@ export async function queryPsnList(
   params: any,
   options?: { [key: string]: any },
 ) {
-  return request<API.Result_PageInfo_UserInfo__>('/api/v1/psn', {
+  const { current, pageSize, pkBizUnit, pkDept, ...rest } = params;
+  let url = `/api/v1/psn/${current}/${pageSize}/${pkBizUnit}`;
+  if (pkDept) {
+    url = `/api/v1/psn/${current}/${pageSize}/${pkBizUnit}/${pkDept}`;
+  }
+
+  return request<API.Result_PageInfo_UserInfo__>(url, {
     method: 'GET',
-    params: {
-      ...params,
-    },
+    params: rest,
     ...(options || {}),
   });
 }
@@ -33,7 +37,7 @@ export async function addPsn(
 
 /** 此处后端没有提供注释 GET /api/v1/psn/${param0} */
 export async function getPsnDetail(
-  userId?: string|number,
+  userId?: string | number,
   options?: { [key: string]: any },
 ) {
   return request<NEBULA_API.Result>(`/api/v1/psn/${userId}`, {
@@ -44,7 +48,7 @@ export async function getPsnDetail(
 
 /** 此处后端没有提供注释 PUT /api/v1/psn/${param0} */
 export async function updatePsn(
-  userId?: string|number,
+  userId?: string | number,
   body?: API.PsnInfoVO,
   options?: { [key: string]: any },
 ) {
@@ -60,11 +64,12 @@ export async function updatePsn(
 
 /** 此处后端没有提供注释 DELETE /api/v1/psn/${param0} */
 export async function deletePsn(
-  userId?: string|number,
+  ids?: Array<any>,
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/psn/${userId}`, {
+  return request<NEBULA_API.Result>(`/api/v1/psn`, {
     method: 'DELETE',
+    data: ids,
     ...(options || {}),
   });
 }

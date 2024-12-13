@@ -68,7 +68,7 @@ export default defineConfig({
           title: 'menu.organization.psn',
           path: '/organization/psn',
           component: './organization/Psn',
-          access: 'organization:psn:list',
+          // access: 'organization:psn:list',
           wrappers: ['@/wrappers/auth'],
         },
         {

@@ -153,7 +153,7 @@ export async function queryDictItemByDictCode(
   code: string,
   options?: { [key: string]: any },
 ) {
-  return request<NEBULA_API.Result>(`/api/v1/dictItem/dictCode/${code}`, {
+  return request<NEBULA_API.Result>(`/api/v1/dictItem/dictGroupCode/${code}`, {
     method: 'GET',
     ...(options || {}),
   });

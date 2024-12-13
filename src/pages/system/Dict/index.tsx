@@ -225,7 +225,12 @@ const DictList: React.FC = () => {
       render: (text, record, index) => (index + 1).toString(),
     },
     {
-      title: intl.formatMessage({ id: 'layout.system.dictionary.group' }),
+      title: intl.formatMessage({ id: 'layout.system.dictionary.groupCode' }),
+      dataIndex: 'code',
+      key: 'code',
+    },
+    {
+      title: intl.formatMessage({ id: 'layout.system.dictionary.groupName' }),
       dataIndex: 'name',
       key: 'name',
     },
@@ -334,7 +339,7 @@ const DictList: React.FC = () => {
       <ProCard split="vertical">
         <ProCard
           title={<FormattedMessage id="layout.system.dictionary.title" />}
-          colSpan="25%"
+          colSpan="30%"
         >
           <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
             <Space size="middle">
@@ -454,6 +459,19 @@ const DictList: React.FC = () => {
           </Form>
         )}
       >
+        <Form.Item<DictGroupType>
+          label={<FormattedMessage id="layout.system.dictionary.groupCode" />}
+          name="code"
+          rules={[{ required: true }]}
+        >
+          <Input
+            placeholder={`${intl.formatMessage({
+              id: 'layout.common.placeholderInput',
+            })} ${intl.formatMessage({
+              id: 'layout.system.dictionary.groupCode',
+            })}`}
+          />
+        </Form.Item>
         <Form.Item<DictGroupType>
           label={<FormattedMessage id="layout.system.dictionary.groupName" />}
           name="name"

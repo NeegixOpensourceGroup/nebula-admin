@@ -11,6 +11,7 @@ interface DictItemDataType {
 }
 
 interface DictGroupType {
+  code: string;
   name: string;
 }
 

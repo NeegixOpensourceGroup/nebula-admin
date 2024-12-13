@@ -155,7 +155,8 @@ export default {
       dictionary: {
         title: '字典',
         group: '字典組',
-        groupName: '字典組名稱',
+        groupCode: '代碼',
+        groupName: '名稱',
         item: '字典項',
         code: '字典項代碼',
         name: '字典項名稱',

@@ -25,10 +25,10 @@ const { queryDeptList } = deptServices.DeptController;
 
 type DataSourceType = {
   id: React.Key;
-  bizUnitPk?: string | number;
+  pkBizUnit?: string | number;
   code?: string;
-  kind?: string;
-  dept?: string;
+  type?: string;
+  pkDept?: number;
   major: boolean;
   start?: Date;
   end?: Date;
@@ -37,20 +37,20 @@ type DataSourceType = {
 };
 
 interface CreateFormProps {
-  bizUnitId?: number | string;
+  pkBizUnit?: number | string;
   onSubmit: (values: any) => Promise<boolean>;
 }
 
-const CreateForm: React.FC<CreateFormProps> = ({ bizUnitId, onSubmit }) => {
+const CreateForm: React.FC<CreateFormProps> = ({ pkBizUnit, onSubmit }) => {
   const intl = useIntl();
   const [form] = ProForm.useForm<any>();
   const [defaultData] = useState<DataSourceType[]>([
     {
       id: 2,
-      bizUnitPk: bizUnitId,
+      pkBizUnit: pkBizUnit,
       code: '',
-      kind: '',
-      dept: '',
+      type: '',
+      pkDept: undefined,
       major: false,
       duty: '',
       position: '',
@@ -80,9 +80,9 @@ const CreateForm: React.FC<CreateFormProps> = ({ bizUnitId, onSubmit }) => {
       title: intl.formatMessage({
         id: 'layout.organization.psn.workInfo.bizUnit',
       }),
-      dataIndex: 'bizUnitPk',
+      dataIndex: 'pkBizUnit',
       valueType: 'treeSelect',
-      initialValue: bizUnitId,
+      initialValue: pkBizUnit,
       fieldProps: (_, { rowIndex }) => {
         return {
           treeData: bizUnits,
@@ -91,7 +91,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ bizUnitId, onSubmit }) => {
           treeNodeFilterProp: 'title',
           onSelect: () => {
             editableFormRef.current?.setRowData?.(rowIndex, {
-              dept: undefined,
+              pkDept: undefined,
             });
           },
         };
@@ -109,23 +109,23 @@ const CreateForm: React.FC<CreateFormProps> = ({ bizUnitId, onSubmit }) => {
       title: intl.formatMessage({
         id: 'layout.organization.psn.workInfo.kind',
       }),
-      dataIndex: 'kind',
+      dataIndex: 'type',
       width: 100,
     },
     {
       title: intl.formatMessage({
         id: 'layout.organization.psn.workInfo.dept',
       }),
-      dataIndex: 'dept',
+      dataIndex: 'pkDept',
       valueType: 'treeSelect',
       width: 150,
       fieldProps: {
         showSearch: true,
         treeNodeFilterProp: 'title',
       },
-      dependencies: ['bizUnitPk'],
-      request: async ({ bizUnitPk }) => {
-        const res = await queryDeptList(bizUnitPk);
+      dependencies: ['pkBizUnit'],
+      request: async ({ pkBizUnit }) => {
+        const res = await queryDeptList(pkBizUnit);
         if (res.code === 200) {
           const treeData = buildTreeData(res.data, {
             idKey: 'id',
@@ -196,8 +196,8 @@ const CreateForm: React.FC<CreateFormProps> = ({ bizUnitId, onSubmit }) => {
           type="primary"
           onClick={() => {
             form.setFieldsValue({
-              bizUnitPk: bizUnitId,
-              dataSource: [{ ...defaultData[0], bizUnitPk: bizUnitId }],
+              pkBizUnit: pkBizUnit,
+              psnWorkInfos: [{ ...defaultData[0], pkBizUnit: pkBizUnit }],
             });
           }}
         >
@@ -211,12 +211,13 @@ const CreateForm: React.FC<CreateFormProps> = ({ bizUnitId, onSubmit }) => {
       }}
       submitTimeout={2000}
       onFinish={async (values) => {
+        console.log(values);
         return await onSubmit(values);
       }}
     >
       <ProForm.Group>
         <ProFormTreeSelect
-          name="bizUnitPk"
+          name="pkBizUnit"
           width="sm"
           label={<FormattedMessage id="layout.organization.bizUnit.title" />}
           disabled
@@ -343,7 +344,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ bizUnitId, onSubmit }) => {
         label={intl.formatMessage({
           id: 'layout.organization.psn.workInfo.title',
         })}
-        name="dataSource"
+        name="psnWorkInfos"
         trigger="onValuesChange"
       >
         <EditableProTable<DataSourceType>
@@ -357,10 +358,10 @@ const CreateForm: React.FC<CreateFormProps> = ({ bizUnitId, onSubmit }) => {
             position: 'top',
             record: () => ({
               id: Date.now(),
-              bizUnitPk: bizUnitId,
+              pkBizUnit: pkBizUnit,
               code: '',
-              kind: '',
-              dept: '',
+              type: '',
+              pkDept: undefined,
               major: false,
               duty: '',
               position: '',

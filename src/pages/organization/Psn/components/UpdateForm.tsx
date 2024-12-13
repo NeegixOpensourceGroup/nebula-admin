@@ -26,10 +26,10 @@ const { getPsnDetail } = psnServices.PsnController;
 
 type DataSourceType = {
   id: React.Key;
-  bizUnitPk?: string | number;
+  pkBizUnit?: string | number;
   code?: string;
-  kind?: string;
-  dept?: string;
+  type?: string;
+  pkDept?: number;
   major: boolean;
   start?: Date;
   end?: Date;
@@ -39,23 +39,24 @@ type DataSourceType = {
 
 interface UpdateFormProps {
   id?: number | string;
-  bizUnitId?: number | string;
+  pkBizUnit?: number | string;
   onSubmit: (values: any) => Promise<boolean>;
 }
-const UpdateForm: React.FC<UpdateFormProps> = ({ id, bizUnitId, onSubmit }) => {
+const UpdateForm: React.FC<UpdateFormProps> = ({ id, pkBizUnit, onSubmit }) => {
   const intl = useIntl();
   const [form] = Form.useForm<any>();
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>();
   const [bizUnits, setBizUnits] = useState<any[]>([]);
   const editableFormRef = useRef<EditableFormInstance>();
+  console.log(pkBizUnit);
   const columns: ProColumns<DataSourceType>[] = [
     {
       title: intl.formatMessage({
         id: 'layout.organization.psn.workInfo.bizUnit',
       }),
-      dataIndex: 'bizUnitPk',
+      dataIndex: 'pkBizUnit',
       valueType: 'treeSelect',
-      initialValue: bizUnitId,
+      initialValue: pkBizUnit,
       fieldProps: (_, { rowIndex }) => {
         return {
           treeData: bizUnits,
@@ -64,7 +65,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, bizUnitId, onSubmit }) => {
           treeNodeFilterProp: 'title',
           onSelect: () => {
             editableFormRef.current?.setRowData?.(rowIndex, {
-              dept: undefined,
+              pkDept: undefined,
             });
           },
         };
@@ -82,23 +83,23 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, bizUnitId, onSubmit }) => {
       title: intl.formatMessage({
         id: 'layout.organization.psn.workInfo.kind',
       }),
-      dataIndex: 'kind',
+      dataIndex: 'type',
       width: 100,
     },
     {
       title: intl.formatMessage({
         id: 'layout.organization.psn.workInfo.dept',
       }),
-      dataIndex: 'dept',
+      dataIndex: 'pkDept',
       valueType: 'treeSelect',
       width: 150,
       fieldProps: {
         showSearch: true,
         treeNodeFilterProp: 'title',
       },
-      dependencies: ['bizUnitPk'],
-      request: async ({ bizUnitPk }) => {
-        const res = await queryDeptList(bizUnitPk);
+      dependencies: ['pkBizUnit'],
+      request: async ({ pkBizUnit }) => {
+        const res = await queryDeptList(pkBizUnit);
         if (res.code === 200) {
           const treeData = buildTreeData(res.data, {
             idKey: 'id',
@@ -170,7 +171,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, bizUnitId, onSubmit }) => {
     const res = await getPsnDetail(id);
     if (res.code === 200) {
       form.setFieldsValue(res.data);
-      setEditableRowKeys(res.data.dataSource.map((item: any) => item.id));
+      setEditableRowKeys(res.data.psnWorkInfos.map((item: any) => item.id));
     }
   };
 
@@ -200,7 +201,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, bizUnitId, onSubmit }) => {
     >
       <ProForm.Group>
         <ProFormTreeSelect
-          name="bizUnitPk"
+          name="pkBizUnit"
           width="sm"
           label={<FormattedMessage id="layout.organization.bizUnit.title" />}
           fieldProps={{
@@ -327,7 +328,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, bizUnitId, onSubmit }) => {
         label={intl.formatMessage({
           id: 'layout.organization.psn.workInfo.title',
         })}
-        name="dataSource"
+        name="psnWorkInfos"
         trigger="onValuesChange"
       >
         <EditableProTable<DataSourceType>
@@ -341,10 +342,10 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, bizUnitId, onSubmit }) => {
             position: 'top',
             record: () => ({
               id: Date.now(),
-              bizUnitPk: bizUnitId,
+              pkBizUnit: pkBizUnit,
               code: '',
-              kind: '',
-              dept: '',
+              type: '',
+              pkDept: undefined,
               major: false,
               duty: '',
               position: '',

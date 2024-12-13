@@ -17,7 +17,7 @@ declare namespace API {
     current?: number;
     pageSize?: number;
     total?: number;
-    list?: Array<PsnInfo>;
+    result?: Array<PsnInfo>;
   }
 
   interface Result {
@@ -45,7 +45,7 @@ declare namespace API {
   }
 
   interface PsnInfo {
-    id?: string|number;
+    id?: string | number;
     name?: string;
     /** nick */
     nickname?: string;
@@ -61,7 +61,7 @@ declare namespace API {
     workTel?: string;
     phone?: string;
     status?: number;
-    bizUnitPk?: number;
+    pkBizUnit?: number;
   }
 
   interface PsnInfoVO {

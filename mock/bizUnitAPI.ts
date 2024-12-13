@@ -71,7 +71,7 @@ export default {
     });
   },
   'GET /api/v1/company': (req: any, res: any) => {
-    const companies = bizUnits.filter((item) => [1, 2].includes(item.orgType));
+    const companies = bizUnits.filter((item) => [1, 2].includes(item.type));
     res.json({
       data: companies,
       code: 200,

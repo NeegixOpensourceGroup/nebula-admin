@@ -157,7 +157,8 @@ export default {
       dictionary: {
         title: 'Dictionary',
         group: 'Group',
-        groupName: 'Group Name',
+        groupCode: 'Code',
+        groupName: 'Name',
         item: 'Item',
         code: 'Dictionary Code',
         name: ' Name',
