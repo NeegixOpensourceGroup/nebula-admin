@@ -160,13 +160,13 @@ export default defineConfig({
         },
       ],
     },
-    {
-      icon: 'smile',
-      title: 'menu.permission',
-      path: '/access',
-      component: './Access',
-      wrappers: ['@/wrappers/auth'],
-    },
+    // {
+    //   icon: 'smile',
+    //   title: 'menu.permission',
+    //   path: '/access',
+    //   component: './Access',
+    //   wrappers: ['@/wrappers/auth'],
+    // },
     {
       path: '/*',
       component: '@/pages/404',

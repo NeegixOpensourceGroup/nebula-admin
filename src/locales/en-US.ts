@@ -228,9 +228,14 @@ export default {
       },
       exception: {
         title: 'Exception Log',
-        level: 'Log Level',
-        info: 'Log Information',
-        loginTime: 'Log Time',
+        user: 'User',
+        module: 'Module',
+        type: 'Type',
+        description: 'Description',
+        uri: 'URI',
+        fullName: 'Method',
+        exception: 'Exception',
+        exceptionTime: 'Exception Time',
         message: {
           sure: 'Are you sure to delete this exception log?',
         },

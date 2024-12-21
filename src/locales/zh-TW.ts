@@ -222,9 +222,14 @@ export default {
       },
       exception: {
         title: '異常日誌',
-        level: '日誌級別',
-        info: '日誌信息',
-        loginTime: '日誌時間',
+        user: '用戶',
+        module: '模塊',
+        type: '類型',
+        description: '描述',
+        uri: 'URI',
+        fullName: '全名',
+        exception: '異常',
+        exceptionTime: '異常時間',
         message: {
           sure: '確認刪除當前異常日誌?',
         },

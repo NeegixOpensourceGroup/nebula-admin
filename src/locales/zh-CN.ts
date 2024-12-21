@@ -223,9 +223,14 @@ export default {
       },
       exception: {
         title: '异常日志',
-        level: '日志级别',
-        info: '日志信息',
-        loginTime: '日志时间',
+        user: '操作人',
+        module: '模块',
+        type: '类型',
+        description: '描述',
+        uri: '请求URI',
+        fullName: '方法全限定名',
+        exception: '异常信息',
+        exceptionTime: '异常时间',
         message: {
           sure: '确认删除当前异常日志?',
         },

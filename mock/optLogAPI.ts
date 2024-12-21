@@ -42,7 +42,7 @@ let optLogs = [
 ];
 
 export default {
-  'DELETE /api/v1/optLog/:id': (req: any, res: any) => {
+  'DELETE /api/v1/operationLog/:id': (req: any, res: any) => {
     const { id } = req.params;
     optLogs = optLogs.filter((item: any) => item.id !== id);
     return res.send({
@@ -51,13 +51,15 @@ export default {
       data: null,
     });
   },
-  'GET /api/v1/optLog': (req: any, res: any) => {
+  'GET /api/v1/operationLog': (req: any, res: any) => {
     const { current = 1, pageSize = 10 } = req.query;
     return res.send({
       code: 200,
       message: '查询成功',
       data: {
-        list: [...optLogs].reverse().splice((current - 1) * pageSize, pageSize),
+        result: [...optLogs]
+          .reverse()
+          .splice((current - 1) * pageSize, pageSize),
         current,
         pageSize,
         total: optLogs.length,

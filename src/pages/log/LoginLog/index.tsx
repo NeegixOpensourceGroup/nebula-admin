@@ -33,25 +33,41 @@ export default () => {
       dataIndex: 'ip',
     },
     {
-      title: <FormattedMessage id={'layout.log.login.loginLocation'} />,
-      dataIndex: 'loginLocation',
+      title: '地区',
+      dataIndex: 'area',
+    },
+    {
+      title: '是否成功',
+      dataIndex: 'isSuccess',
+    },
+    {
+      title: '描述',
+      dataIndex: 'description',
     },
     {
       title: <FormattedMessage id={'layout.log.login.loginTime'} />,
-      dataIndex: 'loginTime',
+      dataIndex: 'createTime',
       valueType: 'date',
       hideInSearch: true,
     },
     {
       title: <FormattedMessage id={'layout.log.login.loginTime'} />,
-      dataIndex: 'loginTime',
+      dataIndex: 'createTime',
       valueType: 'dateRange',
       hideInTable: true,
       search: {
         transform: (value) => {
+          let endDate = value[1] ? new Date(value[1]) : null;
+          if (endDate) {
+            endDate.setDate(endDate.getDate() + 1); // 增加一天
+          }
+          const endCreateTime = endDate ? endDate.toISOString() : undefined;
+          const startCreateTime = value[0]
+            ? new Date(value[0]).toISOString()
+            : undefined;
           return {
-            startTime: value[0],
-            endTime: value[1],
+            startCreateTime,
+            endCreateTime,
           };
         },
       },
@@ -113,7 +129,11 @@ export default () => {
         cardBordered
         request={async (params) => {
           const res = await queryLoginLogList(params);
-          return { data: res.data.list, total: res.data.total, success: true };
+          return {
+            data: res.data.result,
+            total: res.data.total,
+            success: true,
+          };
         }}
         editable={{
           type: 'multiple',
@@ -143,7 +163,7 @@ export default () => {
             if (type === 'get') {
               return {
                 ...values,
-                created_at: [values.startTime, values.endTime],
+                createTime: [values.startTime, values.endTime],
               };
             }
             return values;

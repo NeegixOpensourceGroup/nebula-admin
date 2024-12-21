@@ -14,8 +14,11 @@ const { queryExceptionLogList, deleteExceptionLog } =
 type ExceptionLogItem = {
   id: number;
   ip: string;
-  level: number;
-  message: string;
+  area: string;
+  type: number;
+  client: string;
+  isSuccess: boolean;
+  description: string;
   createTime: string;
 };
 
@@ -26,26 +29,42 @@ export default () => {
 
   const columns: ProColumns<ExceptionLogItem>[] = [
     {
-      title: 'IP',
-      dataIndex: 'ip',
+      title: <FormattedMessage id="layout.log.exception.user" />,
+      dataIndex: 'user',
     },
     {
-      title: <FormattedMessage id="layout.log.exception.level" />,
-      dataIndex: 'level',
+      title: <FormattedMessage id="layout.log.exception.module" />,
+      dataIndex: 'module',
     },
     {
-      title: <FormattedMessage id="layout.log.exception.info" />,
-      dataIndex: 'info',
+      title: <FormattedMessage id="layout.log.exception.type" />,
+      dataIndex: 'type',
     },
     {
-      title: <FormattedMessage id="layout.log.exception.loginTime" />,
-      dataIndex: 'loginTime',
+      title: <FormattedMessage id="layout.log.exception.description" />,
+      dataIndex: 'description',
+    },
+    {
+      title: <FormattedMessage id="layout.log.exception.uri" />,
+      dataIndex: 'uri',
+    },
+    {
+      title: <FormattedMessage id="layout.log.exception.fullName" />,
+      dataIndex: 'fullName',
+    },
+    {
+      title: <FormattedMessage id="layout.log.exception.exception" />,
+      dataIndex: 'exception',
+    },
+    {
+      title: <FormattedMessage id="layout.log.exception.exceptionTime" />,
+      dataIndex: 'createTime',
       valueType: 'date',
       hideInSearch: true,
     },
     {
-      title: <FormattedMessage id="layout.log.exception.loginTime" />,
-      dataIndex: 'loginTime',
+      title: <FormattedMessage id="layout.log.exception.exceptionTime" />,
+      dataIndex: 'createTime',
       valueType: 'dateRange',
       hideInTable: true,
       search: {
@@ -114,7 +133,11 @@ export default () => {
         cardBordered
         request={async (params) => {
           const res = await queryExceptionLogList(params);
-          return { data: res.data.list, total: res.data.total, success: true };
+          return {
+            data: res.data.result,
+            total: res.data.total,
+            success: true,
+          };
         }}
         editable={{
           type: 'multiple',
