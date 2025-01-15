@@ -1,4 +1,5 @@
 import services from '@/services/log/loginLog';
+import dictServices from '@/services/system/dict';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -10,6 +11,7 @@ import { Button, message } from 'antd';
 import { useRef, useState } from 'react';
 
 const { queryLoginLogList, deleteLoginLog } = services.LoginLogController;
+const { queryDictItemByDictCode } = dictServices.DictController;
 type LoginLogItem = {
   id: number;
   user: string;
@@ -33,16 +35,26 @@ export default () => {
       dataIndex: 'ip',
     },
     {
+      title: '平台',
+      dataIndex: 'type',
+      valueType: 'select',
+      request: async () => {
+        const res = await queryDictItemByDictCode('PLATFORM_TYPE');
+        return res.data.map((item: any) => {
+          return {
+            value: item.value,
+            label: item.name,
+          };
+        });
+      },
+    },
+    {
+      title: '客户端',
+      dataIndex: 'client',
+    },
+    {
       title: '地区',
       dataIndex: 'area',
-    },
-    {
-      title: '是否成功',
-      dataIndex: 'isSuccess',
-    },
-    {
-      title: '描述',
-      dataIndex: 'description',
     },
     {
       title: <FormattedMessage id={'layout.log.login.loginTime'} />,
