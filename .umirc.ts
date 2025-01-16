@@ -47,6 +47,7 @@ export default defineConfig({
       title: 'menu.organization.title',
       path: '/organization',
       icon: 'ApartmentOutlined',
+      access: 'organization',
       routes: [
         {
           path: '/organization',
@@ -56,25 +57,28 @@ export default defineConfig({
           title: 'menu.organization.bizUnit',
           path: '/organization/biz-unit',
           component: './organization/BizUnit',
+          access: 'organization:bizUnit',
           wrappers: ['@/wrappers/auth'],
         },
         {
           title: 'menu.organization.dept',
           path: '/organization/dept',
           component: './organization/Dept',
+          access: 'organization:dept',
           wrappers: ['@/wrappers/auth'],
         },
         {
           title: 'menu.organization.psn',
           path: '/organization/psn',
           component: './organization/Psn',
-          // access: 'organization:psn:list',
+          access: 'organization:psn',
           wrappers: ['@/wrappers/auth'],
         },
         {
           title: 'menu.organization.position',
           path: '/organization/post',
           component: './organization/Post',
+          access: 'organization:post',
           wrappers: ['@/wrappers/auth'],
         },
       ],
@@ -83,6 +87,7 @@ export default defineConfig({
       title: 'menu.system.title',
       path: '/system',
       icon: 'BlockOutlined',
+      access: 'system',
       routes: [
         {
           path: '/system',
@@ -92,18 +97,21 @@ export default defineConfig({
           title: 'menu.system.dictionary',
           path: '/system/dict',
           component: './system/Dict',
+          access: 'system:dict',
           wrappers: ['@/wrappers/auth'],
         },
         {
           title: 'menu.system.role',
           path: '/system/role',
           component: './system/Role',
+          access: 'system:role',
           wrappers: ['@/wrappers/auth'],
         },
         {
           title: 'menu.system.user',
           path: '/system/user',
           component: './system/User',
+          access: 'system:user',
           wrappers: ['@/wrappers/auth'],
         },
       ],
@@ -112,6 +120,7 @@ export default defineConfig({
       title: 'menu.log.title',
       path: '/log',
       icon: 'ContainerOutlined',
+      access: 'log',
       routes: [
         {
           path: '/log',
@@ -121,18 +130,21 @@ export default defineConfig({
           title: 'menu.log.operate',
           path: '/log/optLog',
           component: './log/OptLog',
+          access: 'log:operationLog',
           wrappers: ['@/wrappers/auth'],
         },
         {
           title: 'menu.log.login',
           path: '/log/loginLog',
           component: './log/LoginLog',
+          access: 'log:loginLog',
           wrappers: ['@/wrappers/auth'],
         },
         {
           title: 'menu.log.exception',
           path: '/log/exceptionLog',
           component: './log/ExceptionLog',
+          access: 'log:exceptionLog',
           wrappers: ['@/wrappers/auth'],
         },
       ],
@@ -141,6 +153,7 @@ export default defineConfig({
       title: 'menu.development.title',
       path: '/development',
       icon: 'CodeOutlined',
+      access: 'development',
       routes: [
         {
           path: '/development',
@@ -150,12 +163,14 @@ export default defineConfig({
           title: 'menu.development.menu',
           path: '/development/menu',
           component: './development/Menu',
+          access: 'development:menu',
           wrappers: ['@/wrappers/auth'],
         },
         {
           title: 'menu.development.api',
           path: '/development/api',
           component: './development/Api',
+          access: 'development:api',
           wrappers: ['@/wrappers/auth'],
         },
       ],

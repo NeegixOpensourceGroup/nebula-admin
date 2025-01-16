@@ -181,6 +181,7 @@ export const request: RequestConfig = {
             duration: 1,
             onClose: () => {
               sessionStorage.removeItem('token');
+              sessionStorage.removeItem('name');
               history.push('/login');
             },
           });
