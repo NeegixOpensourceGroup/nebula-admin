@@ -1,4 +1,5 @@
 import services from '@/services/log/optLog';
+import dictServices from '@/services/system/dict';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -8,7 +9,7 @@ import {
 import { FormattedMessage } from '@umijs/max';
 import { Button, message } from 'antd';
 import { useRef, useState } from 'react';
-
+const { queryDictItemByDictCode } = dictServices.DictController;
 const { queryOptLogList, deleteOptLog } = services.OptLogController;
 type OptItem = {
   id: number;
@@ -36,6 +37,16 @@ export default () => {
     {
       title: <FormattedMessage id={'layout.log.operate.optType'} />,
       dataIndex: 'type',
+      valueType: 'select',
+      request: async () => {
+        const res = await queryDictItemByDictCode('OPERATION_TYPE');
+        return res.data.map((item: any) => {
+          return {
+            value: item.value,
+            label: item.name,
+          };
+        });
+      },
     },
     {
       title: <FormattedMessage id={'layout.log.operate.optDesc'} />,
