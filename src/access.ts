@@ -8,5 +8,5 @@ export default (initialState: any) => {
     acc[permission] = true; // 默认值为 true
     return acc;
   }, {} as Record<string, boolean>);
-  return access;
+  return access || {};
 };
