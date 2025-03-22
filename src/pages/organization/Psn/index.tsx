@@ -3,6 +3,7 @@ import deptServices from '@/services/organization/dept';
 import psnServices from '@/services/organization/psn';
 import dictServices from '@/services/system/dict';
 import { buildTreeData } from '@/utils/tools';
+import { DeleteTwoTone } from '@ant-design/icons';
 import {
   ActionType,
   FooterToolbar,
@@ -284,9 +285,9 @@ const PsnList: React.FC<unknown> = () => {
               record.id !== undefined ? handleSingleRemove(record.id) : null
             }
           >
-            <a>
-              <FormattedMessage id="layout.common.delete" />
-            </a>
+            <DeleteTwoTone
+              title={intl.formatMessage({ id: 'layout.common.delete' })}
+            />
           </Popconfirm>
         </>
       ),

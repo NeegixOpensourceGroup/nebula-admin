@@ -1,4 +1,5 @@
 import services from '@/services/system/role';
+import { DeleteTwoTone, EyeTwoTone } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -8,6 +9,7 @@ import {
 import { FormattedMessage } from '@umijs/max';
 import { Button, message, Popconfirm } from 'antd';
 import { useRef, useState } from 'react';
+import { useIntl } from 'umi';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
 
@@ -33,7 +35,7 @@ export default () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedRowsState, setSelectedRows] = useState<any[]>([]);
   const actionRef = useRef<ActionType>();
-
+  const intl = useIntl();
   const columns: ProColumns<GithubIssueItem>[] = [
     {
       title: <FormattedMessage id="layout.system.role.name" />,
@@ -79,14 +81,10 @@ export default () => {
       key: 'option',
       render: (text, record, _, action) => [
         <UpdateForm key={'updateForm'} roleId={record.id} actionRef={action} />,
-        <a
-          href={record.url}
-          target="_blank"
-          rel="noopener noreferrer"
+        <EyeTwoTone
           key="view"
-        >
-          <FormattedMessage id="layout.common.view" />
-        </a>,
+          title={intl.formatMessage({ id: 'layout.common.view' })}
+        />,
         <Popconfirm
           title={<FormattedMessage id="layout.common.warning" />}
           key="remove"
@@ -105,9 +103,9 @@ export default () => {
             }
           }}
         >
-          <a>
-            <FormattedMessage id="layout.common.delete" />
-          </a>
+          <DeleteTwoTone
+            title={intl.formatMessage({ id: 'layout.common.delete' })}
+          />
         </Popconfirm>,
       ],
     },

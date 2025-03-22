@@ -3,6 +3,7 @@ import deptServices from '@/services/organization/dept';
 import psnServices from '@/services/organization/psn';
 import dictServices from '@/services/system/dict';
 import { buildTreeData } from '@/utils/tools';
+import { EditTwoTone } from '@ant-design/icons';
 import {
   DrawerForm,
   EditableFormInstance,
@@ -186,9 +187,10 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id, pkBizUnit, onSubmit }) => {
       width={'90%'}
       form={form}
       trigger={
-        <a onClick={detailHandler}>
-          <FormattedMessage id="layout.common.edit" />
-        </a>
+        <EditTwoTone
+          title={intl.formatMessage({ id: 'layout.common.edit' })}
+          onClick={detailHandler}
+        />
       }
       autoFocusFirstInput
       drawerProps={{

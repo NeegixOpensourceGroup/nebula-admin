@@ -1,5 +1,6 @@
 import services from '@/services/log/optLog';
 import dictServices from '@/services/system/dict';
+import { EyeTwoTone } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -9,6 +10,7 @@ import {
 import { FormattedMessage } from '@umijs/max';
 import { Button, message } from 'antd';
 import { useRef, useState } from 'react';
+import { useIntl } from 'umi';
 const { queryDictItemByDictCode } = dictServices.DictController;
 const { queryOptLogList, deleteOptLog } = services.OptLogController;
 type OptItem = {
@@ -24,7 +26,7 @@ export default () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedRowsState, setSelectedRows] = useState<any[]>([]);
   const actionRef = useRef<ActionType>();
-
+  const intl = useIntl();
   const columns: ProColumns<OptItem>[] = [
     {
       title: <FormattedMessage id={'layout.log.operate.user'} />,
@@ -85,9 +87,10 @@ export default () => {
       valueType: 'option',
       key: 'option',
       render: () => [
-        <a target="_blank" rel="noopener noreferrer" key="view">
-          <FormattedMessage id={'layout.common.view'} />
-        </a>,
+        <EyeTwoTone
+          key="view"
+          title={intl.formatMessage({ id: 'layout.common.view' })}
+        />,
       ],
     },
   ];

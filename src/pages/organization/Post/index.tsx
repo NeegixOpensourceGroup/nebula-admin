@@ -2,6 +2,7 @@ import BizUnitSelectTree from '@/components/BizUnitSelectTree';
 import deptServices from '@/services/organization/dept';
 import postServices from '@/services/organization/post';
 import { buildTreeData } from '@/utils/tools';
+import { DeleteTwoTone, EyeTwoTone } from '@ant-design/icons';
 import {
   ActionType,
   FooterToolbar,
@@ -287,9 +288,10 @@ const PostList: React.FC<unknown> = () => {
           pkDept={checkedKey}
           actionRef={action}
         />,
-        <a target="_blank" rel="noopener noreferrer" key="view">
-          <FormattedMessage id={'layout.common.view'} />
-        </a>,
+        <EyeTwoTone
+          key="view"
+          title={intl.formatMessage({ id: 'layout.common.view' })}
+        />,
         <Popconfirm
           title={<FormattedMessage id="layout.common.warning" />}
           key="remove"
@@ -310,9 +312,9 @@ const PostList: React.FC<unknown> = () => {
             }
           }}
         >
-          <a>
-            <FormattedMessage id={'layout.common.delete'} />
-          </a>
+          <DeleteTwoTone
+            title={intl.formatMessage({ id: 'layout.common.delete' })}
+          />
         </Popconfirm>,
       ],
     },

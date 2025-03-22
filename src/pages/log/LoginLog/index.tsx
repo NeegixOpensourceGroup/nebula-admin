@@ -1,5 +1,6 @@
 import services from '@/services/log/loginLog';
 import dictServices from '@/services/system/dict';
+import { EyeTwoTone } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -9,6 +10,7 @@ import {
 import { FormattedMessage } from '@umijs/max';
 import { Button, message } from 'antd';
 import { useRef, useState } from 'react';
+import { useIntl } from 'umi';
 
 const { queryLoginLogList, deleteLoginLog } = services.LoginLogController;
 const { queryDictItemByDictCode } = dictServices.DictController;
@@ -24,6 +26,7 @@ export default () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedRowsState, setSelectedRows] = useState<any[]>([]);
   const actionRef = useRef<ActionType>();
+  const intl = useIntl();
 
   const columns: ProColumns<LoginLogItem>[] = [
     {
@@ -89,9 +92,10 @@ export default () => {
       valueType: 'option',
       key: 'option',
       render: () => [
-        <a target="_blank" rel="noopener noreferrer" key="view">
-          <FormattedMessage id={'layout.common.view'} />
-        </a>,
+        <EyeTwoTone
+          key="view"
+          title={intl.formatMessage({ id: 'layout.common.view' })}
+        />,
       ],
     },
   ];
