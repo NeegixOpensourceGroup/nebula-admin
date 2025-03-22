@@ -17,6 +17,13 @@ export async function queryRoleList(
   });
 }
 
+export async function queryAllRole(options?: { [key: string]: any }) {
+  return request<NEBULA_API.Result>(`/api/v1/role`, {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 export async function createRole(body: any, options?: { [key: string]: any }) {
   return request<NEBULA_API.Result>('/api/v1/role', {
     method: 'POST',

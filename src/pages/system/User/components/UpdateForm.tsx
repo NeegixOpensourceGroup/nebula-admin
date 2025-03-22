@@ -1,4 +1,5 @@
 import services from '@/services/system/user';
+import { EditTwoTone } from '@ant-design/icons';
 import {
   DrawerForm,
   ProCoreActionType,
@@ -57,9 +58,10 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ userId, actionRef }) => {
         width={'30%'}
         form={form}
         trigger={
-          <a onClick={roleDetailHanlder}>
-            <FormattedMessage id="layout.common.edit" />
-          </a>
+          <EditTwoTone
+            title={intl.formatMessage({ id: 'layout.common.edit' })}
+            onClick={roleDetailHanlder}
+          />
         }
         autoFocusFirstInput
         drawerProps={{

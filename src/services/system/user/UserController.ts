@@ -58,3 +58,21 @@ export async function deleteUser(
     ...(options || {}),
   });
 }
+
+export async function bindRole(body: any, options?: { [key: string]: any }) {
+  return request<NEBULA_API.Result>('/api/v1/user/bindRoles', {
+    method: 'POST',
+    data: body,
+    ...(options || {}),
+  });
+}
+
+export async function queryRolesByUser(
+  pkUser: number | string,
+  options?: { [key: string]: any },
+) {
+  return request<NEBULA_API.Result>(`/api/v1/user/${pkUser}/roles`, {
+    method: 'GET',
+    ...(options || {}),
+  });
+}

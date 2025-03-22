@@ -1,4 +1,5 @@
 import services from '@/services/system/user';
+import { DeleteTwoTone, EyeTwoTone, SettingTwoTone } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -8,10 +9,12 @@ import {
 import { FormattedMessage } from '@umijs/max';
 import { Button, message, Popconfirm } from 'antd';
 import { useRef, useState } from 'react';
+import { useIntl } from 'umi';
 import CreateForm from './components/CreateForm';
+import RoleSelectionModal from './components/RoleSelectionModal';
 import UpdateForm from './components/UpdateForm';
 
-const { queryUserList, deleteUser } = services.UserController;
+const { queryUserList, deleteUser, bindRole } = services.UserController;
 
 type UserItem = {
   url: string;
@@ -27,8 +30,37 @@ type UserItem = {
 
 export default () => {
   const [messageApi, contextHolder] = message.useMessage();
-  const [selectedRowsState, setSelectedRows] = useState<any[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<UserItem[]>([]);
   const actionRef = useRef<ActionType>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userIds, setUserIds] = useState<number[]>([]);
+
+  const intl = useIntl();
+  const showModal = (record?: UserItem) => {
+    if (record) {
+      setUserIds([record.id]);
+    } else {
+      setUserIds(selectedRowsState.map((item) => item.id));
+    }
+    setIsModalOpen(true);
+  };
+
+  const handleOk = async (userIds: number[], roleIds: string[]) => {
+    const res = await bindRole({ userIds, roleIds });
+    if (res.code === 200) {
+      messageApi.success('配置成功，即将刷新');
+      setIsModalOpen(false);
+      actionRef.current?.reload();
+      return true;
+    } else {
+      messageApi.error(res.message);
+      return false;
+    }
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   const columns: ProColumns<UserItem>[] = [
     {
@@ -85,14 +117,15 @@ export default () => {
       key: 'option',
       render: (text, record, _, action) => [
         <UpdateForm key={'updateForm'} userId={record.id} actionRef={action} />,
-        <a
-          href={record.url}
-          target="_blank"
-          rel="noopener noreferrer"
+        <EyeTwoTone
           key="view"
-        >
-          <FormattedMessage id="layout.common.view" />
-        </a>,
+          title={intl.formatMessage({ id: 'layout.common.view' })}
+        />,
+        <SettingTwoTone
+          key="setting"
+          title="角色配置"
+          onClick={() => showModal(record)}
+        />,
         <Popconfirm
           title={<FormattedMessage id="layout.common.warning" />}
           key="remove"
@@ -111,9 +144,9 @@ export default () => {
             }
           }}
         >
-          <a>
-            <FormattedMessage id="layout.common.delete" />
-          </a>
+          <DeleteTwoTone
+            title={intl.formatMessage({ id: 'layout.common.delete' })}
+          />
         </Popconfirm>,
       ],
     },
@@ -183,9 +216,6 @@ export default () => {
             defaultValue: {
               option: { fixed: 'right', disable: true },
             },
-            onChange(value) {
-              console.log('value: ', value);
-            },
           }}
           rowKey="id"
           search={{
@@ -215,6 +245,13 @@ export default () => {
           dateFormatter="string"
           toolBarRender={() => [
             <CreateForm key="createForm" actionRef={actionRef.current} />,
+            <Button
+              key="role"
+              disabled={selectedRowsState?.length === 0}
+              onClick={() => showModal()}
+            >
+              角色配置
+            </Button>,
           ]}
         />
         {selectedRowsState?.length > 0 && (
@@ -243,6 +280,12 @@ export default () => {
             </Button>
           </FooterToolbar>
         )}
+        <RoleSelectionModal
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          userIds={userIds}
+        />
       </PageContainer>
     </>
   );
