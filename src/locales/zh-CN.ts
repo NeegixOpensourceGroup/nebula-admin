@@ -51,6 +51,7 @@ export default {
   'layout.common.success': '操作成功',
   'layout.common.enabled': '启用',
   'layout.common.disabled': '禁用',
+  'layout.common.status': '状态',
   'layout.organization.info': '信息',
   'layout.organization.select': '请选择要新增的节点',
   'layout.organization.bizUnit.title': '业务单元',

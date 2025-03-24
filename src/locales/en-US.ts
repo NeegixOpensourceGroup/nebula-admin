@@ -52,6 +52,7 @@ export default {
   'layout.common.success': 'Operation successful',
   'layout.common.enabled': 'Enabled',
   'layout.common.disabled': 'Disabled',
+  'layout.common.status': 'Status',
   'layout.organization.info': 'Information',
   'layout.organization.select': 'Please select the node to add',
   'layout.organization.bizUnit.title': 'Business Unit',
