@@ -1,5 +1,5 @@
 import services from '@/services/system/dict';
-import { PlusOutlined } from '@ant-design/icons';
+import { DeleteTwoTone, EditTwoTone, PlusOutlined } from '@ant-design/icons';
 import {
   ActionType,
   PageContainer,
@@ -240,16 +240,15 @@ const DictList: React.FC = () => {
       width: 80,
       render: (_e, record) => (
         <Space size="middle">
-          <a
+          <EditTwoTone
+            title={intl.formatMessage({ id: 'layout.common.edit' })}
             onClick={(e) =>
               showDictGroupModal(
                 e as React.MouseEvent<HTMLAnchorElement>,
                 record,
               )
             }
-          >
-            <FormattedMessage id="layout.common.edit" />
-          </a>
+          />
           <Popconfirm
             title={
               <FormattedMessage id="layout.system.dictionary.message.group.sure" />
@@ -257,14 +256,13 @@ const DictList: React.FC = () => {
             onConfirm={confirmGroup}
             onCancel={cancel}
           >
-            <a
+            <DeleteTwoTone
+              title={intl.formatMessage({ id: 'layout.common.delete' })}
               onClick={(e) => {
                 e.stopPropagation();
                 setGroupData(record);
               }}
-            >
-              <FormattedMessage id="layout.common.delete" />
-            </a>
+            />
           </Popconfirm>
         </Space>
       ),
@@ -295,16 +293,15 @@ const DictList: React.FC = () => {
       hideInSearch: true,
       render: (_e, record) => (
         <Space size="middle">
-          <a
+          <EditTwoTone
+            title={intl.formatMessage({ id: 'layout.common.edit' })}
             onClick={(e) =>
               showDictItemModal(
                 e as React.MouseEvent<HTMLAnchorElement>,
                 record,
               )
             }
-          >
-            <FormattedMessage id="layout.common.edit" />
-          </a>
+          />
           <Popconfirm
             title={
               <FormattedMessage id="layout.system.dictionary.message.sure" />
@@ -312,14 +309,21 @@ const DictList: React.FC = () => {
             onConfirm={confirmItem}
             onCancel={cancel}
           >
-            <a
+            {/* <a
               onClick={(e) => {
                 e.stopPropagation();
                 setItemData(record);
               }}
             >
               <FormattedMessage id="layout.common.delete" />
-            </a>
+            </a> */}
+            <DeleteTwoTone
+              title={intl.formatMessage({ id: 'layout.common.delete' })}
+              onClick={(e) => {
+                e.stopPropagation();
+                setItemData(record);
+              }}
+            />
           </Popconfirm>
         </Space>
       ),
