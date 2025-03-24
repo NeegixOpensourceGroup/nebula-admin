@@ -105,32 +105,16 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ userId, actionRef }) => {
             label={intl.formatMessage({ id: 'layout.system.user.desc' })}
           />
           <ProFormText
-            rules={[
-              {
-                required: true,
-                type: 'email',
-              },
-            ]}
             width="md"
             name="email"
             label={intl.formatMessage({ id: 'layout.system.user.email' })}
           />
           <ProFormText
-            rules={[
-              {
-                required: true,
-              },
-            ]}
             width="md"
             name="mobilePhone"
             label={intl.formatMessage({ id: 'layout.system.user.phone' })}
           />
           <ProFormSwitch
-            rules={[
-              {
-                required: true,
-              },
-            ]}
             name="enabled"
             width="md"
             label={intl.formatMessage({ id: 'layout.system.user.enabled' })}
