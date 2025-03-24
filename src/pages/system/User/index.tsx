@@ -7,7 +7,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { FormattedMessage } from '@umijs/max';
-import { Button, message, Popconfirm } from 'antd';
+import { Badge, Button, message, Popconfirm } from 'antd';
 import { useRef, useState } from 'react';
 import { useIntl } from 'umi';
 import CreateForm from './components/CreateForm';
@@ -26,6 +26,7 @@ type UserItem = {
   createTime: string;
   updated_at: string;
   closed_at?: string;
+  enabled: boolean;
 };
 
 export default () => {
@@ -110,6 +111,26 @@ export default () => {
           };
         },
       },
+    },
+    {
+      title: <FormattedMessage id="layout.common.status" />,
+      dataIndex: 'enabled',
+      hideInSearch: true,
+      render: (_, record) => (
+        <>
+          {record.enabled ? (
+            <Badge
+              status="success"
+              text={intl.formatMessage({ id: 'layout.common.enabled' })}
+            />
+          ) : (
+            <Badge
+              status="error"
+              text={intl.formatMessage({ id: 'layout.common.disabled' })}
+            />
+          )}
+        </>
+      ),
     },
     {
       title: <FormattedMessage id="layout.common.operate" />,

@@ -55,7 +55,7 @@ export default () => {
       hideInSearch: true,
     },
     {
-      title: <FormattedMessage id="layout.common.enabled" />,
+      title: <FormattedMessage id="layout.common.status" />,
       dataIndex: 'enabled',
       hideInSearch: true,
       render: (_, record) => (
