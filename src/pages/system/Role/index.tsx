@@ -7,7 +7,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { FormattedMessage } from '@umijs/max';
-import { Button, message, Popconfirm } from 'antd';
+import { Badge, Button, message, Popconfirm } from 'antd';
 import { useRef, useState } from 'react';
 import { useIntl } from 'umi';
 import CreateForm from './components/CreateForm';
@@ -28,6 +28,7 @@ type GithubIssueItem = {
   comments: number;
   createTime: string;
   updateTime: string;
+  enabled: boolean;
   closed_at?: string;
 };
 
@@ -52,6 +53,26 @@ export default () => {
       dataIndex: 'createTime',
       valueType: 'date',
       hideInSearch: true,
+    },
+    {
+      title: <FormattedMessage id="layout.common.enabled" />,
+      dataIndex: 'enabled',
+      hideInSearch: true,
+      render: (_, record) => (
+        <>
+          {record.enabled ? (
+            <Badge
+              status="success"
+              text={intl.formatMessage({ id: 'layout.common.enabled' })}
+            />
+          ) : (
+            <Badge
+              status="error"
+              text={intl.formatMessage({ id: 'layout.common.disabled' })}
+            />
+          )}
+        </>
+      ),
     },
     {
       title: <FormattedMessage id="layout.system.role.createTime" />,
