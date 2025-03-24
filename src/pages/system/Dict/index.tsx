@@ -309,14 +309,6 @@ const DictList: React.FC = () => {
             onConfirm={confirmItem}
             onCancel={cancel}
           >
-            {/* <a
-              onClick={(e) => {
-                e.stopPropagation();
-                setItemData(record);
-              }}
-            >
-              <FormattedMessage id="layout.common.delete" />
-            </a> */}
             <DeleteTwoTone
               title={intl.formatMessage({ id: 'layout.common.delete' })}
               onClick={(e) => {
