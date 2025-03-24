@@ -64,7 +64,7 @@ export default defineConfig({
           title: 'menu.organization.dept',
           path: '/organization/dept',
           component: './organization/Dept',
-          access: 'organization:dept',
+          access: 'organization:department',
           wrappers: ['@/wrappers/auth'],
         },
         {
