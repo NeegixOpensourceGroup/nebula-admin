@@ -59,12 +59,24 @@ const DictList: React.FC = () => {
     [],
   );
   const [itemData, setItemData] = useState<DictItemDataType>();
-  const [groupPagination, setGroupPagination] = useState<Pagination>({
+  const [groupPagination, setGroupPagination] = useState<
+    Pagination<DictGroupDataType>
+  >({
     current: 1,
     pageSize: 10,
     total: 0,
+    data: [],
+  });
+  const [itemPagination, setItemPagination] = useState<
+    Pagination<DictItemDataType>
+  >({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+    data: [],
   });
   const actionRef = useRef<ActionType | null>(null);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]); // 新增状态变量，用于存储选中的行的key
 
   useEffect(() => {
     const queryDictGroupFun = async () => {
@@ -74,7 +86,13 @@ const DictList: React.FC = () => {
         current: res.data?.currentPage,
         pageSize: res.data?.pageSize,
         total: res.data?.total,
+        data: res.data?.result,
       });
+      // 设置默认选中第一行
+      if (res.data?.result && res.data?.result.length > 0) {
+        setGroupData(res.data?.result[0]);
+        setSelectedRowKeys([res.data?.result[0].id]); // 设置默认选中的行的key
+      }
     };
 
     queryDictGroupFun();
@@ -88,6 +106,7 @@ const DictList: React.FC = () => {
         current: res.data?.currentPage,
         pageSize: res.data?.pageSize,
         total: res.data?.total,
+        data: res.data?.result,
       });
     } else {
       const res = await queryDictList({ ...groupPagination });
@@ -147,6 +166,7 @@ const DictList: React.FC = () => {
       current: resList.data?.currentPage,
       pageSize: resList.data?.pageSize,
       total: resList.data?.total,
+      data: resList.data?.result,
     });
   };
 
@@ -165,6 +185,7 @@ const DictList: React.FC = () => {
         current: resList.data?.currentPage,
         pageSize: resList.data?.pageSize,
         total: resList.data?.total,
+        data: resList.data?.result,
       });
       message.open({
         type: 'success',
@@ -335,7 +356,7 @@ const DictList: React.FC = () => {
       <ProCard split="vertical">
         <ProCard
           title={<FormattedMessage id="layout.system.dictionary.title" />}
-          colSpan="30%"
+          colSpan="35%"
         >
           <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
             <Space size="middle">
@@ -355,6 +376,14 @@ const DictList: React.FC = () => {
               />
             </Space>
             <Table
+              rowSelection={{
+                type: 'radio',
+                selectedRowKeys: selectedRowKeys, // 使用selectedRowKeys来设置默认选中的行
+                onChange: (selectedRowKeys, selectedRows) => {
+                  setGroupData(selectedRows[0]);
+                  setSelectedRowKeys(selectedRowKeys); // 更新选中的行的key
+                },
+              }}
               columns={dictGroups}
               dataSource={groupDataSource}
               rowKey="id"
@@ -370,6 +399,7 @@ const DictList: React.FC = () => {
                       current: res.data?.currentPage,
                       pageSize: res.data?.pageSize,
                       total: res.data?.total,
+                      data: res.data?.result,
                     });
                     setGroupDataSource(res.data?.result);
                   }
@@ -383,6 +413,7 @@ const DictList: React.FC = () => {
                       actionRef.current.reset();
                     }
                     setGroupData(record);
+                    setSelectedRowKeys([record.id]); // 设置选中的行的key
                   }, // 点击行
                 };
               }}
@@ -402,6 +433,12 @@ const DictList: React.FC = () => {
             }}
             params={{ pkDictGroup: groupData?.id }}
             request={async (params) => {
+              if (
+                selectedRowKeys.length !== 0 &&
+                selectedRowKeys[0] !== groupData?.id
+              ) {
+                return itemPagination;
+              }
               if (groupData?.id === undefined) {
                 return {
                   data: [],
@@ -409,6 +446,12 @@ const DictList: React.FC = () => {
                 };
               }
               const res = await queryDictItemList({ ...params });
+              setItemPagination({
+                data: res.data?.result,
+                total: res.data.total,
+                current: res.data?.currentPage,
+                pageSize: res.data?.pageSize,
+              });
               return {
                 data: res.data?.result,
                 total: res.data.total,

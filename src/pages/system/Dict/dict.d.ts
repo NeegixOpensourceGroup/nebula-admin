@@ -20,8 +20,9 @@ interface DictItemType {
   value: string;
 }
 
-interface Pagination {
+interface Pagination<T> {
   current: number;
   pageSize: number;
   total: number;
+  data: T[];
 }
