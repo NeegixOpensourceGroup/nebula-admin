@@ -76,3 +76,14 @@ export async function queryRolesByUser(
     ...(options || {}),
   });
 }
+
+export async function modifyPassword(
+  body: any,
+  options?: { [key: string]: any },
+) {
+  return request<NEBULA_API.Result>('/api/v1/user/password', {
+    method: 'PUT',
+    data: body,
+    ...(options || {}),
+  });
+}

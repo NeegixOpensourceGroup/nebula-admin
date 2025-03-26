@@ -175,6 +175,23 @@ export default defineConfig({
         },
       ],
     },
+    {
+      title: 'menu.personal.title',
+      path: '/personal',
+      icon: 'CodeOutlined',
+      routes: [
+        {
+          path: '/personal',
+          redirect: '/personal/profile',
+        },
+        {
+          title: 'menu.personal.profile',
+          path: '/personal/profile',
+          component: './personal/Profile',
+          wrappers: ['@/wrappers/auth'],
+        },
+      ],
+    },
     // {
     //   icon: 'smile',
     //   title: 'menu.permission',

@@ -49,6 +49,9 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
                   key: 'psn',
                   icon: <UserOutlined />,
                   label: <FormattedMessage id="layout.header.profile" />,
+                  onClick: () => {
+                    history.push('/personal/profile');
+                  },
                 },
                 {
                   key: 'logout',
