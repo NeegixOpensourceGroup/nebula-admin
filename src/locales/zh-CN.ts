@@ -30,6 +30,7 @@ export default {
   'layout.common.sn': '序号',
   'layout.common.view': '查看',
   'layout.common.edit': '编辑',
+  'layout.common.copy': '复制',
   'layout.common.add': '新增',
   'layout.common.subNode': '子节点',
   'layout.common.rootNode': '根节点',

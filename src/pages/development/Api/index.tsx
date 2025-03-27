@@ -11,6 +11,7 @@ import { FormattedMessage } from '@umijs/max';
 import { Button, message, Popconfirm } from 'antd';
 import { useRef, useState } from 'react';
 import { useIntl } from 'umi';
+import CopyForm from './components/CopyForm';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
 
@@ -94,6 +95,7 @@ export default () => {
           key="view"
           title={intl.formatMessage({ id: 'layout.common.view' })}
         />,
+        <CopyForm key={'copyForm'} id={record.id} actionRef={action} />,
         <Popconfirm
           title={<FormattedMessage id="layout.common.warning" />}
           key="remove"

@@ -31,6 +31,7 @@ export default {
   'layout.common.sn': 'Serial Number',
   'layout.common.view': 'View',
   'layout.common.edit': 'Edit',
+  'layout.common.copy': 'Copy',
   'layout.common.add': 'Add',
   'layout.common.subNode': 'Sub-node',
   'layout.common.rootNode': 'Root Node',
