@@ -55,9 +55,6 @@ const DictList: React.FC = () => {
   const [openGroup, setOpenGroup] = useState(false);
   const [openItem, setOpenItem] = useState(false);
   const [groupData, setGroupData] = useState<DictGroupDataType>();
-  const [groupDataSource, setGroupDataSource] = useState<DictGroupDataType[]>(
-    [],
-  );
   const [itemData, setItemData] = useState<DictItemDataType>();
   const [groupPagination, setGroupPagination] = useState<
     Pagination<DictGroupDataType>
@@ -81,7 +78,6 @@ const DictList: React.FC = () => {
   useEffect(() => {
     const queryDictGroupFun = async () => {
       const res = await queryDictList({ ...groupPagination });
-      setGroupDataSource(res.data?.result);
       setGroupPagination({
         current: res.data?.currentPage,
         pageSize: res.data?.pageSize,
@@ -99,9 +95,10 @@ const DictList: React.FC = () => {
   }, []);
 
   const onSearch: SearchProps['onSearch'] = async (value) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { data: _, ...rest } = groupPagination;
     if (value) {
-      const res = await queryDictList({ ...groupPagination, name: value });
-      setGroupDataSource(res.data?.result);
+      const res = await queryDictList({ ...rest, name: value });
       setGroupPagination({
         current: res.data?.currentPage,
         pageSize: res.data?.pageSize,
@@ -109,8 +106,13 @@ const DictList: React.FC = () => {
         data: res.data?.result,
       });
     } else {
-      const res = await queryDictList({ ...groupPagination });
-      setGroupDataSource(res.data?.result);
+      const res = await queryDictList({ ...rest });
+      setGroupPagination({
+        current: res.data?.currentPage,
+        pageSize: res.data?.pageSize,
+        total: res.data?.total,
+        data: res.data?.result,
+      });
     }
   };
 
@@ -160,8 +162,9 @@ const DictList: React.FC = () => {
         setOpenGroup(false);
       }
     }
-    const resList = await queryDictList({ ...groupPagination });
-    setGroupDataSource(resList.data?.result);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { data: _, ...rest } = groupPagination;
+    const resList = await queryDictList({ ...rest });
     setGroupPagination({
       current: resList.data?.currentPage,
       pageSize: resList.data?.pageSize,
@@ -179,8 +182,9 @@ const DictList: React.FC = () => {
     const res = await removeDict([groupData?.id || 1]);
     if (res.code === 200) {
       setGroupData(undefined);
-      const resList = await queryDictList({ ...groupPagination });
-      setGroupDataSource(resList.data?.result);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { data: _, ...rest } = groupPagination;
+      const resList = await queryDictList({ ...rest });
       setGroupPagination({
         current: resList.data?.currentPage,
         pageSize: resList.data?.pageSize,
@@ -385,7 +389,7 @@ const DictList: React.FC = () => {
                 },
               }}
               columns={dictGroups}
-              dataSource={groupDataSource}
+              dataSource={groupPagination.data}
               rowKey="id"
               pagination={{
                 ...groupPagination,
@@ -401,7 +405,6 @@ const DictList: React.FC = () => {
                       total: res.data?.total,
                       data: res.data?.result,
                     });
-                    setGroupDataSource(res.data?.result);
                   }
                 },
               }}
