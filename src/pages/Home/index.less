@@ -1,3 +1,74 @@
 .container {
-  padding-top: 80px;
+  padding: 24px;
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    opacity: 0;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f0f2f5;
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 20%);
+    border-radius: 2px;
+
+    &:hover {
+      background: rgba(0, 0, 0, 30%);
+    }
+  }
+
+  &:hover {
+    ::-webkit-scrollbar {
+      opacity: 1;
+    }
+  }
+
+  // 场景卡片配色方案
+  @scenario-tech: #f6ffed;
+  @scenario-eco: #e6f7ff;
+  @scenario-ops: #fff7e6;
+  @scenario-monitor: #fff0f6;
+
+  :global {
+    .ant-card {
+      height: 100%;
+      transition: all 0.3s;
+
+      &.scenario-tech {
+        background: @scenario-tech;
+        border-color: @blue-5;
+      }
+
+      &.scenario-eco {
+        background: @scenario-eco;
+        border-color: @green-5;
+      }
+
+      &.scenario-ops {
+        background: @scenario-ops;
+        border-color: @volcano-5;
+      }
+
+      &.scenario-monitor {
+        background: @scenario-monitor;
+        border-color: @purple-5;
+      }
+
+      &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 10%);
+      }
+    }
+
+    .ant-timeline {
+      margin-top: 8px;
+    }
+
+    .ant-statistic {
+      text-align: center;
+    }
+  }
 }
