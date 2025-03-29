@@ -1,34 +1,38 @@
 import accessServices from '@/services/system/access';
 import services from '@/services/system/auth';
 import {
-  AlipayOutlined,
+  // AlipayOutlined,
   LockOutlined,
-  MobileOutlined,
-  TaobaoOutlined,
+  // MobileOutlined,
+  // TaobaoOutlined,
   UserOutlined,
-  WeiboOutlined,
 } from '@ant-design/icons';
 import {
   LoginFormPage,
   ProConfigProvider,
-  ProFormCaptcha,
-  ProFormCheckbox,
+  // ProFormCaptcha,
+  // ProFormCheckbox,
   ProFormText,
 } from '@ant-design/pro-components';
-import { Divider, Space, Tabs, message, theme } from 'antd';
-import type { CSSProperties } from 'react';
+import {
+  // Divider, Space,
+  Tabs,
+  message,
+  theme,
+} from 'antd';
+// import type { CSSProperties } from 'react';
 import { useState } from 'react';
 import { FormattedMessage, history, useModel } from 'umi';
 
 const { queryAccess } = accessServices.AccessController;
 type LoginType = 'phone' | 'account';
 
-const iconStyles: CSSProperties = {
-  color: 'rgba(0, 0, 0, 0.2)',
-  fontSize: '18px',
-  verticalAlign: 'middle',
-  cursor: 'pointer',
-};
+// const iconStyles: CSSProperties = {
+//   color: 'rgba(0, 0, 0, 0.2)',
+//   fontSize: '18px',
+//   verticalAlign: 'middle',
+//   cursor: 'pointer',
+// };
 
 interface FormProps<FieldType> {
   // 其他属性...
@@ -136,7 +140,7 @@ const Page = () => {
                 flexDirection: 'column',
               }}
             >
-              <Divider plain>
+              {/* <Divider plain>
                 <span
                   style={{
                     color: token.colorTextPlaceholder,
@@ -190,7 +194,7 @@ const Page = () => {
                 >
                   <WeiboOutlined style={{ ...iconStyles, color: '#1890ff' }} />
                 </div>
-              </Space>
+              </Space> */}
             </div>
           }
         >
@@ -204,11 +208,11 @@ const Page = () => {
                 label: '账号密码登录',
                 children: '账号密码登录的内容区域',
               },
-              {
-                key: 'phone',
-                label: '手机号登录',
-                children: '手机号登录的内容区域',
-              },
+              // {
+              //   key: 'phone',
+              //   label: '手机号登录',
+              //   children: '手机号登录的内容区域',
+              // },
             ]}
           />
           {loginType === 'account' && (
@@ -257,7 +261,7 @@ const Page = () => {
               />
             </>
           )}
-          {loginType === 'phone' && (
+          {/* {loginType === 'phone' && (
             <>
               <ProFormText
                 fieldProps={{
@@ -318,8 +322,8 @@ const Page = () => {
                 }}
               />
             </>
-          )}
-          <div
+          )} */}
+          {/* <div
             style={{
               marginBlockEnd: 24,
             }}
@@ -334,7 +338,7 @@ const Page = () => {
             >
               忘记密码
             </a>
-          </div>
+          </div> */}
         </LoginFormPage>
       </div>
     </>

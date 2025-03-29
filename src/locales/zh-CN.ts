@@ -1,7 +1,7 @@
 export default {
   welcome: '欢迎光临 Neegix 的世界！',
   'login.title': 'Nebula Admin',
-  'login.subtitle': '知识改变命运，能找到一个目标并努力去完成就很好！',
+  'login.subtitle': '简化开发，不简化可能性！',
   'menu.home': '首页',
   'menu.organization.title': '组织管理',
   'menu.organization.bizUnit': '业务单元',

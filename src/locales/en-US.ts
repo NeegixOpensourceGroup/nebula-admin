@@ -1,8 +1,7 @@
 export default {
   welcome: 'Welcome to the world of Neegix!',
   'login.title': 'Nebula Admin',
-  'login.subtitle':
-    "Knowledge changes destiny. It's great to find a goal and work hard to achieve it!",
+  'login.subtitle': 'Code Less, Do More!',
   'menu.home': 'Home',
   'menu.organization.title': 'Organization Management',
   'menu.organization.bizUnit': 'Business Unit',
