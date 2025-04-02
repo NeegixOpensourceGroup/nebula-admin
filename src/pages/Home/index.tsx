@@ -6,6 +6,7 @@ import { Card, Col, Row, Typography } from 'antd';
 import Contributors from './components/Contributors';
 import DevPlans from './components/DevPlans';
 import ProjectOverview from './components/ProjectOverview';
+import QQGroupCard from './components/QQGroupCard';
 import Scenarios from './components/Scenarios';
 import TechStack from './components/TechStack';
 import UpdateLogs from './components/UpdateLogs';
@@ -120,6 +121,11 @@ const HomePage: React.FC = () => {
           </Col>
         </Row>
 
+        <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
+          <Col span={24}>
+            <QQGroupCard />
+          </Col>
+        </Row>
         <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
           <Col span={16}>
             <ProjectOverview />
