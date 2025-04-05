@@ -10,7 +10,7 @@ export default defineConfig({
   request: {
     dataField: '',
   },
-  favicons: ['/images/logo.png'],
+  favicons: ['/images/logo.svg'],
   proxy: {
     '/api': {
       target: 'http://localhost:8080/',

@@ -5,7 +5,7 @@ import { GithubFilled, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { FormattedMessage, RunTimeLayoutConfig, SelectLang } from '@umijs/max';
 import { Dropdown, message } from 'antd';
 import { history, RequestConfig } from 'umi';
-import logo from '/public/images/logo.png';
+import logo from '/public/images/logo.svg';
 
 const { queryAccess } = accessServices.AccessController;
 const { logout } = services.AuthController;

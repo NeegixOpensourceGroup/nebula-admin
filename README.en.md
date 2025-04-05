@@ -1,6 +1,6 @@
 # <div align=center>Nebula-Admin</div>
 
-<div align=center><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/logo.png" width="70"/></div>
+<div align=center><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/nebula.png" width="70"/></div>
 
 <div align=center>
 
