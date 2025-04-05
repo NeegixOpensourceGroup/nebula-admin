@@ -28,33 +28,27 @@
   }
 
   // 场景卡片配色方案
-  @scenario-tech: #f6ffed;
-  @scenario-eco: #e6f7ff;
-  @scenario-ops: #fff7e6;
-  @scenario-monitor: #fff0f6;
+  @scenario-edu: #f0f9ff; // 学校课设
+  @scenario-personal: #fff7f0; // 私活项目
+  @scenario-business: #f6f6ff; // 中小企业项目
 
   :global {
     .ant-card {
       height: 100%;
       transition: all 0.3s;
 
-      &.scenario-tech {
-        background: @scenario-tech;
+      &.scenario-edu {
+        background: @scenario-edu;
         border-color: @blue-5;
       }
 
-      &.scenario-eco {
-        background: @scenario-eco;
-        border-color: @green-5;
+      &.scenario-personal {
+        background: @scenario-personal;
+        border-color: @orange-5;
       }
 
-      &.scenario-ops {
-        background: @scenario-ops;
-        border-color: @volcano-5;
-      }
-
-      &.scenario-monitor {
-        background: @scenario-monitor;
+      &.scenario-business {
+        background: @scenario-business;
         border-color: @purple-5;
       }
 

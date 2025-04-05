@@ -74,14 +74,21 @@ const HomePage: React.FC = () => {
 
   // 应用场景
   const scenarios = [
-    { title: '企业管理系统', desc: '适用于各类企业内部管理系统', type: 'tech' },
     {
-      title: '数据分析平台',
-      desc: '支持复杂的数据可视化和分析需求',
-      type: 'eco',
+      title: '学校课设或毕业设计',
+      desc: '适合作为计算机相关专业的课程设计或毕业设计项目',
+      type: 'edu',
     },
-    { title: '工作流平台', desc: '可快速搭建业务流程管理系统', type: 'ops' },
-    { title: '监控平台', desc: '适用于系统监控和运维管理', type: 'monitor' },
+    {
+      title: '私活或自有项目',
+      desc: '适合个人开发者承接外包项目或开发自己的产品',
+      type: 'personal',
+    },
+    {
+      title: '中小企业内部项目',
+      desc: '适合中小企业内部管理系统开发',
+      type: 'business',
+    },
   ];
 
   // 项目更新记录
