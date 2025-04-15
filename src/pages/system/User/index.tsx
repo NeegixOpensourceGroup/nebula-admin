@@ -7,14 +7,15 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { FormattedMessage } from '@umijs/max';
-import { Badge, Button, message, Popconfirm } from 'antd';
+import { Badge, Button, message, notification, Popconfirm } from 'antd';
 import { useRef, useState } from 'react';
 import { useIntl } from 'umi';
 import CreateForm from './components/CreateForm';
 import RoleSelectionModal from './components/RoleSelectionModal';
 import UpdateForm from './components/UpdateForm';
 
-const { queryUserList, deleteUser, bindRole } = services.UserController;
+const { queryUserList, deleteUser, bindRole, resetPassword } =
+  services.UserController;
 
 type UserItem = {
   url: string;
@@ -31,6 +32,8 @@ type UserItem = {
 
 export default () => {
   const [messageApi, contextHolder] = message.useMessage();
+  const [notificationApi, notificationHolder] = notification.useNotification();
+
   const [selectedRowsState, setSelectedRows] = useState<UserItem[]>([]);
   const actionRef = useRef<ActionType>();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -200,9 +203,34 @@ export default () => {
     }
   };
 
+  /**
+   * 重置密码
+   */
+  const handleResetPassword = async (selectedRows: any[]) => {
+    const hide = messageApi.loading('正在重置');
+    if (!selectedRows) return true;
+    try {
+      const res = await resetPassword(selectedRows.map((item) => item.id));
+      if (res.code === 200) {
+        actionRef.current?.reload();
+        hide();
+        notificationApi.success({
+          message: res.message,
+          description: res.data,
+          duration: 0,
+        });
+      }
+    } catch (error) {
+      hide();
+      messageApi.error('重置失败，请重试');
+      return false;
+    }
+  };
+
   return (
     <>
       {contextHolder}
+      {notificationHolder}
       <PageContainer
         header={{
           title: (
@@ -272,6 +300,13 @@ export default () => {
               onClick={() => showModal()}
             >
               角色配置
+            </Button>,
+            <Button
+              key="resetPassword"
+              disabled={selectedRowsState?.length === 0}
+              onClick={async () => await handleResetPassword(selectedRowsState)}
+            >
+              重置密码
             </Button>,
           ]}
         />

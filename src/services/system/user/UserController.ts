@@ -87,3 +87,14 @@ export async function modifyPassword(
     ...(options || {}),
   });
 }
+
+export async function resetPassword(
+  body: any,
+  options?: { [key: string]: any },
+) {
+  return request<NEBULA_API.Result>('/api/v1/user/resetPassword', {
+    method: 'PUT',
+    data: body,
+    ...(options || {}),
+  });
+}
