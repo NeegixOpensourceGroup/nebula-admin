@@ -93,6 +93,7 @@ const HomePage: React.FC = () => {
 
   // 项目更新记录
   const backendLogs = [
+    { time: '2025-04-15', content: '账户新增重置密码' },
     { time: '2025-03-27', content: '优化新增校验的提示语' },
     { time: '2025-03-26', content: '升级springboot版本3.4.0->3.4.4' },
     { time: '2025-03-26', content: '登录人用户密码修改' },
@@ -109,7 +110,8 @@ const HomePage: React.FC = () => {
   ];
 
   const frontendLogs = [
-    { time: '2025-03-27', content: '新增复制记录功能' },
+    { time: '2025-04-15', content: '账户新增重置密码' },
+    { time: '2025-04-05', content: '品牌Logo升级' },
     { time: '2025-03-27', content: '修复字典组操作后列表刷新问题' },
     { time: '2025-03-26', content: '优化字典组选择体验' },
     { time: '2025-03-26', content: '新增个人信息和密码修改功能' },
