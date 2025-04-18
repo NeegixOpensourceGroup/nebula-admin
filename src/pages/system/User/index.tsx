@@ -1,5 +1,5 @@
 import services from '@/services/system/user';
-import { DeleteTwoTone, EyeTwoTone, SettingTwoTone } from '@ant-design/icons';
+import { DeleteTwoTone, SettingTwoTone } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -13,6 +13,7 @@ import { useIntl } from 'umi';
 import CreateForm from './components/CreateForm';
 import RoleSelectionModal from './components/RoleSelectionModal';
 import UpdateForm from './components/UpdateForm';
+import ViewForm from './components/ViewForm';
 
 const { queryUserList, deleteUser, bindRole, resetPassword } =
   services.UserController;
@@ -141,10 +142,7 @@ export default () => {
       key: 'option',
       render: (text, record, _, action) => [
         <UpdateForm key={'updateForm'} userId={record.id} actionRef={action} />,
-        <EyeTwoTone
-          key="view"
-          title={intl.formatMessage({ id: 'layout.common.view' })}
-        />,
+        <ViewForm key={'viewForm'} userId={record.id} actionRef={action} />,
         <SettingTwoTone
           key="setting"
           title="角色配置"
