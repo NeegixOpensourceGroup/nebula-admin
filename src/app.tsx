@@ -166,7 +166,14 @@ export const request: RequestConfig = {
       (error: any) => {
         let result = error;
         if (error.response) {
-          result = error.response.data;
+          if (error.response.status === 504) {
+            result = {
+              code: 504,
+              message: '服务器异常',
+            };
+          } else {
+            result = error.response.data;
+          }
         }
         const { code, message: errorMessage } = result;
         if (code === 500 || code === 405) {
@@ -192,7 +199,7 @@ export const request: RequestConfig = {
 
         if (code > 500 && code < 600) {
           message.open({
-            content: '服务器异常',
+            content: result.message,
             type: 'error',
             duration: 1,
           });
