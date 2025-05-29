@@ -1,6 +1,6 @@
 import services from '@/services/development/api';
 import menuServices from '@/services/development/menu';
-import { DeleteTwoTone, EyeTwoTone } from '@ant-design/icons';
+import { DeleteTwoTone } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -14,6 +14,7 @@ import { useIntl } from 'umi';
 import CopyForm from './components/CopyForm';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
+import ViewForm from './components/ViewForm';
 
 const { queryApiList, deleteApi } = services.ApiController;
 const { queryMenuList } = menuServices.MenuController;
@@ -91,10 +92,11 @@ export default () => {
       key: 'option',
       render: (text, record, _, action) => [
         <UpdateForm key={'updateForm'} id={record.id} actionRef={action} />,
-        <EyeTwoTone
-          key="view"
-          title={intl.formatMessage({ id: 'layout.common.view' })}
-        />,
+        // <EyeTwoTone
+        //   key="view"
+        //   title={intl.formatMessage({ id: 'layout.common.view' })}
+        // />,
+        <ViewForm key={'viewForm'} id={record.id} />,
         <CopyForm key={'copyForm'} id={record.id} actionRef={action} />,
         <Popconfirm
           title={<FormattedMessage id="layout.common.warning" />}

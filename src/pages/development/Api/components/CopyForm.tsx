@@ -35,7 +35,7 @@ const CopyForm: React.FC<CopyFormProps> = ({ id, actionRef }) => {
       form.setFieldsValue({
         name: res.data.name,
         description: res.data.description,
-        module: res.data.module,
+        module: res.data.module.id,
         access: res.data.access,
       });
     }

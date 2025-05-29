@@ -119,6 +119,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ pkBizUnit, onSubmit }) => {
       dataIndex: 'pkDept',
       valueType: 'treeSelect',
       width: 150,
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: '此为必填项',
+          },
+        ],
+      },
       fieldProps: {
         showSearch: true,
         treeNodeFilterProp: 'title',
@@ -151,12 +159,28 @@ const CreateForm: React.FC<CreateFormProps> = ({ pkBizUnit, onSubmit }) => {
       }),
       dataIndex: 'start',
       valueType: 'date',
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: '此为必填项',
+          },
+        ],
+      },
       width: 150,
     },
     {
       title: intl.formatMessage({ id: 'layout.organization.psn.workInfo.end' }),
       dataIndex: 'end',
       valueType: 'date',
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: '此为必填项',
+          },
+        ],
+      },
       width: 150,
     },
     {
@@ -211,7 +235,13 @@ const CreateForm: React.FC<CreateFormProps> = ({ pkBizUnit, onSubmit }) => {
       }}
       submitTimeout={2000}
       onFinish={async (values) => {
-        console.log(values);
+        try {
+          if (editableFormRef.current) {
+            await editableFormRef.current.validateFields();
+          }
+        } catch (error) {
+          console.error('Validation failed:', error);
+        }
         return await onSubmit(values);
       }}
     >

@@ -61,9 +61,9 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
       setCheckedKeys(
         res.data.pagePermissions
           ?.filter((item: any) => !item.isHalf)
-          .map((item: any) => item.pkMenu),
+          .map((item: any) => item.id),
       );
-      setTableSelectedKeys(res.data.apiPermissions);
+      setTableSelectedKeys(res.data.apiPermissions.map((item: any) => item.id));
       apiPermissions = res.data.apiPermissions;
       pagePermissions = res.data.pagePermissions;
     }

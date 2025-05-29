@@ -1,5 +1,5 @@
 import services from '@/services/system/role';
-import { DeleteTwoTone, EyeTwoTone } from '@ant-design/icons';
+import { DeleteTwoTone } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -102,10 +102,6 @@ export default () => {
       key: 'option',
       render: (text, record, _, action) => [
         <UpdateForm key={'updateForm'} roleId={record.id} actionRef={action} />,
-        <EyeTwoTone
-          key="view"
-          title={intl.formatMessage({ id: 'layout.common.view' })}
-        />,
         <Popconfirm
           title={<FormattedMessage id="layout.common.warning" />}
           key="remove"

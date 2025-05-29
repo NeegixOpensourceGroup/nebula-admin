@@ -1,17 +1,9 @@
 import services from '@/services/system/user';
 import { PageContainer } from '@ant-design/pro-components';
-import {
-  Avatar,
-  Button,
-  Card,
-  Flex,
-  Form,
-  Input,
-  message,
-  Typography,
-  Upload,
-} from 'antd'; // 引入Ant Design的Upload组件
+import { Button, Form, message } from 'antd';
 import { useState } from 'react';
+import PasswordTab from './components/PasswordTab';
+import UserInfoTab from './components/UserInfoTab';
 const { modifyPassword } = services.UserController;
 const Profile: React.FC<unknown> = () => {
   const [key, setKey] = useState('base');
@@ -30,162 +22,14 @@ const Profile: React.FC<unknown> = () => {
 
   const [form] = Form.useForm(); // 新增表单实例
 
-  const renderUserInfo = () => {
-    const handleAvatarChange = (info: any) => {
-      if (info.file.status === 'done') {
-        // 这里可以处理上传成功后的逻辑，比如更新userInfo.avatar
-        console.log('Avatar uploaded successfully', info.file.response);
-      }
-    };
-
-    return (
-      <Card>
-        <Flex gap={16} align="center" vertical>
-          <Card>
-            {isEditing ? (
-              <Upload
-                name="avatar"
-                listType="picture-card"
-                className="avatar-uploader"
-                showUploadList={false}
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76" // 这里需要替换为实际的上传接口地址
-                onChange={handleAvatarChange}
-              >
-                {userInfo.avatar ? (
-                  <img
-                    src={userInfo.avatar}
-                    alt="avatar"
-                    style={{ width: '100%' }}
-                  />
-                ) : (
-                  <div>
-                    <div style={{ marginTop: 8 }}>Upload</div>
-                  </div>
-                )}
-              </Upload>
-            ) : (
-              <Avatar src={userInfo.avatar} size={128} />
-            )}
-          </Card>
-          {isEditing ? (
-            <Form
-              form={form} // 绑定表单实例
-              name="edit_user_info"
-              initialValues={userInfo}
-              style={{ width: 300 }}
-            >
-              <Form.Item
-                name="name"
-                rules={[{ required: true, message: '请输入姓名!' }]}
-              >
-                <Input placeholder="姓名" />
-              </Form.Item>
-              <Form.Item
-                name="email"
-                rules={[{ required: true, message: '请输入邮箱!' }]}
-              >
-                <Input placeholder="邮箱" />
-              </Form.Item>
-              <Form.Item
-                name="department"
-                rules={[{ required: true, message: '请输入部门!' }]}
-              >
-                <Input placeholder="部门" />
-              </Form.Item>
-              <Form.Item
-                name="position"
-                rules={[{ required: true, message: '请输入职位!' }]}
-              >
-                <Input placeholder="职位" />
-              </Form.Item>
-              <Form.Item
-                name="phone"
-                rules={[{ required: true, message: '请输入电话!' }]}
-              >
-                <Input placeholder="电话" />
-              </Form.Item>
-              <Form.Item
-                name="address"
-                rules={[{ required: true, message: '请输入地址!' }]}
-              >
-                <Input placeholder="地址" />
-              </Form.Item>
-            </Form>
-          ) : (
-            <Card.Meta
-              title={userInfo.name}
-              description={
-                <>
-                  <p>邮箱: {userInfo.email}</p>
-                  <p>部门: {userInfo.department}</p>
-                  <p>职位: {userInfo.position}</p>
-                  <p>电话: {userInfo.phone}</p>
-                  <p>地址: {userInfo.address}</p>
-                </>
-              }
-              style={{ textAlign: 'center' }} // 添加样式使title居中
-            />
-          )}
-        </Flex>
-      </Card>
-    );
-  };
-
-  const renderPasswordForm = () => {
-    return (
-      <Card>
-        <Typography.Title level={4} style={{ textAlign: 'center' }}>
-          重置密码
-        </Typography.Title>
-        <Flex justify="center" align="center">
-          <Form
-            form={form} // 绑定表单实例
-            name="change_password"
-            initialValues={{ remember: true }}
-            style={{ width: 300 }}
-          >
-            <Form.Item
-              name="oldPassword"
-              rules={[{ required: true, message: '请输入旧密码!' }]}
-            >
-              <Input.Password placeholder="旧密码" />
-            </Form.Item>
-            <Form.Item
-              name="newPassword"
-              rules={[{ required: true, message: '请输入新密码!' }]}
-            >
-              <Input.Password placeholder="新密码" />
-            </Form.Item>
-            <Form.Item
-              name="confirmPassword"
-              dependencies={['newPassword']}
-              hasFeedback
-              rules={[
-                { required: true, message: '请确认新密码!' },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue('newPassword') === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(new Error('两次输入的新密码不一致!'));
-                  },
-                }),
-              ]}
-            >
-              <Input.Password placeholder="确认新密码" />
-            </Form.Item>
-          </Form>
-        </Flex>
-      </Card>
-    );
-  };
-
   const tabListChange = () => {
     switch (key) {
       case 'base':
-        return renderUserInfo();
+        return (
+          <UserInfoTab userInfo={userInfo} isEditing={isEditing} form={form} />
+        );
       case 'password':
-        return renderPasswordForm();
+        return <PasswordTab form={form} />;
       default:
         return null;
     }
