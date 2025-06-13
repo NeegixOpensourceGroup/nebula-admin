@@ -64,8 +64,11 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
           .map((item: any) => item.id),
       );
       setTableSelectedKeys(res.data.apiPermissions.map((item: any) => item.id));
-      apiPermissions = res.data.apiPermissions;
-      pagePermissions = res.data.pagePermissions;
+      apiPermissions = res.data.apiPermissions.map((item: any) => item.id);
+      pagePermissions = res.data.pagePermissions.map((item: any) => ({
+        pkMenu: item.id,
+        isHalf: item.isHalf,
+      }));
     }
   };
 
@@ -183,11 +186,6 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
             label={intl.formatMessage({ id: 'layout.system.role.description' })}
           />
           <ProFormSwitch
-            rules={[
-              {
-                required: true,
-              },
-            ]}
             name="enabled"
             width="md"
             label={intl.formatMessage({ id: 'layout.system.role.enabled' })}

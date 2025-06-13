@@ -157,11 +157,6 @@ const CreateForm: React.FC<CreateFormProps> = ({ actionRef }) => {
             label={intl.formatMessage({ id: 'layout.system.role.description' })}
           />
           <ProFormSwitch
-            rules={[
-              {
-                required: true,
-              },
-            ]}
             name="enabled"
             width="md"
             label={intl.formatMessage({ id: 'layout.system.role.enabled' })}
