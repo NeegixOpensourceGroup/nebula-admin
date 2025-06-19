@@ -9,8 +9,8 @@ export function buildTreeData(
   config: Config = {
     idKey: 'id',
     nameKey: 'name',
-    pidKey: 'pid'
-  }
+    pidKey: 'pid',
+  },
 ): any[] {
   const { idKey, nameKey, pidKey } = config;
   const map: { [key: string]: any } = {};
@@ -18,7 +18,7 @@ export function buildTreeData(
   if (!items || items.length === 0) return [];
 
   // Initialize all nodes and store them in a map
-  items.forEach(item => {
+  items.forEach((item) => {
     const id = item[idKey];
     const name = item[nameKey];
     map[String(id)] = {
@@ -26,7 +26,7 @@ export function buildTreeData(
       title: name,
       value: id,
       label: name,
-      children: []
+      children: [],
     };
   });
 
@@ -34,7 +34,7 @@ export function buildTreeData(
   const treeData: any[] = [];
 
   // Build the tree structure
-  items.forEach(item => {
+  items.forEach((item) => {
     const id = item[idKey];
     const pid = item[pidKey];
 
@@ -49,7 +49,7 @@ export function buildTreeData(
 
   // Remove empty children arrays recursively
   const pruneEmptyChildren = (nodeList: any[]) => {
-    nodeList.forEach(node => {
+    nodeList.forEach((node) => {
       if (node.children && node.children.length > 0) {
         pruneEmptyChildren(node.children);
         if (node.children.length === 0) {
@@ -65,7 +65,10 @@ export function buildTreeData(
 }
 
 // 定义辅助函数，用于获取当前节点的父节点
-export function getParentNode(nodeKey: string | number, treeData: any[]): any | null {
+export function getParentNode(
+  nodeKey: string | number,
+  treeData: any[],
+): any | null {
   // 辅助函数，用于递归查找父节点
   function findParent(node: any, key: string | number): any | null {
     // 如果节点的 key 与给定的 key 匹配，则返回该节点本身，因为它是根节点
@@ -97,4 +100,22 @@ export function getParentNode(nodeKey: string | number, treeData: any[]): any | 
     if (parentNode) return parentNode;
   }
   return null;
+}
+
+//
+export function transformRangeDate(value: any[]): {
+  startCreateTime?: string;
+  endCreateTime?: string;
+} {
+  const start = value[0]
+    ? new Date(value[0]).toISOString().split('T')[0]
+    : undefined;
+  const end = value[1] ? new Date(value[1]) : null;
+
+  return {
+    startCreateTime: start,
+    endCreateTime: end
+      ? new Date(end.setDate(end.getDate() + 1)).toISOString().split('T')[0]
+      : undefined,
+  };
 }

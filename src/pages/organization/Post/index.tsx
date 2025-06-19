@@ -1,7 +1,7 @@
 import BizUnitSelectTree from '@/components/BizUnitSelectTree';
 import deptServices from '@/services/organization/dept';
 import postServices from '@/services/organization/post';
-import { buildTreeData } from '@/utils/tools';
+import { buildTreeData, transformRangeDate } from '@/utils/tools';
 import { DeleteTwoTone, EyeTwoTone } from '@ant-design/icons';
 import {
   ActionType,
@@ -269,10 +269,7 @@ const PostList: React.FC<unknown> = () => {
       hideInTable: true,
       search: {
         transform: (value) => {
-          return {
-            startTime: value[0],
-            endTime: value[1],
-          };
+          return transformRangeDate(value);
         },
       },
     },

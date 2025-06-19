@@ -1,4 +1,5 @@
 import services from '@/services/system/user';
+import { transformRangeDate } from '@/utils/tools';
 import { DeleteTwoTone, SettingTwoTone } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
@@ -101,18 +102,7 @@ export default () => {
       hideInTable: true,
       search: {
         transform: (value) => {
-          let endDate = value[1] ? new Date(value[1]) : null;
-          if (endDate) {
-            endDate.setDate(endDate.getDate() + 1); // 增加一天
-          }
-          const endCreateTime = endDate ? endDate.toISOString() : undefined;
-          const startCreateTime = value[0]
-            ? new Date(value[0]).toISOString()
-            : undefined;
-          return {
-            startCreateTime,
-            endCreateTime,
-          };
+          return transformRangeDate(value);
         },
       },
     },

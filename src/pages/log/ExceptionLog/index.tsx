@@ -1,4 +1,5 @@
 import services from '@/services/log/exceptionLog';
+import { transformRangeDate } from '@/utils/tools';
 import { EyeTwoTone } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
@@ -72,10 +73,7 @@ export default () => {
       hideInTable: true,
       search: {
         transform: (value) => {
-          return {
-            startTime: value[0],
-            endTime: value[1],
-          };
+          return transformRangeDate(value);
         },
       },
     },

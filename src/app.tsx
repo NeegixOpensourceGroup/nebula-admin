@@ -120,9 +120,12 @@ export const request: RequestConfig = {
     // 直接写一个 function，作为拦截器
     (url, options) => {
       if (sessionStorage.getItem('token') !== null) {
+        // 获取时区（如 "Asia/Shanghai"）
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         options.headers = {
           ...options.headers,
           Authorization: sessionStorage.getItem('token') ?? '',
+          'X-Timezone': timezone,
         };
       } else {
         history.push('/login');
