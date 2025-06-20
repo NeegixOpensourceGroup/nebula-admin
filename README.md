@@ -123,6 +123,12 @@ routes: [
 5. mock 目录下创建 mock 数据(或者启用后端服务)
 6. 菜单/按钮的权限信息可以通过`queryAccess`接口获取，也可以改造成自己的方法，具体接口结果参考：mock 数据
 
+#### 代码库
+
+- GitCode: [https://gitcode.com/NeegixOpensourceGroup/nebula-admin](https://gitcode.com/NeegixOpensourceGroup/nebula-admin)
+- Gitee: [https://gitee.com/neegix-opensource-group/nebula-admin](https://gitee.com/neegix-opensource-group/nebula-admin)
+- GitHub: [https://github.com/NeegixOpensourceGroup/nebula-admin](https://github.com/NeegixOpensourceGroup/nebula-admin)
+
 #### 参与贡献
 
 1.  Fork 本仓库

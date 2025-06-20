@@ -122,6 +122,12 @@ routes: [
 5.  Create mock data in the mock directory (or enable the backend service).
 6.  Permission information about menus/buttons can be obtained through the `queryAccess` interface, or you can customize it, refer to the mock data for the interface result.
 
+#### Code repository
+
+- GitCode: [https://gitcode.com/NeegixOpensourceGroup/nebula-admin](https://gitcode.com/NeegixOpensourceGroup/nebula-admin)
+- Gitee: [https://gitee.com/neegix-opensource-group/nebula-admin](https://gitee.com/neegix-opensource-group/nebula-admin)
+- GitHub: [https://github.com/NeegixOpensourceGroup/nebula-admin](https://github.com/NeegixOpensourceGroup/nebula-admin)
+
 #### Contribution
 
 1.  Fork the repository
