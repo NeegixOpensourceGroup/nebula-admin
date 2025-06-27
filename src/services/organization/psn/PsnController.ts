@@ -73,3 +73,17 @@ export async function deletePsn(
     ...(options || {}),
   });
 }
+
+export async function generateUsers(
+  body?: Array<any>,
+  options?: { [key: string]: any },
+) {
+  return request<NEBULA_API.Result>('/api/v1/psn/batch-users', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

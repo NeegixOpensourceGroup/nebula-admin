@@ -3,7 +3,7 @@ import deptServices from '@/services/organization/dept';
 import psnServices from '@/services/organization/psn';
 import dictServices from '@/services/system/dict';
 import { buildTreeData } from '@/utils/tools';
-import { DeleteTwoTone } from '@ant-design/icons';
+import { DeleteTwoTone, UsergroupAddOutlined } from '@ant-design/icons';
 import {
   ActionType,
   FooterToolbar,
@@ -32,7 +32,7 @@ import styles from './index.less';
 const { Search } = Input;
 const { queryDictItemByDictCode } = dictServices.DictController;
 const { queryDeptList } = deptServices.DeptController;
-const { queryPsnList, deletePsn, addPsn, updatePsn } =
+const { queryPsnList, deletePsn, addPsn, updatePsn, generateUsers } =
   psnServices.PsnController;
 
 const dataList: { key: React.Key; title: string }[] = [];
@@ -230,6 +230,32 @@ const PsnList: React.FC<unknown> = () => {
     }
   };
 
+  /**
+   * 批量生成用户
+   */
+  const handleBatchGenerate = async (selectedRowsState: API.PsnInfo[]) => {
+    const hide = messageApi.loading('正在生成');
+    console.log(selectedRowsState);
+    if (!selectedRowsState) return true;
+    try {
+      const res = await generateUsers(selectedRowsState.map((item) => item.id));
+      if (res.code === 200) {
+        actionRef.current?.reload();
+        hide();
+        messageApi.success('生成成功，即将刷新');
+        return true;
+      } else {
+        hide();
+        messageApi.error(res.message);
+        return false;
+      }
+    } catch (error) {
+      hide();
+      messageApi.error('生成失败，请重试');
+      return false;
+    }
+  };
+
   const columns: ProColumns<API.PsnInfo>[] = [
     {
       title: intl.formatMessage({ id: 'layout.organization.psn.code' }),
@@ -289,6 +315,8 @@ const PsnList: React.FC<unknown> = () => {
               title={intl.formatMessage({ id: 'layout.common.delete' })}
             />
           </Popconfirm>
+          {/* <Divider type="vertical" />
+          <UserAddOutlined title="生成用户"  /> */}
         </>
       ),
     },
@@ -371,6 +399,13 @@ const PsnList: React.FC<unknown> = () => {
                   pkBizUnit={pkBizUnit}
                   onSubmit={onSubmit}
                 />,
+                <Button
+                  key={'generateUser'}
+                  onClick={() => handleBatchGenerate(selectedRowsState)}
+                >
+                  <UsergroupAddOutlined />
+                  生成用户
+                </Button>,
               ]}
               params={{ pkBizUnit, pkDept: checkedKey }}
               request={async (params, sorter, filter) => {
