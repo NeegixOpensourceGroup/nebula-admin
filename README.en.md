@@ -26,6 +26,7 @@ nebula-admin is a management system built on the umimax framework, complemented 
 ├── 系统管理     -- System
   ├── 字典管理   -- Dictionary
   ├── 角色管理   -- Role
+  ├── 用户管理   -- User
 ├── 日志管理     -- Log
   ├── 操作日志   -- OperationLog
   ├── 登录日志   -- LoginLog
@@ -146,10 +147,10 @@ routes: [
 <table>
   <tr>
     <th>QQ Group: 996598075</th>
-    <th>Discord: <a href="https://discord.gg/WrP5J9Ea7z">https://discord.gg/WrP5J9Ea7z</a></th>
+    <!-- <th>Discord: <a href="https://discord.gg/WrP5J9Ea7z">https://discord.gg/WrP5J9Ea7z</a></th> -->
   </tr>
   <tr>
     <td><img src="https://neegix.com/img/qq_qrcode.jpg" width="200" /></td>
-    <td align=center><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/httpsdiscord.ggWrP5J9Ea7z.png" width="200" /></td>
+    <!-- <td align=center><img src="https://gitee.com/kushu001/pic-go-images/raw/master/images/httpsdiscord.ggWrP5J9Ea7z.png" width="200" /></td> -->
   </tr>
 </table>
