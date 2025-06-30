@@ -114,7 +114,7 @@ routes: [
     icon: 'HomeOutlined',
     component: './Home',
     access: 'home',
-    wrappers: ['@/wrappers/auth'],
+    wrappers: ['@/wrappers/auth']
   },
 ]
 ```
