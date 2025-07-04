@@ -48,10 +48,26 @@ const HomePage: React.FC = () => {
       title: '现有模块优化',
       desc: '优化体验，功能完善，bug修复',
       type: 'feature',
+      color: { background: '#f6ffed', borderColor: '#b7eb8f' },
     },
-    { title: '导入导出', desc: '实现列表的快速导入导出开发', type: 'feature' },
-    { title: '工作流支持', desc: '支持工作流开发', type: 'feature' },
-    { title: '报表支持', desc: '支持报表开发', type: 'feature' },
+    {
+      title: '导入导出',
+      desc: '实现列表的快速导入导出开发',
+      type: 'feature',
+      color: { background: '#fff2e8', borderColor: '#ffbb96' },
+    },
+    {
+      title: '工作流支持',
+      desc: '支持工作流开发',
+      type: 'feature',
+      color: { background: '#e6f7ff', borderColor: '#91d5ff' },
+    },
+    {
+      title: '报表支持',
+      desc: '支持报表开发',
+      type: 'feature',
+      color: { background: '#fffbe6', borderColor: '#ffe58f' },
+    },
   ];
 
   // 贡献人信息
@@ -93,30 +109,39 @@ const HomePage: React.FC = () => {
 
   // 项目更新记录
   const backendLogs = [
-    { time: '2025-04-15', content: '账户新增重置密码' },
-    { time: '2025-03-27', content: '优化新增校验的提示语' },
-    { time: '2025-03-26', content: '升级springboot版本3.4.0->3.4.4' },
-    { time: '2025-03-26', content: '登录人用户密码修改' },
-    { time: '2025-03-26', content: '新建获取当前用户信息的工具，方便使用' },
-    { time: '2025-03-26', content: '调整错误提示' },
-    { time: '2025-03-25', content: '用户禁用后，不允许登录' },
-    { time: '2025-03-24', content: '更新人员信息时报ID不能为空的bug处理' },
-    { time: '2025-03-22', content: '用户绑定角色' },
+    { time: '2025-07-03', content: 'perf(pom.xml): 更新版本号1.1.0' },
     {
-      time: '2025-01-16',
-      content: '调整过期时间策略，如果访问过缓存，则重置过期时间',
+      time: '2025-06-30',
+      content: 'perf(.gitignore): 过滤不需要提交的文件配置',
     },
-    { time: '2025-01-15', content: '优化登录日志信息' },
+    { time: '2025-06-30', content: 'perf(fast-excel): 1.0.0->1.2.0' },
+    { time: '2025-06-30', content: 'update: 更新文件 README.md' },
+    {
+      time: '2025-06-28',
+      content: 'perf(readme): 去掉discard联系，集中社区维护',
+    },
+    { time: '2025-06-28', content: 'perf(readme): 修改README文档' },
+    { time: '2025-06-28', content: 'perf(log): 列表数据倒序' },
+    {
+      time: '2025-06-28',
+      content: 'perf(ModifyMinePasswordHandler): 调整获取当前用户的方法',
+    },
+    { time: '2025-06-28', content: 'perf(LogAspect): 调整获取当前用户的方法' },
   ];
 
   const frontendLogs = [
-    { time: '2025-04-15', content: '账户新增重置密码' },
-    { time: '2025-04-05', content: '品牌Logo升级' },
-    { time: '2025-03-27', content: '修复字典组操作后列表刷新问题' },
-    { time: '2025-03-26', content: '优化字典组选择体验' },
-    { time: '2025-03-26', content: '新增个人信息和密码修改功能' },
-    { time: '2025-03-24', content: '优化角色和用户列表状态显示' },
-    { time: '2025-03-24', content: '修复菜单权限标识问题' },
+    { time: '2025-06-30', content: 'update: 更新文件 README.md' },
+    {
+      time: '2025-06-28',
+      content: 'perf(readme): 去掉discord社区，集中维护qq群社区',
+    },
+    { time: '2025-06-28', content: 'perf(readme): 优化文档说明' },
+    { time: '2025-06-27', content: 'perf(psn): 增加接口调用' },
+    { time: '2025-06-20', content: 'perf(accessAPI): 修改访问mock数据' },
+    { time: '2025-06-20', content: 'perf(README): 更新README说明' },
+    { time: '2025-06-19', content: 'feat(all): 日期传参调整' },
+    { time: '2025-06-13', content: 'fix(Role): 新增更新角色时报错处理' },
+    { time: '2025-05-29', content: 'perf(all): 根据后端领域化改造' },
   ];
 
   return (

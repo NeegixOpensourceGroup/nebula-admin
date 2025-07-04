@@ -6,6 +6,7 @@ interface DevPlanItem {
   title: string;
   desc: string;
   type: string;
+  color: { background: string; borderColor: string };
 }
 
 interface DevPlansProps {
@@ -20,7 +21,7 @@ const DevPlans: React.FC<DevPlansProps> = ({ devPlans }) => {
         dataSource={devPlans}
         renderItem={(item) => (
           <List.Item>
-            <Card size="small">
+            <Card size="small" style={item.color}>
               <Typography.Title level={5}>{item.title}</Typography.Title>
               <Typography.Text type="secondary">{item.desc}</Typography.Text>
             </Card>

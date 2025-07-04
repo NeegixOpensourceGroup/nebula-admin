@@ -12,12 +12,12 @@ const ProjectOverview: React.FC = () => {
             <Col span={8}>
               <Statistic
                 title="当前版本"
-                value="1.0.0"
+                value="1.1.0"
                 prefix={<GithubOutlined />}
               />
             </Col>
             <Col span={8}>
-              <Statistic title="代码提交" value={82} suffix="次" />
+              <Statistic title="代码提交" value={94} suffix="次" />
             </Col>
             <Col span={8}>
               <Statistic title="贡献者" value={1} suffix="人" />
@@ -34,12 +34,12 @@ const ProjectOverview: React.FC = () => {
             <Col span={8}>
               <Statistic
                 title="当前版本"
-                value="1.0-SNAP"
+                value="1.1.0"
                 prefix={<GithubOutlined />}
               />
             </Col>
             <Col span={8}>
-              <Statistic title="代码提交" value={64} suffix="次" />
+              <Statistic title="代码提交" value={108} suffix="次" />
             </Col>
             <Col span={8}>
               <Statistic title="贡献者" value={1} suffix="人" />

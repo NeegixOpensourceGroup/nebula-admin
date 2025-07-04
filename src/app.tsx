@@ -187,7 +187,7 @@ export const request: RequestConfig = {
           });
         }
 
-        if (code === 401 || code === 403) {
+        if (code === 401) {
           message.open({
             content: errorMessage,
             type: 'error',
@@ -196,6 +196,19 @@ export const request: RequestConfig = {
               sessionStorage.removeItem('token');
               sessionStorage.removeItem('name');
               history.push('/login');
+            },
+          });
+        }
+
+        if (code === 403) {
+          message.open({
+            content: errorMessage,
+            type: 'error',
+            duration: 1,
+            onClose: () => {
+              //sessionStorage.removeItem('token');
+              //sessionStorage.removeItem('name');
+              //history.push('/login');
             },
           });
         }
