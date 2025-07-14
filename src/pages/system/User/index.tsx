@@ -9,7 +9,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { FormattedMessage } from '@umijs/max';
-import { Badge, Button, message, notification, Popconfirm } from 'antd';
+import { Button, message, notification, Popconfirm, Switch } from 'antd';
 import { useRef, useState } from 'react';
 import { useIntl } from 'umi';
 import CreateForm from './components/CreateForm';
@@ -17,8 +17,14 @@ import RoleSelectionModal from './components/RoleSelectionModal';
 import UpdateForm from './components/UpdateForm';
 import ViewForm from './components/ViewForm';
 const { queryDictItemByDictCode } = dictServices.DictController;
-const { queryUserList, deleteUser, bindRole, resetPassword } =
-  services.UserController;
+const {
+  queryUserList,
+  deleteUser,
+  bindRole,
+  resetPassword,
+  disableUser,
+  enabledUser,
+} = services.UserController;
 
 type UserItem = {
   url: string;
@@ -129,20 +135,35 @@ export default () => {
       title: <FormattedMessage id="layout.common.status" />,
       dataIndex: 'enabled',
       hideInSearch: true,
-      render: (_, record) => (
-        <>
-          {record.enabled ? (
-            <Badge
-              status="success"
-              text={intl.formatMessage({ id: 'layout.common.enabled' })}
-            />
-          ) : (
-            <Badge
-              status="error"
-              text={intl.formatMessage({ id: 'layout.common.disabled' })}
-            />
-          )}
-        </>
+      render: (_, record, index, action) => (
+        <Switch
+          checked={record.enabled}
+          onChange={async (checked) => {
+            if (checked) {
+              const { code, message } = await enabledUser(record.id);
+              if (code === 200) {
+                messageApi.success('启用成功，即将刷新');
+                action?.reload();
+                return true;
+              } else {
+                messageApi.error(message);
+                return false;
+              }
+            } else {
+              const { code, message } = await disableUser(record.id);
+              if (code === 200) {
+                messageApi.success('禁用成功，即将刷新');
+                action?.reload();
+                return true;
+              } else {
+                messageApi.error(message);
+                return false;
+              }
+            }
+          }}
+          checkedChildren={<FormattedMessage id="layout.common.enabled" />}
+          unCheckedChildren={<FormattedMessage id="layout.common.disabled" />}
+        />
       ),
     },
     {

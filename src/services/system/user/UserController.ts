@@ -98,3 +98,29 @@ export async function resetPassword(
     ...(options || {}),
   });
 }
+
+/**
+ * 禁用账号
+ */
+export async function disableUser(
+  pkUser: number | string,
+  options?: { [key: string]: any },
+) {
+  return request<NEBULA_API.Result>(`/api/v1/user/${pkUser}/disabled`, {
+    method: 'PUT',
+    ...(options || {}),
+  });
+}
+
+/**
+ * 启用账号
+ */
+export async function enabledUser(
+  pkUser: number | string,
+  options?: { [key: string]: any },
+) {
+  return request<NEBULA_API.Result>(`/api/v1/user/${pkUser}/enabled`, {
+    method: 'PUT',
+    ...(options || {}),
+  });
+}

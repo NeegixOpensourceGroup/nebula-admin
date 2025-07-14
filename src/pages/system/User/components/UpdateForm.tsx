@@ -6,7 +6,7 @@ import {
   ProCoreActionType,
   ProForm,
   ProFormSelect,
-  ProFormSwitch,
+  // ProFormSwitch,
   ProFormText,
 } from '@ant-design/pro-components';
 import { FormattedMessage } from '@umijs/max';
@@ -40,7 +40,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ userId, actionRef }) => {
         description: res.data.description,
         email: res.data.email,
         mobilePhone: res.data.mobilePhone,
-        enabled: res.data.enabled,
+        // enabled: res.data.enabled,
         userType: res.data.userType?.id,
       });
     }
@@ -133,11 +133,11 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ userId, actionRef }) => {
             name="mobilePhone"
             label={intl.formatMessage({ id: 'layout.system.user.phone' })}
           />
-          <ProFormSwitch
+          {/* <ProFormSwitch
             name="enabled"
             width="md"
             label={intl.formatMessage({ id: 'layout.system.user.enabled' })}
-          />
+          /> */}
         </ProForm.Group>
       </DrawerForm>
     </>
