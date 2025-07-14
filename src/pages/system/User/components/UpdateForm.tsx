@@ -1,9 +1,11 @@
+import dictServices from '@/services/system/dict';
 import services from '@/services/system/user';
 import { EditTwoTone } from '@ant-design/icons';
 import {
   DrawerForm,
   ProCoreActionType,
   ProForm,
+  ProFormSelect,
   ProFormSwitch,
   ProFormText,
 } from '@ant-design/pro-components';
@@ -11,6 +13,7 @@ import { FormattedMessage } from '@umijs/max';
 import { Form, message } from 'antd';
 import { Key } from 'react';
 import { useIntl } from 'umi';
+const { queryDictItemByDictCode } = dictServices.DictController;
 const { updateUser, queryUserDetail } = services.UserController;
 
 interface UpdateFormProps {
@@ -25,6 +28,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ userId, actionRef }) => {
     email: string;
     mobilePhone: string;
     enabled: boolean;
+    userType: number;
   }>();
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -37,6 +41,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ userId, actionRef }) => {
         email: res.data.email,
         mobilePhone: res.data.mobilePhone,
         enabled: res.data.enabled,
+        userType: res.data.userType?.id,
       });
     }
   };
@@ -103,6 +108,20 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ userId, actionRef }) => {
             width="md"
             name="description"
             label={intl.formatMessage({ id: 'layout.system.user.desc' })}
+          />
+          <ProFormSelect
+            width="md"
+            name="userType"
+            label="账号类型"
+            request={async () => {
+              const res = await queryDictItemByDictCode('ACCOUNT_TYPE');
+              return res.data.map((item: any) => {
+                return {
+                  value: item.id,
+                  label: item.name,
+                };
+              });
+            }}
           />
           <ProFormText
             width="md"

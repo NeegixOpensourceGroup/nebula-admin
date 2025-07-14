@@ -18,6 +18,11 @@ interface UserDetail {
   email: string;
   mobilePhone: string;
   enabled: boolean;
+  userType: {
+    id: number;
+    name: string;
+    value: string;
+  };
 }
 
 const ViewForm: React.FC<ViewFormProps> = ({ userId }) => {
@@ -33,6 +38,7 @@ const ViewForm: React.FC<ViewFormProps> = ({ userId }) => {
         email: res.data.email,
         mobilePhone: res.data.mobilePhone,
         enabled: res.data.enabled,
+        userType: res.data.userType,
       });
     }
   };
@@ -67,6 +73,9 @@ const ViewForm: React.FC<ViewFormProps> = ({ userId }) => {
           label={intl.formatMessage({ id: 'layout.system.user.desc' })}
         >
           {userDetail?.description}
+        </Descriptions.Item>
+        <Descriptions.Item label="用户类型">
+          {userDetail?.userType?.name}
         </Descriptions.Item>
         <Descriptions.Item
           label={intl.formatMessage({ id: 'layout.system.user.email' })}

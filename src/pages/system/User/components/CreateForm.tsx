@@ -1,9 +1,11 @@
+import dictServices from '@/services/system/dict';
 import services from '@/services/system/user';
 import { PlusOutlined } from '@ant-design/icons';
 import {
   DrawerForm,
   ProCoreActionType,
   ProForm,
+  ProFormSelect,
   ProFormSwitch,
   ProFormText,
 } from '@ant-design/pro-components';
@@ -11,6 +13,7 @@ import { FormattedMessage } from '@umijs/max';
 import { Button, Form, message } from 'antd';
 import { Key } from 'react';
 import { useIntl } from 'umi';
+const { queryDictItemByDictCode } = dictServices.DictController;
 const { createUser } = services.UserController;
 
 interface CreateFormProps {
@@ -91,6 +94,20 @@ const CreateForm: React.FC<CreateFormProps> = ({ actionRef }) => {
             width="md"
             name="description"
             label={intl.formatMessage({ id: 'layout.system.user.desc' })}
+          />
+          <ProFormSelect
+            width="md"
+            name="userType"
+            label="账号类型"
+            request={async () => {
+              const res = await queryDictItemByDictCode('ACCOUNT_TYPE');
+              return res.data.map((item: any) => {
+                return {
+                  value: item.id,
+                  label: item.name,
+                };
+              });
+            }}
           />
           <ProFormText
             width="md"

@@ -1,3 +1,4 @@
+import dictServices from '@/services/system/dict';
 import services from '@/services/system/user';
 import { transformRangeDate } from '@/utils/tools';
 import { DeleteTwoTone, SettingTwoTone } from '@ant-design/icons';
@@ -15,7 +16,7 @@ import CreateForm from './components/CreateForm';
 import RoleSelectionModal from './components/RoleSelectionModal';
 import UpdateForm from './components/UpdateForm';
 import ViewForm from './components/ViewForm';
-
+const { queryDictItemByDictCode } = dictServices.DictController;
 const { queryUserList, deleteUser, bindRole, resetPassword } =
   services.UserController;
 
@@ -78,6 +79,24 @@ export default () => {
       disable: true,
       title: <FormattedMessage id="layout.system.user.desc" />,
       dataIndex: 'description',
+    },
+    {
+      title: '账号类型',
+      dataIndex: 'userType',
+      valueType: 'select',
+      fieldProps: () => {
+        return {
+          fieldNames: {
+            label: 'name',
+            value: 'id',
+          },
+        };
+      },
+      request: async () => {
+        // 查询账号类型字典
+        const res = await queryDictItemByDictCode('ACCOUNT_TYPE');
+        return res.data;
+      },
     },
     {
       title: <FormattedMessage id="layout.system.user.email" />,
