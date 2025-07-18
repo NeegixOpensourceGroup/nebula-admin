@@ -154,7 +154,11 @@ export const request: RequestConfig = {
     // 直接写一个 function，作为拦截器
     (response) => {
       // 不再需要异步处理读取返回体内容，可直接在data中读出，部分字段可在 config 中找到
+      // data.type !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
       const { data = {} as any } = response;
+      if (data instanceof Blob) {
+        return response;
+      }
       if (data.code !== 200) {
         return Promise.reject(data);
       }
