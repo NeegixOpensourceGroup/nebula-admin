@@ -124,3 +124,36 @@ export async function enabledUser(
     ...(options || {}),
   });
 }
+
+/**
+ * 导入用户
+ */
+export async function importUser(file: File, options?: { [key: string]: any }) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  return request<NEBULA_API.Result>('/api/v1/user/import', {
+    method: 'POST',
+    data: formData,
+    requestType: 'form',
+    ...(options || {}),
+  });
+}
+
+/**
+ * 导出用户
+ */
+export async function exportUser(
+  params?: {
+    [key: string]: any;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<Blob>(`/api/v1/user/export`, {
+    method: 'GET',
+    params,
+    responseType: 'blob',
+    getResponse: true,
+    ...(options || {}),
+  });
+}

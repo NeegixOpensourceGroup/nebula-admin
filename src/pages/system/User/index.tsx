@@ -1,7 +1,12 @@
 import dictServices from '@/services/system/dict';
 import services from '@/services/system/user';
 import { transformRangeDate } from '@/utils/tools';
-import { DeleteTwoTone, SettingTwoTone } from '@ant-design/icons';
+import {
+  DeleteTwoTone,
+  DownloadOutlined,
+  SettingTwoTone,
+  UploadOutlined,
+} from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -9,13 +14,25 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { FormattedMessage } from '@umijs/max';
-import { Button, message, notification, Popconfirm, Switch } from 'antd';
+import type { UploadProps } from 'antd';
+import {
+  Button,
+  message,
+  Modal,
+  notification,
+  Popconfirm,
+  Switch,
+  Upload,
+} from 'antd';
 import { useRef, useState } from 'react';
 import { useIntl } from 'umi';
 import CreateForm from './components/CreateForm';
 import RoleSelectionModal from './components/RoleSelectionModal';
 import UpdateForm from './components/UpdateForm';
 import ViewForm from './components/ViewForm';
+
+import { downloadFile } from '@/utils/download';
+
 const { queryDictItemByDictCode } = dictServices.DictController;
 const {
   queryUserList,
@@ -24,6 +41,8 @@ const {
   resetPassword,
   disableUser,
   enabledUser,
+  importUser,
+  exportUser,
 } = services.UserController;
 
 type UserItem = {
@@ -255,10 +274,101 @@ export default () => {
     }
   };
 
+  /**
+   * 导出用户数据
+   */
+  const handleExport = async () => {
+    // 获取当前搜索条件
+    const searchParams = actionRef.current?.getFieldsValue?.() || {};
+
+    downloadFile(
+      () => exportUser(searchParams), // 只负责返回 Promise<Blob>
+      { defaultFileName: '用户数据' },
+    );
+  };
+
+  const [importModalVisible, setImportModalVisible] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  /**
+   * 处理文件导入
+   */
+  const handleImport = async (file: File) => {
+    setUploading(true);
+    try {
+      const res = await importUser(file);
+      if (res.code === 200) {
+        messageApi.success(`导入成功！共导入 ${res.data || 0} 条数据`);
+        setImportModalVisible(false);
+        actionRef.current?.reload();
+      } else {
+        messageApi.error(res.message || '导入失败');
+      }
+    } catch (error) {
+      messageApi.error('导入失败，请检查文件格式');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const uploadProps: UploadProps = {
+    name: 'file',
+    accept: '.xlsx,.xls',
+    showUploadList: false,
+    beforeUpload: (file) => {
+      // 检查文件类型
+      const isExcel =
+        file.type ===
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+        file.type === 'application/vnd.ms-excel';
+      if (!isExcel) {
+        messageApi.error('只能上传 Excel 文件！');
+        return false;
+      }
+
+      // 检查文件大小（限制为10MB）
+      const isLt10M = file.size / 1024 / 1024 < 10;
+      if (!isLt10M) {
+        messageApi.error('文件大小不能超过 10MB！');
+        return false;
+      }
+
+      // 直接处理文件上传
+      handleImport(file);
+      return false; // 阻止默认上传行为
+    },
+  };
+
+  const ImportModal = () => (
+    <Modal
+      title="导入用户"
+      open={importModalVisible}
+      onCancel={() => setImportModalVisible(false)}
+      footer={null}
+    >
+      <div style={{ textAlign: 'center', padding: '20px 0' }}>
+        <Upload {...uploadProps}>
+          <Button icon={<UploadOutlined />} loading={uploading} size="large">
+            {uploading ? '正在导入...' : '选择Excel文件'}
+          </Button>
+        </Upload>
+        <p style={{ marginTop: 16, color: '#666' }}>
+          支持 .xlsx、.xls 格式，文件大小不超过 10MB
+        </p>
+      </div>
+      <div style={{ marginTop: 16, textAlign: 'center' }}>
+        <a href="/template/user_import_template.xlsx" download>
+          <DownloadOutlined /> 下载导入模板
+        </a>
+      </div>
+    </Modal>
+  );
+
   return (
     <>
       {contextHolder}
       {notificationHolder}
+      <ImportModal />
       <PageContainer
         header={{
           title: (
@@ -322,6 +432,20 @@ export default () => {
           dateFormatter="string"
           toolBarRender={() => [
             <CreateForm key="createForm" actionRef={actionRef.current} />,
+            <Button
+              key="import"
+              icon={<UploadOutlined />}
+              onClick={() => setImportModalVisible(true)}
+            >
+              导入
+            </Button>,
+            <Button
+              key="export"
+              icon={<DownloadOutlined />}
+              onClick={handleExport}
+            >
+              导出
+            </Button>,
             <Button
               key="role"
               disabled={selectedRowsState?.length === 0}
