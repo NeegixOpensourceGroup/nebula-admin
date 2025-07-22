@@ -64,3 +64,29 @@ export async function getRole(
     ...(options || {}),
   });
 }
+
+/**
+ * 禁用角色
+ */
+export async function disableRole(
+  pkRole: number | string,
+  options?: { [key: string]: any },
+) {
+  return request<NEBULA_API.Result>(`/api/v1/role/${pkRole}/disabled`, {
+    method: 'PUT',
+    ...(options || {}),
+  });
+}
+
+/**
+ * 启用角色
+ */
+export async function enabledRole(
+  pkRole: number | string,
+  options?: { [key: string]: any },
+) {
+  return request<NEBULA_API.Result>(`/api/v1/role/${pkRole}/enabled`, {
+    method: 'PUT',
+    ...(options || {}),
+  });
+}

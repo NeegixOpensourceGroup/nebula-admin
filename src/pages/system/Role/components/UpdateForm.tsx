@@ -4,7 +4,7 @@ import {
   DrawerForm,
   ProCoreActionType,
   ProForm,
-  ProFormSwitch,
+  // ProFormSwitch,
   ProFormText,
 } from '@ant-design/pro-components';
 import { FormattedMessage } from '@umijs/max';
@@ -33,7 +33,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
   const [form] = Form.useForm<{
     name: string;
     description: string;
-    enabled: boolean;
+    // enabled: boolean;
     permission: { checked: Key[]; halfChecked: Key[] };
   }>();
   const [messageApi, contextHolder] = message.useMessage();
@@ -56,7 +56,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
       form.setFieldsValue({
         name: res.data.name,
         description: res.data.description,
-        enabled: res.data.enabled,
+        // enabled: res.data.enabled,
       });
       setCheckedKeys(
         res.data.pagePermissions
@@ -185,11 +185,11 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ roleId, actionRef }) => {
             name="description"
             label={intl.formatMessage({ id: 'layout.system.role.description' })}
           />
-          <ProFormSwitch
+          {/* <ProFormSwitch
             name="enabled"
             width="md"
             label={intl.formatMessage({ id: 'layout.system.role.enabled' })}
-          />
+          /> */}
         </ProForm.Group>
         <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
       </DrawerForm>

@@ -180,8 +180,6 @@ export default () => {
               }
             }
           }}
-          checkedChildren={<FormattedMessage id="layout.common.enabled" />}
-          unCheckedChildren={<FormattedMessage id="layout.common.disabled" />}
         />
       ),
     },

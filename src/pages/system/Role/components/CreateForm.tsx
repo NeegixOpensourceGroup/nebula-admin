@@ -4,7 +4,7 @@ import {
   DrawerForm,
   ProCoreActionType,
   ProForm,
-  ProFormSwitch,
+  // ProFormSwitch,
   ProFormText,
 } from '@ant-design/pro-components';
 import { FormattedMessage } from '@umijs/max';
@@ -33,7 +33,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ actionRef }) => {
   const [form] = Form.useForm<{
     name: string;
     description: string;
-    enabled: boolean;
+    // enabled: boolean;
     permission: { checked: Key[]; halfChecked: Key[] };
   }>();
   const [messageApi, contextHolder] = message.useMessage();
@@ -156,11 +156,11 @@ const CreateForm: React.FC<CreateFormProps> = ({ actionRef }) => {
             name="description"
             label={intl.formatMessage({ id: 'layout.system.role.description' })}
           />
-          <ProFormSwitch
+          {/* <ProFormSwitch
             name="enabled"
             width="md"
             label={intl.formatMessage({ id: 'layout.system.role.enabled' })}
-          />
+          /> */}
         </ProForm.Group>
         <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
       </DrawerForm>

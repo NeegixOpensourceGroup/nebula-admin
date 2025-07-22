@@ -8,19 +8,20 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { FormattedMessage } from '@umijs/max';
-import { Badge, Button, message, Popconfirm } from 'antd';
+import { Button, message, Popconfirm, Switch } from 'antd';
 import { useRef, useState } from 'react';
 import { useIntl } from 'umi';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
 
-const { queryRoleList, deleteRole } = services.RoleController;
+const { queryRoleList, deleteRole, disableRole, enabledRole } =
+  services.RoleController;
 
 type GithubIssueItem = {
   url: string;
   id: number;
   number: number;
-  title: string;
+  name: string;
   labels: {
     name: string;
     color: string;
@@ -59,21 +60,49 @@ export default () => {
       title: <FormattedMessage id="layout.common.status" />,
       dataIndex: 'enabled',
       hideInSearch: true,
-      render: (_, record) => (
-        <>
-          {record.enabled ? (
-            <Badge
-              status="success"
-              text={intl.formatMessage({ id: 'layout.common.enabled' })}
-            />
-          ) : (
-            <Badge
-              status="error"
-              text={intl.formatMessage({ id: 'layout.common.disabled' })}
-            />
-          )}
-        </>
+      render: (_, record, index, action) => (
+        <Switch
+          checked={record.enabled}
+          onChange={async (checked) => {
+            if (checked) {
+              const { code, message } = await enabledRole(record.id);
+              if (code === 200) {
+                messageApi.success('启用成功，即将刷新');
+                action?.reload();
+                return true;
+              } else {
+                messageApi.error(message);
+                return false;
+              }
+            } else {
+              const { code, message } = await disableRole(record.id);
+              if (code === 200) {
+                messageApi.success('禁用成功，即将刷新');
+                action?.reload();
+                return true;
+              } else {
+                messageApi.error(message);
+                return false;
+              }
+            }
+          }}
+        />
       ),
+      // render: (_, record) => (
+      //   <>
+      //     {record.enabled ? (
+      //       <Badge
+      //         status="success"
+      //         text={intl.formatMessage({ id: 'layout.common.enabled' })}
+      //       />
+      //     ) : (
+      //       <Badge
+      //         status="error"
+      //         text={intl.formatMessage({ id: 'layout.common.disabled' })}
+      //       />
+      //     )}
+      //   </>
+      // ),
     },
     {
       title: <FormattedMessage id="layout.system.role.createTime" />,
