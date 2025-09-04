@@ -157,3 +157,15 @@ export async function exportUser(
     ...(options || {}),
   });
 }
+
+/**
+ * 下载用户导入模板
+ */
+export async function downloadImportTemplate(options?: { [key: string]: any }) {
+  return request<Blob>('/api/v1/user/downloadTemplate', {
+    method: 'GET',
+    responseType: 'blob',
+    getResponse: true,
+    ...(options || {}),
+  });
+}

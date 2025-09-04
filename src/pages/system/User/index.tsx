@@ -43,6 +43,7 @@ const {
   enabledUser,
   importUser,
   exportUser,
+  downloadImportTemplate,
 } = services.UserController;
 
 type UserItem = {
@@ -276,11 +277,9 @@ export default () => {
    * 导出用户数据
    */
   const handleExport = async () => {
-    // 获取当前搜索条件
-    const searchParams = actionRef.current?.getFieldsValue?.() || {};
-
+    // 直接导出，不传递搜索条件
     downloadFile(
-      () => exportUser(searchParams), // 只负责返回 Promise<Blob>
+      () => exportUser(), // 只负责返回 Promise<Blob>
       { defaultFileName: '用户数据' },
     );
   };
@@ -355,9 +354,17 @@ export default () => {
         </p>
       </div>
       <div style={{ marginTop: 16, textAlign: 'center' }}>
-        <a href="/template/user_import_template.xlsx" download>
-          <DownloadOutlined /> 下载导入模板
-        </a>
+        <Button
+          icon={<DownloadOutlined />}
+          onClick={() => {
+            downloadFile(() => downloadImportTemplate(), {
+              defaultFileName: '用户导入模板',
+              suffix: '.xlsx',
+            });
+          }}
+        >
+          下载导入模板
+        </Button>
       </div>
     </Modal>
   );
